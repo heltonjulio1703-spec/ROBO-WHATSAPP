@@ -68,7 +68,33 @@ const state = {
 };
 
 // State Persistence Helper Functions
-const STATE_FILE_PATH = path.join(process.cwd(), "state_data.json");
+const STATE_FILE_PATH = (() => {
+  const isProd = process.env.NODE_ENV === "production" || process.env.PORT === "3000";
+  if (isProd) {
+    return "/tmp/state_data.json";
+  }
+  try {
+    const testPath = path.join(process.cwd(), "test_write_perm");
+    fs.mkdirSync(testPath, { recursive: true });
+    fs.rmdirSync(testPath);
+    return path.join(process.cwd(), "state_data.json");
+  } catch {
+    return "/tmp/state_data.json";
+  }
+})();
+
+// Copy initial state_data.json if we are using /tmp and the /tmp file doesn't exist yet
+if (STATE_FILE_PATH.startsWith("/tmp")) {
+  try {
+    const localPath = path.join(process.cwd(), "state_data.json");
+    if (fs.existsSync(localPath) && !fs.existsSync(STATE_FILE_PATH)) {
+      fs.copyFileSync(localPath, STATE_FILE_PATH);
+      console.log("Copiado arquivo de estado inicial para /tmp/state_data.json");
+    }
+  } catch (err) {
+    console.error("Falha ao copiar estado inicial para /tmp:", err);
+  }
+}
 
 const saveStateToFile = () => {
   try {

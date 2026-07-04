@@ -37,7 +37,20 @@ export class WhatsAppEngine {
     connectedAt: null,
   };
   
-  private authStatePath = path.join(process.cwd(), "auth_info_baileys");
+  private authStatePath = (() => {
+    const isProd = process.env.NODE_ENV === "production" || process.env.PORT === "3000";
+    if (isProd) {
+      return "/tmp/auth_info_baileys";
+    }
+    try {
+      const testPath = path.join(process.cwd(), "test_write_perm");
+      fs.mkdirSync(testPath, { recursive: true });
+      fs.rmdirSync(testPath);
+      return path.join(process.cwd(), "auth_info_baileys");
+    } catch {
+      return "/tmp/auth_info_baileys";
+    }
+  })();
   private addLogCallback: (type: "info" | "success" | "warning" | "error", message: string) => void;
   private onGroupsDiscoveredCallback: (groups: GroupItem[]) => void;
   private onMessageReceivedCallback: (
@@ -82,7 +95,20 @@ export class WhatsAppEngine {
 
     try {
       const { state, saveCreds } = await useMultiFileAuthState(this.authStatePath);
-      const { version } = await fetchLatestBaileysVersion();
+      
+      let version;
+      try {
+        const versionPromise = fetchLatestBaileysVersion();
+        const timeoutPromise = new Promise<never>((_, reject) => 
+          setTimeout(() => reject(new Error("Timeout ao buscar versão")), 3500)
+        );
+        const latest = await Promise.race([versionPromise, timeoutPromise]);
+        version = latest.version;
+      } catch (err) {
+        console.warn("Falha ao obter versão atualizada do Baileys, usando fallback local:", err);
+        this.addLogCallback("warning", "Usando versão local estável do WhatsApp para acelerar a conexão.");
+        version = [2, 3000, 1017539728];
+      }
 
       this.sock = makeWASocket({
         version,
