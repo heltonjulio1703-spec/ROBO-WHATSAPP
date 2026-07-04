@@ -362,6 +362,56 @@ const parseMessageWithRegex = async (messageText: string, affiliateId: string) =
   };
 };
 
+// Helper to fetch original product photo from Shopee URL by following redirects and reading OpenGraph tags
+const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => {
+  if (!url || !url.startsWith("http")) return null;
+  
+  try {
+    addLog("info", `Buscando foto original do produto no link: ${url}`);
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+      },
+      redirect: "follow",
+    });
+
+    if (!response.ok) {
+      console.warn(`Shopee request returned status: ${response.status}`);
+      return null;
+    }
+
+    const html = await response.text();
+    
+    // Pattern matches for og:image
+    const matches = [
+      /<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i,
+      /<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i,
+      /<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i,
+      /meta\s+property="og:image"\s+content="([^"]+)"/i,
+      /"image":\s*"([^"]+)"/i,
+    ];
+
+    for (const regex of matches) {
+      const match = html.match(regex);
+      if (match && match[1]) {
+        let imageUrl = match[1].trim();
+        if (imageUrl.startsWith("//")) {
+          imageUrl = "https:" + imageUrl;
+        }
+        if (imageUrl.startsWith("http")) {
+          addLog("success", `📸 Foto original encontrada: ${imageUrl.substring(0, 60)}...`);
+          return imageUrl;
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Falha ao buscar imagem do link da Shopee:", err);
+  }
+  return null;
+};
+
 // Map product titles or keywords to beautiful high-quality Unsplash image URLs
 const getProductImage = (title: string): string => {
   const cleanTitle = (title || "").toLowerCase();
@@ -399,7 +449,8 @@ const getProductImage = (title: string): string => {
 
 // Process an incoming message (either simulated or actual)
 const processIncomingMessage = async (sourceGroupName: string, messageText: string, imageBuffer?: Buffer, imageUrl?: string) => {
-  // Check if message matches filter keywords
+  // Filtro de palavra-chave desabilitado por solicitação do usuário. Todos os anúncios de links Shopee serão processados.
+  /*
   const keywords = state.config.keywords.split(",").map(k => k.trim().toLowerCase());
   const hasKeyword = keywords.length === 0 || keywords.some(kw => kw && messageText.toLowerCase().includes(kw));
 
@@ -407,6 +458,7 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
     addLog("info", `Mensagem recebida em "${sourceGroupName}" descartada (não contém palavras-chave).`);
     return null;
   }
+  */
 
   addLog("info", `Nova mensagem em "${sourceGroupName}": Analisando anúncio...`);
 
@@ -427,7 +479,13 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
     addLog("warning", `Anúncio convertido, mas nenhum grupo de destino está ativo. Mensagem arquivada.`);
   }
 
-  const resolvedImageUrl = imageUrl || getProductImage(parsed.productTitle);
+  let resolvedImageUrl = imageUrl;
+  if (!resolvedImageUrl && parsed.originalLink) {
+    resolvedImageUrl = await fetchOriginalShopeeImage(parsed.originalLink);
+  }
+  if (!resolvedImageUrl) {
+    resolvedImageUrl = getProductImage(parsed.productTitle);
+  }
 
   const historyItem = {
     id: "deal_" + Math.random().toString(36).substr(2, 9),
@@ -644,6 +702,12 @@ app.post("/api/whatsapp/disconnect", async (req, res) => {
     clearInterval(autoPilotTimer);
     autoPilotTimer = null;
   }
+  // Clear connected/synchronized WhatsApp groups and history metrics
+  state.groups.sources = state.groups.sources.filter(g => !g.id.endsWith("@g.us"));
+  state.groups.targets = state.groups.targets.filter(g => !g.id.endsWith("@g.us"));
+  state.history = [];
+  saveStateToFile();
+  addLog("info", "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos.");
   res.json(whatsappEngine.status);
 });
 
@@ -680,6 +744,34 @@ app.post("/api/whatsapp/sync-groups", async (req, res) => {
   }
 });
 
+// Endpoint to scan and process current-day messages for a selected source group
+app.post("/api/whatsapp/scan-today", async (req, res) => {
+  const { groupId } = req.body;
+  if (!groupId) {
+    return res.status(400).json({ error: "Grupo não especificado." });
+  }
+
+  if (whatsappEngine.status.status !== "connected") {
+    return res.status(400).json({ error: "O WhatsApp precisa estar conectado." });
+  }
+
+  const group = state.groups.sources.find(s => s.id === groupId);
+  const groupName = group ? group.name : "Grupo Monitorado";
+
+  try {
+    const result = await whatsappEngine.scanTodayMessages(groupId, async (text, imageBuffer) => {
+      return await processIncomingMessage(groupName, text, imageBuffer);
+    });
+    
+    // Save updated state since history/logs may have changed
+    saveStateToFile();
+    
+    res.json({ success: true, ...result });
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
 // Manual Test Sandbox endpoint
 app.post("/api/sandbox/parse", async (req, res) => {
   const { messageText } = req.body;
@@ -694,8 +786,12 @@ app.post("/api/sandbox/parse", async (req, res) => {
       state.config.affiliateId,
       state.config.rewriteStyle
     );
-    // Add imageUrl using getProductImage helper
-    result.imageUrl = getProductImage(result.productTitle);
+    // Add imageUrl using fetchOriginalShopeeImage if originalLink is present, otherwise fallback
+    let imageUrl = null;
+    if (result.originalLink) {
+      imageUrl = await fetchOriginalShopeeImage(result.originalLink);
+    }
+    result.imageUrl = imageUrl || getProductImage(result.productTitle);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });

@@ -5,12 +5,16 @@ import { Trash2, ArrowRightLeft, RefreshCw, Smartphone, Search, Send } from "luc
 interface GroupsViewProps {
   groups: GroupConfig;
   saveGroups: (newGroups: GroupConfig) => Promise<void>;
+  whatsappConnected?: boolean;
+  onRefreshHistory?: () => Promise<void>;
 }
 
-export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups }) => {
+export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, whatsappConnected = false, onRefreshHistory }) => {
   const [activeTab, setActiveTab] = React.useState<"sources" | "targets">("sources");
   const [isSyncing, setIsSyncing] = React.useState(false);
   const [syncMessage, setSyncMessage] = React.useState<string | null>(null);
+  const [scanningGroupId, setScanningGroupId] = React.useState<string | null>(null);
+  const [scanResult, setScanResult] = React.useState<{ groupId: string; message: string; success: boolean } | null>(null);
 
   // Filter only groups that are synchronized from a connected WhatsApp (id ending in @g.us)
   const displayedSources = groups.sources.filter((g) => g.id.endsWith("@g.us"));
@@ -62,6 +66,44 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups }) =>
       [type]: filteredList,
     };
     await saveGroups(newGroups);
+  };
+
+  const handleScanToday = async (groupId: string) => {
+    setScanningGroupId(groupId);
+    setScanResult(null);
+    try {
+      const response = await fetch("/api/whatsapp/scan-today", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ groupId }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setScanResult({
+          groupId,
+          message: `Busca finalizada! Foram encontradas e reescritas ${data.processedCount} ofertas de hoje.`,
+          success: true,
+        });
+        if (onRefreshHistory) {
+          await onRefreshHistory();
+        }
+      } else {
+        setScanResult({
+          groupId,
+          message: data.error || "Erro ao buscar mensagens do grupo.",
+          success: false,
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setScanResult({
+        groupId,
+        message: "Erro de conexão com o servidor.",
+        success: false,
+      });
+    } finally {
+      setScanningGroupId(null);
+    }
   };
 
   return (
@@ -188,45 +230,75 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups }) =>
                 </div>
               ) : (
                 displayedSources.map((group) => (
-                  <div
-                    key={group.id}
-                    id={`source-group-${group.id}`}
-                    className={`p-3.5 rounded-xl border flex items-center justify-between transition-all ${
-                      group.active
-                        ? "bg-indigo-50/20 border-indigo-150"
-                        : "bg-gray-50/50 border-gray-100 opacity-60"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <input
-                        type="checkbox"
-                        id={`checkbox-source-${group.id}`}
-                        checked={group.active}
-                        onChange={() => handleToggleActive(group.id, "sources")}
-                        className="w-4.5 h-4.5 text-indigo-600 border-gray-300 rounded-sm focus:ring-indigo-500 cursor-pointer shrink-0"
-                      />
-                      <div className="flex flex-col min-w-0">
-                        <label
-                          htmlFor={`checkbox-source-${group.id}`}
-                          className="text-sm font-semibold text-gray-700 cursor-pointer select-none truncate"
+                  <div key={group.id} className="flex flex-col gap-1">
+                    <div
+                      id={`source-group-${group.id}`}
+                      className={`p-3.5 rounded-xl border flex items-center justify-between transition-all ${
+                        group.active
+                          ? "bg-indigo-50/20 border-indigo-150"
+                          : "bg-gray-50/50 border-gray-100 opacity-60"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <input
+                          type="checkbox"
+                          id={`checkbox-source-${group.id}`}
+                          checked={group.active}
+                          onChange={() => handleToggleActive(group.id, "sources")}
+                          className="w-4.5 h-4.5 text-indigo-600 border-gray-300 rounded-sm focus:ring-indigo-500 cursor-pointer shrink-0"
+                        />
+                        <div className="flex flex-col min-w-0">
+                          <label
+                            htmlFor={`checkbox-source-${group.id}`}
+                            className="text-sm font-semibold text-gray-700 cursor-pointer select-none truncate"
+                          >
+                            {group.name}
+                          </label>
+                          <span className="text-[10px] text-emerald-600 font-medium flex items-center gap-0.5 mt-0.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block shrink-0 animate-pulse" />
+                            Grupo WhatsApp Real
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          id={`scan-today-btn-${group.id}`}
+                          type="button"
+                          onClick={() => handleScanToday(group.id)}
+                          disabled={!whatsappConnected || scanningGroupId === group.id}
+                          title={!whatsappConnected ? "Conecte o WhatsApp para buscar ofertas de hoje" : "Buscar ofertas geradas hoje neste grupo"}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                            scanningGroupId === group.id
+                              ? "bg-amber-100 text-amber-700 cursor-wait"
+                              : !whatsappConnected
+                                ? "bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
+                                : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
+                          }`}
                         >
-                          {group.name}
-                        </label>
-                        <span className="text-[10px] text-emerald-600 font-medium flex items-center gap-0.5 mt-0.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block shrink-0 animate-pulse" />
-                          Grupo WhatsApp Real
-                        </span>
+                          <RefreshCw className={`w-3.5 h-3.5 ${scanningGroupId === group.id ? "animate-spin" : ""}`} />
+                          <span>{scanningGroupId === group.id ? "Buscando..." : "Buscar Ofertas de Hoje"}</span>
+                        </button>
+
+                        <button
+                          id={`delete-source-btn-${group.id}`}
+                          type="button"
+                          onClick={() => handleDeleteItem(group.id, "sources")}
+                          className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
-                    
-                    <button
-                      id={`delete-source-btn-${group.id}`}
-                      type="button"
-                      onClick={() => handleDeleteItem(group.id, "sources")}
-                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {scanResult && scanResult.groupId === group.id && (
+                      <div className={`text-xs px-4 py-2 rounded-lg mt-1 border ${
+                        scanResult.success 
+                          ? "bg-emerald-50 text-emerald-800 border-emerald-100 animate-fade-in" 
+                          : "bg-red-50 text-red-800 border-red-100 animate-fade-in"
+                      }`}>
+                        {scanResult.message}
+                      </div>
+                    )}
                   </div>
                 ))
               )}

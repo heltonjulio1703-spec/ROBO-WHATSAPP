@@ -181,24 +181,21 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </div>
             </div>
 
-            {/* Keyword Filters */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
-                Filtro de Palavras-Chave (separadas por vírgula)
+            {/* Keyword Filters (Disabled per user request) */}
+            <div className="opacity-60 pointer-events-none">
+              <label className="block text-sm font-semibold text-gray-400 mb-1">
+                Filtro de Palavras-Chave (DESABILITADO)
               </label>
               <textarea
                 id="keywords-input"
                 value={kw}
-                onChange={(e) => {
-                  setKw(e.target.value);
-                  setSaveStatus("unsaved");
-                }}
+                disabled
                 rows={2}
-                placeholder="Ex: promocao, cupom, desconto, shopee"
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                placeholder="Filtro desabilitado. O robô agora processa todas as mensagens de forma direta."
+                className="w-full px-3 py-2 border border-gray-200 bg-gray-50 text-gray-400 rounded-lg focus:outline-none text-sm cursor-not-allowed"
               />
-              <p className="text-xs text-gray-400 mt-1">
-                O robô só processará anúncios que contenham ao menos uma dessas palavras. Deixe em branco para processar tudo.
+              <p className="text-xs text-red-500 mt-1 font-semibold">
+                ⚠️ Filtro de palavra-chave desabilitado por padrão. Todos os anúncios com links da Shopee serão processados e encaminhados sem necessidade de palavras-chave.
               </p>
             </div>
 

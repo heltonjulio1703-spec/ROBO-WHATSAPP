@@ -152,6 +152,14 @@ export default function App() {
       const response = await fetch("/api/whatsapp/disconnect", { method: "POST" });
       const data = await response.json();
       setWhatsapp(data);
+      
+      // Fetch and update groups and history states to immediately clear UI counts and data
+      const [groupsRes, historyRes] = await Promise.all([
+        fetch("/api/groups").then(r => r.json()),
+        fetch("/api/history").then(r => r.json()),
+      ]);
+      setGroups(groupsRes);
+      setHistory(historyRes);
     } catch (err) {
       console.error(err);
     }
@@ -359,6 +367,8 @@ export default function App() {
               <GroupsView
                 groups={groups}
                 saveGroups={handleSaveGroups}
+                whatsappConnected={whatsapp.status === "connected"}
+                onRefreshHistory={handleRefreshHistoryOnly}
               />
             </motion.div>
           )}
