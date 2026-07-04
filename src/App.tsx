@@ -90,7 +90,7 @@ export default function App() {
         .then((r) => r.json())
         .then((data) => setHistory(data))
         .catch((e) => console.error(e));
-    }, 3000);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, []);

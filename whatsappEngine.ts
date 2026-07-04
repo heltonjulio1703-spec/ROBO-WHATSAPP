@@ -96,26 +96,29 @@ export class WhatsAppEngine {
     try {
       const { state, saveCreds } = await useMultiFileAuthState(this.authStatePath);
       
-      let version;
+      let version: [number, number, number] = [2, 2413, 1]; // Fallback estável
       try {
-        const versionPromise = fetchLatestBaileysVersion();
-        const timeoutPromise = new Promise<never>((_, reject) => 
-          setTimeout(() => reject(new Error("Timeout ao buscar versão")), 3500)
-        );
-        const latest = await Promise.race([versionPromise, timeoutPromise]);
-        version = latest.version;
+        const { version: latestVersion, isLatest } = await fetchLatestBaileysVersion();
+        version = latestVersion;
+        console.log(`📡 Baileys: Usando versão ${version.join(".")} (Latest: ${isLatest})`);
       } catch (err) {
-        console.warn("Falha ao obter versão atualizada do Baileys, usando fallback local:", err);
-        this.addLogCallback("warning", "Usando versão local estável do WhatsApp para acelerar a conexão.");
-        version = [2, 3000, 1017539728];
+        console.warn("Falha ao obter versão atualizada do Baileys:", err);
       }
+
+      console.log(`📡 Baileys: Iniciando socket com versão ${version.join(".")}`);
+      this.addLogCallback("info", `Iniciando mecanismo de conexão (v${version.join(".")})...`);
 
       this.sock = makeWASocket({
         version,
-        logger: pino({ level: "silent" }) as any,
+        logger: pino({ level: "error" }) as any,
         auth: state,
         printQRInTerminal: false,
-        mobile: false,
+        browser: ["Windows", "Chrome", "11.0.0"], // Browser mais padrão
+        connectTimeoutMs: 60000,
+        keepAliveIntervalMs: 25000,
+        emitOwnEvents: true,
+        generateHighQualityLinkPreview: false,
+        syncFullHistory: false,
       });
 
       // Connection event listener
@@ -123,13 +126,17 @@ export class WhatsAppEngine {
         const { connection, lastDisconnect, qr } = update;
 
         if (qr) {
+          console.log("📡 Baileys: QR Code recebido, convertendo para imagem...");
           this.status.status = "qr_code";
           this.status.qrCodeProgress = 50;
           try {
             const dataUrl = await QRCode.toDataURL(qr);
             this.status.qrDataUrl = dataUrl;
+            this.status.qrCodeProgress = 90;
+            console.log("📡 Baileys: Imagem do QR Code gerada com sucesso!");
             this.addLogCallback("info", "Novo QR Code gerado. Aguardando escaneamento no celular...");
           } catch (err) {
+            console.error("Erro ao converter QR para DataURL:", err);
             this.addLogCallback("error", "Falha ao gerar imagem do QR Code.");
           }
         }
@@ -236,8 +243,11 @@ export class WhatsAppEngine {
       });
 
     } catch (error) {
+      console.error("ERRO FATAL NA INICIALIZAÇÃO DO WHATSAPP:", error);
       this.addLogCallback("error", `Erro crítico na conexão do WhatsApp: ${(error as Error).message}`);
       this.status.status = "disconnected";
+      this.status.qrDataUrl = null;
+      this.status.qrCodeProgress = 0;
       this.sock = null;
     }
   }
