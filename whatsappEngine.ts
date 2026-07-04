@@ -37,6 +37,7 @@ export class WhatsAppEngine {
     connectedAt: null,
   };
   
+  private isConnecting = false;
   private authStatePath = (() => {
     const isProd = process.env.NODE_ENV === "production" || process.env.PORT === "3000";
     if (isProd) {
@@ -83,73 +84,117 @@ export class WhatsAppEngine {
     }
   }
 
-  public async connect() {
+  public async reset() {
+    this.isConnecting = false;
     if (this.sock) {
-      this.addLogCallback("warning", "WhatsApp já possui uma tentativa de conexão ativa.");
+      try {
+        this.sock.ev.removeAllListeners("connection.update");
+        this.sock.ev.removeAllListeners("creds.update");
+        this.sock.ev.removeAllListeners("messages.upsert");
+        this.sock.end(undefined);
+      } catch (e) {}
+      this.sock = null;
+    }
+    this.status = {
+      status: "disconnected",
+      phone: "",
+      userName: "",
+      qrCodeProgress: 0,
+      connectedAt: null,
+    };
+    this.addLogCallback("info", "Mecanismo de conexão reiniciado.");
+  }
+
+  public async connect(force = false) {
+    console.log(`📡 WhatsAppEngine: Chamada de connect(force=${force}). Status atual: ${this.status.status}, isConnecting: ${this.isConnecting}`);
+    
+    if (this.isConnecting && !force) {
+      this.addLogCallback("info", "Já existe uma tentativa de conexão em andamento...");
       return;
     }
 
+    if (this.status.status === "connected" && !force) {
+      this.addLogCallback("warning", "WhatsApp já está conectado.");
+      return;
+    }
+
+    this.isConnecting = true;
     this.status.status = "connecting";
     this.status.qrCodeProgress = 10;
-    this.addLogCallback("info", "Carregando credenciais de criptografia do WhatsApp...");
+    this.addLogCallback("info", "Iniciando processo de conexão com WhatsApp...");
 
     try {
-      const { state, saveCreds } = await useMultiFileAuthState(this.authStatePath);
-      
-      let version: [number, number, number] = [2, 2413, 1]; // Fallback estável
-      try {
-        const { version: latestVersion, isLatest } = await fetchLatestBaileysVersion();
-        version = latestVersion;
-        console.log(`📡 Baileys: Usando versão ${version.join(".")} (Latest: ${isLatest})`);
-      } catch (err) {
-        console.warn("Falha ao obter versão atualizada do Baileys:", err);
+      // Limpeza profunda se for forçado ou se já houver tentativa
+      if (this.sock || force) {
+        console.log("📡 WhatsAppEngine: Limpando socket anterior...");
+        try {
+          if (this.sock) {
+            this.sock.ev.removeAllListeners("connection.update");
+            this.sock.ev.removeAllListeners("creds.update");
+            this.sock.ev.removeAllListeners("messages.upsert");
+            this.sock.end(undefined);
+          }
+        } catch (e) {
+          console.error("Erro ao encerrar socket anterior:", e);
+        }
+        this.sock = null;
       }
 
-      console.log(`📡 Baileys: Iniciando socket com versão ${version.join(".")}`);
-      this.addLogCallback("info", `Iniciando mecanismo de conexão (v${version.join(".")})...`);
+      console.log(`📡 WhatsAppEngine: Lendo estado em ${this.authStatePath}`);
+      const { state, saveCreds } = await useMultiFileAuthState(this.authStatePath);
+      
+      let version: [number, number, number] = [2, 3000, 1017539728];
+      try {
+        const versionPromise = fetchLatestBaileysVersion();
+        const timeoutPromise = new Promise<any>((_, reject) => 
+          setTimeout(() => reject(new Error("Timeout version fetch")), 3000)
+        );
+        const { version: latestVersion } = await Promise.race([versionPromise, timeoutPromise]);
+        version = latestVersion;
+        console.log(`📡 Baileys: Versão obtida: ${version.join(".")}`);
+      } catch (err) {
+        console.warn("Usando fallback de versão Baileys:", err);
+      }
+
+      this.addLogCallback("info", "Criando socket de conexão segura...");
 
       this.sock = makeWASocket({
         version,
         logger: pino({ level: "error" }) as any,
         auth: state,
         printQRInTerminal: false,
-        browser: ["Windows", "Chrome", "11.0.0"], // Browser mais padrão
+        browser: ["Chrome (Linux)", "Chrome", "110.0.0"],
         connectTimeoutMs: 60000,
-        keepAliveIntervalMs: 25000,
+        keepAliveIntervalMs: 30000,
         emitOwnEvents: true,
         generateHighQualityLinkPreview: false,
         syncFullHistory: false,
       });
 
-      // Connection event listener
+      this.sock.ev.on("creds.update", saveCreds);
+
       this.sock.ev.on("connection.update", async (update) => {
         const { connection, lastDisconnect, qr } = update;
+        console.log("📡 Baileys Update:", { connection, qr: !!qr });
 
         if (qr) {
-          console.log("📡 Baileys: QR Code recebido, convertendo para imagem...");
           this.status.status = "qr_code";
           this.status.qrCodeProgress = 50;
           try {
-            const dataUrl = await QRCode.toDataURL(qr);
-            this.status.qrDataUrl = dataUrl;
-            this.status.qrCodeProgress = 90;
-            console.log("📡 Baileys: Imagem do QR Code gerada com sucesso!");
-            this.addLogCallback("info", "Novo QR Code gerado. Aguardando escaneamento no celular...");
+            this.status.qrDataUrl = await QRCode.toDataURL(qr);
+            this.status.qrCodeProgress = 95;
+            this.addLogCallback("info", "QR Code gerado! Por favor, escaneie com seu WhatsApp.");
           } catch (err) {
-            console.error("Erro ao converter QR para DataURL:", err);
+            console.error("Erro QR:", err);
             this.addLogCallback("error", "Falha ao gerar imagem do QR Code.");
           }
         }
 
-        if (connection === "connecting") {
-          this.status.status = "connecting";
-          this.addLogCallback("info", "Estabelecendo handshake com os servidores do WhatsApp...");
-        }
-
         if (connection === "open") {
+          this.isConnecting = false;
           const userJid = this.sock?.user?.id || "";
-          const userName = this.sock?.user?.name || "Minha Conta WhatsApp";
-          const phone = userJid.split(":")[0] || userJid.split("@")[0] || "";
+          const userName = this.sock?.user?.name || "Minha Conta";
+          const phone = userJid.split(":")[0] || "";
 
           this.status = {
             status: "connected",
@@ -158,40 +203,27 @@ export class WhatsAppEngine {
             qrCodeProgress: 100,
             connectedAt: new Date().toLocaleString("pt-BR"),
           };
-
-          this.addLogCallback("success", `🟢 WhatsApp CONECTADO REAL com sucesso! Logado como ${userName} (+${phone})`);
-          
-          // Fetch groups the user is in
+          this.addLogCallback("success", `🟢 Conectado com sucesso como ${userName}`);
           this.fetchAndRegisterGroups();
         }
 
         if (connection === "close") {
+          this.isConnecting = false;
           const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode;
-          const shouldReconnect = statusCode !== DisconnectReason.loggedOut;
-
-          this.status = {
-            status: "disconnected",
-            phone: "",
-            userName: "",
-            qrCodeProgress: 0,
-            connectedAt: null,
-          };
+          console.log("📡 Conexão fechada. Código:", statusCode);
+          
+          this.status.status = "disconnected";
           this.sock = null;
 
-          this.addLogCallback("warning", `🔴 Conexão encerrada pelo WhatsApp (Código: ${statusCode}).`);
-
-          if (shouldReconnect) {
-            this.addLogCallback("info", "Tentando reconectar em 5 segundos...");
-            setTimeout(() => this.connect(), 5000);
+          if (statusCode !== DisconnectReason.loggedOut) {
+            this.addLogCallback("warning", "Conexão perdida. Tentando reconectar em 10s...");
+            setTimeout(() => this.connect(), 10000);
           } else {
-            this.addLogCallback("error", "Sessão deslogada permanentemente pelo celular. Limpando dados da sessão...");
+            this.addLogCallback("error", "Sessão encerrada. Você precisará gerar um novo QR Code.");
             this.logout();
           }
         }
       });
-
-      // Save credentials callback
-      this.sock.ev.on("creds.update", saveCreds);
 
       // Incoming messages listener
       this.sock.ev.on("messages.upsert", async (m) => {
@@ -243,6 +275,7 @@ export class WhatsAppEngine {
       });
 
     } catch (error) {
+      this.isConnecting = false;
       console.error("ERRO FATAL NA INICIALIZAÇÃO DO WHATSAPP:", error);
       this.addLogCallback("error", `Erro crítico na conexão do WhatsApp: ${(error as Error).message}`);
       this.status.status = "disconnected";

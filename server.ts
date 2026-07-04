@@ -702,7 +702,7 @@ app.get("/api/whatsapp/status", (req, res) => {
 });
 
 app.post("/api/whatsapp/connect", (req, res) => {
-  whatsappEngine.connect();
+  whatsappEngine.connect(true);
   res.json(whatsappEngine.status);
 });
 
