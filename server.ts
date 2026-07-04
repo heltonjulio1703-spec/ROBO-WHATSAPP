@@ -373,9 +373,7 @@ const parseMessageWithRegex = async (messageText: string, affiliateId: string) =
 🛍️ *${productTitle || "Produto Achado"}*
 
 🔗 Compre aqui com desconto garantido:
-👉 ${affiliateLink}
-
-🚀 _Enviado via Robô de Afiliados Shopee_`;
+👉 ${affiliateLink}`;
 
   return {
     hasShopeeLink: true,
