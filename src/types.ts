@@ -4,6 +4,7 @@ export interface AppConfig {
   autoPilotInterval: number;
   rewriteStyle: "excited" | "minimal" | "creative" | "direct";
   keywords: string;
+  isTransmissionEnabled: boolean;
   shopeeAppKey?: string;
   shopeeAppSecret?: string;
   shopeeAffiliateId?: string;

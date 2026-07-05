@@ -31,6 +31,7 @@ export default function App() {
     autoPilotInterval: 30,
     rewriteStyle: "excited",
     keywords: "promocao, cupom, desconto, oferta, achado, frete gratis, shopee, shp.ee",
+    isTransmissionEnabled: true,
   });
 
   const [whatsapp, setWhatsapp] = React.useState<WhatsAppStatus>({
@@ -206,6 +207,18 @@ export default function App() {
     }
   };
 
+  const handleToggleTransmission = async () => {
+    try {
+      const response = await fetch("/api/transmission/toggle", { method: "POST" });
+      const data = await response.json();
+      if (data.success) {
+        setConfig(prev => ({ ...prev, isTransmissionEnabled: data.isTransmissionEnabled }));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const handleSimulateIncoming = async (sourceGroupId: string, messageText: string) => {
     try {
       await fetch("/api/simulation/incoming", {
@@ -244,6 +257,19 @@ export default function App() {
           {/* Right quick connection badge */}
           <div className="flex items-center gap-4">
             
+            {/* Transmission Toggle Button */}
+            <button
+              onClick={handleToggleTransmission}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                config.isTransmissionEnabled 
+                  ? "bg-green-100 text-green-700 hover:bg-green-200 border border-green-200" 
+                  : "bg-red-100 text-red-700 hover:bg-red-200 border border-red-200"
+              }`}
+            >
+              <div className={`w-2 h-2 rounded-full ${config.isTransmissionEnabled ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+              {config.isTransmissionEnabled ? "ROBÔ LIGADO" : "ROBÔ DESLIGADO"}
+            </button>
+
             {/* Shopee Program Helper */}
             <a 
               href="https://afiliados.shopee.com.br/"

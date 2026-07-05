@@ -26,6 +26,7 @@ const state = {
     autoPilotInterval: 30, // seconds
     rewriteStyle: "excited", // "excited", "minimal", "creative", "direct"
     keywords: "promocao, cupom, desconto, oferta, achado, frete gratis, shopee, shp.ee",
+    isTransmissionEnabled: true,
     shopeeAppKey: "",
     shopeeAppSecret: "",
     shopeeAffiliateId: "",
@@ -473,6 +474,11 @@ const getProductImage = (title: string): string => {
 
 // Process an incoming message (either simulated or actual)
 const processIncomingMessage = async (sourceGroupName: string, messageText: string, imageBuffer?: Buffer, imageUrl?: string) => {
+  if (!state.config.isTransmissionEnabled) {
+    addLog("info", `Transmissão pausada: Mensagem de "${sourceGroupName}" ignorada.`);
+    return null;
+  }
+
   // Filtro de palavra-chave desabilitado por solicitação do usuário. Todos os anúncios de links Shopee serão processados.
   /*
   const keywords = state.config.keywords.split(",").map(k => k.trim().toLowerCase());
@@ -622,7 +628,7 @@ const startAutoPilotSimulator = () => {
       return;
     }
 
-    if (!state.config.autoPilot) return;
+    if (!state.config.autoPilot || !state.config.isTransmissionEnabled) return;
 
     // Pick random source group that is active
     const activeSources = state.groups.sources.filter(g => g.active);
@@ -658,6 +664,12 @@ app.post("/api/config", (req, res) => {
   // Restart autopilot timer to apply new intervals
   startAutoPilotSimulator();
   res.json({ success: true, config: state.config });
+});
+
+app.post("/api/transmission/toggle", (req, res) => {
+  state.config.isTransmissionEnabled = !state.config.isTransmissionEnabled;
+  addLog("info", `Transmissão de anúncios ${state.config.isTransmissionEnabled ? "REATIVADA" : "PAUSADA"} pelo usuário.`);
+  res.json({ success: true, isTransmissionEnabled: state.config.isTransmissionEnabled });
 });
 
 // Groups
