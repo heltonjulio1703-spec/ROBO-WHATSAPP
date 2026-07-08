@@ -39,6 +39,7 @@ export class WhatsAppEngine {
   };
   
   private isConnecting = false;
+  private groupNameCache = new Map<string, string>();
   private authStatePath = (() => {
     const isElectron = typeof process !== 'undefined' && (process.versions?.electron || process.env.ELECTRON_RUN_AS_NODE);
     
@@ -168,7 +169,22 @@ export class WhatsAppEngine {
 
       this.sock = makeWASocket({
         version,
-        logger: pino({ level: "error" }) as any,
+        logger: pino({
+          level: "error",
+        }, {
+          write: (msg: string) => {
+            if (
+              msg.includes("No session found to decrypt message") ||
+              msg.includes("transaction failed, rolling back") ||
+              msg.includes("failed to decrypt message") ||
+              msg.includes("skmsg") ||
+              msg.includes("isSessionRecordError")
+            ) {
+              return;
+            }
+            process.stdout.write(msg);
+          }
+        }) as any,
         auth: state,
         printQRInTerminal: false,
         browser: ["Chrome (Linux)", "Chrome", "110.0.0"],
@@ -253,14 +269,19 @@ export class WhatsAppEngine {
 
           // Obtain sender group name if cached, or use remoteJid
           let groupName = "Grupo WhatsApp";
-          try {
-            const metadata = await this.sock?.groupMetadata(from);
-            if (metadata?.subject) {
-              groupName = metadata.subject;
+          if (this.groupNameCache.has(from)) {
+            groupName = this.groupNameCache.get(from)!;
+          } else {
+            try {
+              const metadata = await this.sock?.groupMetadata(from);
+              if (metadata?.subject) {
+                groupName = metadata.subject;
+                this.groupNameCache.set(from, groupName);
+              }
+            } catch (e) {
+              // Ignore metadata fetch errors, use RemoteJid
+              groupName = `Grupo (${from.split("@")[0]})`;
             }
-          } catch (e) {
-            // Ignore metadata fetch errors, use RemoteJid
-            groupName = `Grupo (${from.split("@")[0]})`;
           }
 
           let imageBuffer: Buffer | undefined = undefined;
@@ -301,11 +322,15 @@ export class WhatsAppEngine {
       this.addLogCallback("info", "Buscando lista de grupos que você participa no WhatsApp...");
       const participatingGroups = await this.sock.groupFetchAllParticipating();
       
-      const discoveredGroups: GroupItem[] = Object.values(participatingGroups).map((g) => ({
-        id: g.id,
-        name: g.subject || `Grupo (${g.id.split("@")[0]})`,
-        active: false, // Default to inactive until selected
-      }));
+      const discoveredGroups: GroupItem[] = Object.values(participatingGroups).map((g) => {
+        const name = g.subject || `Grupo (${g.id.split("@")[0]})`;
+        this.groupNameCache.set(g.id, name);
+        return {
+          id: g.id,
+          name: name,
+          active: false, // Default to inactive until selected
+        };
+      });
 
       this.onGroupsDiscoveredCallback(discoveredGroups);
       this.addLogCallback("success", `✨ Sincronizados ${discoveredGroups.length} grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los.`);

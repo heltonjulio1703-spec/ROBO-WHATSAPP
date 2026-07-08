@@ -147,7 +147,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   React.useEffect(() => {
     if (saveStatus !== "unsaved") {
-      setAffId(config.affiliateId);
+      const initialAffId = config.affiliateId || config.shopeeAffiliateId || "";
+      const initialShopeeAffId = config.shopeeAffiliateId || config.affiliateId || "";
+      setAffId(initialAffId);
       setIntervalTime(config.autoPilotInterval);
       setKw(config.keywords);
       setAp(config.autoPilot);
@@ -155,7 +157,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       setUseShopeeApi(config.useShopeeApi || false);
       setShopeeAppKey(config.shopeeAppKey || "");
       setShopeeAppSecret(config.shopeeAppSecret || "");
-      setShopeeAffId(config.shopeeAffiliateId || "");
+      setShopeeAffId(initialShopeeAffId);
     }
   }, [config, saveStatus]);
 
@@ -163,9 +165,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     e.preventDefault();
     setSaveStatus("saving");
     try {
+      const resolvedAffId = useShopeeApi ? shopeeAffId : affId;
       const updatedConfig = {
         ...config,
-        affiliateId: affId,
+        affiliateId: resolvedAffId,
         autoPilotInterval: Number(intervalTime),
         keywords: kw,
         autoPilot: ap,
@@ -173,7 +176,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         useShopeeApi,
         shopeeAppKey,
         shopeeAppSecret,
-        shopeeAffiliateId: shopeeAffId,
+        shopeeAffiliateId: resolvedAffId,
       };
       setConfig(updatedConfig);
       await saveConfig(updatedConfig);
@@ -248,29 +251,31 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <form id="config-form" onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Affiliate ID */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  ID de Afiliado Shopee (obrigatório)
-                </label>
-                <input
-                  id="affiliate-id-input"
-                  type="text"
-                  value={affId}
-                  onChange={(e) => {
-                    setAffId(e.target.value);
-                    setSaveStatus("unsaved");
-                  }}
-                  placeholder="Ex: heltonjulio1703"
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                  required
-                />
-                <p className="text-xs text-gray-400 mt-1">
-                  Seus links convertidos serão redirecionados usando este ID de rastreamento.
-                </p>
-              </div>
+              {!useShopeeApi && (
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    ID de Afiliado Shopee (obrigatório)
+                  </label>
+                  <input
+                    id="affiliate-id-input"
+                    type="text"
+                    value={affId}
+                    onChange={(e) => {
+                      setAffId(e.target.value);
+                      setSaveStatus("unsaved");
+                    }}
+                    placeholder="Ex: heltonjulio1703"
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                    required={!useShopeeApi}
+                  />
+                  <p className="text-xs text-gray-400 mt-1">
+                    Seus links convertidos serão redirecionados usando este ID de rastreamento.
+                  </p>
+                </div>
+              )}
 
               {/* Autopilot Interval */}
-              <div>
+              <div className={useShopeeApi ? "md:col-span-2" : ""}>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Intervalo de Simulação (segundos)
                 </label>
@@ -401,9 +406,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       </div>
                     </div>
                   </div>
-                  <div>
+                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      ID de Afiliado Oficial da API (Opcional)
+                      ID de Afiliado Shopee (obrigatório)
                     </label>
                     <div className="flex gap-1.5">
                       <input
@@ -414,8 +419,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           setShopeeAffId(e.target.value);
                           setSaveStatus("unsaved");
                         }}
-                        placeholder="Deixe em branco para usar o ID padrão"
+                        placeholder="Ex: heltonjulio1703"
                         className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
+                        required={useShopeeApi}
                       />
                       <button
                         type="button"
@@ -432,7 +438,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       </button>
                     </div>
                     <p className="text-[10px] text-gray-400 mt-1">
-                      Se você tem um ID de Afiliado específico associado às suas chaves da API, insira-o aqui. Caso contrário, o ID padrão acima será utilizado.
+                      Insira seu ID de Afiliado. Ele será usado para identificar suas conversões ou como reserva (fallback) direta caso a chamada da API falhe ou as credenciais estejam inativas.
                     </p>
                   </div>
 

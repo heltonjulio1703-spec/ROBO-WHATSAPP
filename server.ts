@@ -247,7 +247,11 @@ const convertWithShopeeApi = async (
 
       const json = await response.json() as any;
       if (json.errors && json.errors.length > 0) {
-        throw new Error(json.errors[0].message || "GraphQL error");
+        let msg = json.errors[0].message || "GraphQL error";
+        if (msg.includes("10020") || msg.toLowerCase().includes("invalid credential")) {
+          msg = "Erro 10020: Credenciais da API Shopee Inválidas ou Inativas. Verifique se copiou a Chave e Segredo corretamente no painel.";
+        }
+        throw new Error(msg);
       }
 
       const data = json.data?.generatePromotionLink;
@@ -255,11 +259,19 @@ const convertWithShopeeApi = async (
         console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint}`);
         return data.data.promotionLink;
       } else {
-        const errorMsg = data?.message || "Sem link retornado da API";
+        let errorMsg = data?.message || "Sem link retornado da API";
+        if (data?.code === 10020 || errorMsg.includes("10020") || errorMsg.toLowerCase().includes("invalid credential")) {
+          errorMsg = "Erro 10020: Credenciais da API Shopee Inválidas ou Inativas. Verifique se copiou a Chave e Segredo corretamente no painel.";
+        }
         throw new Error(`Shopee API cod ${data?.code}: ${errorMsg}`);
       }
     } catch (error) {
-      console.warn(`Falha na conversão Shopee API usando endpoint ${endpoint}:`, error);
+      const isDnsError = (error as any).code === "ENOTFOUND" || (error as Error).message?.includes("getaddrinfo") || (error as Error).message?.includes("fetch failed");
+      if (isDnsError) {
+        console.log(`Endpoint ${endpoint} não pôde ser resolvido por DNS (ENOTFOUND).`);
+      } else {
+        console.warn(`Falha na conversão Shopee API usando endpoint ${endpoint}:`, error);
+      }
       lastError = error as Error;
     }
   }
@@ -284,7 +296,7 @@ const convertToAffiliateLinkAsync = async (originalUrl: string, affiliateId: str
         return apiLink;
       }
     } catch (err) {
-      addLog("error", `⚠️ Falha ao converter via API da Shopee: ${(err as Error).message}. Usando simulador.`);
+      addLog("error", `⚠️ Falha ao converter via API da Shopee: ${(err as Error).message}. Usando formato de link estruturado (com ID de Afiliado)...`);
     }
   }
 
@@ -507,6 +519,27 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
     return null;
   }
 
+  // 1. Checagem rápida de duplicidade antes do processamento pesado do Gemini
+  const shopeeLinkRegex = /(https?:\/\/(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com)[^\s]+)/i;
+  const match = messageText.match(shopeeLinkRegex);
+  const foundLink = match ? match[1].toLowerCase().trim() : null;
+  const cleanMessage = messageText.trim().replace(/\s+/g, " ");
+
+  const isDuplicatePre = state.history.some(h => {
+    if (h.originalMessage && h.originalMessage.trim().replace(/\s+/g, " ") === cleanMessage) {
+      return true;
+    }
+    if (foundLink && h.originalLink && h.originalLink.toLowerCase().trim() === foundLink) {
+      return true;
+    }
+    return false;
+  });
+
+  if (isDuplicatePre) {
+    addLog("info", `Anúncio em "${sourceGroupName}" já foi convertido e enviado anteriormente (${foundLink || "mensagem idêntica"}). Ignorando para evitar duplicidade.`);
+    return null;
+  }
+
   // Filtro de palavra-chave desabilitado por solicitação do usuário. Todos os anúncios de links Shopee serão processados.
   /*
   const keywords = state.config.keywords.split(",").map(k => k.trim().toLowerCase());
@@ -529,6 +562,22 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   if (!parsed.hasShopeeLink) {
     addLog("warning", `Anúncio em "${sourceGroupName}" não contém link da Shopee. Processamento ignorado.`);
     return null;
+  }
+
+  // 2. Checagem profunda após Gemini, caso o link original tenha sido expandido pela API
+  if (parsed.originalLink) {
+    const parsedOriginalLinkClean = parsed.originalLink.toLowerCase().trim();
+    const isDuplicatePost = state.history.some(h => {
+      if (h.originalLink && h.originalLink.toLowerCase().trim() === parsedOriginalLinkClean) {
+        return true;
+      }
+      return false;
+    });
+
+    if (isDuplicatePost) {
+      addLog("info", `Anúncio em "${sourceGroupName}" com link expandido (${parsed.originalLink}) já foi processado anteriormente. Ignorando para evitar duplicidade.`);
+      return null;
+    }
   }
 
   // Identify targets
