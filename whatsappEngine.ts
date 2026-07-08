@@ -316,7 +316,9 @@ export class WhatsAppEngine {
 
   // Fetch groups the logged-in user is currently in and populate them in source/target lists
   public async fetchAndRegisterGroups() {
-    if (!this.sock) return;
+    if (!this.sock) {
+      throw new Error("O WhatsApp não está conectado no momento.");
+    }
 
     try {
       this.addLogCallback("info", "Buscando lista de grupos que você participa no WhatsApp...");
@@ -336,6 +338,7 @@ export class WhatsAppEngine {
       this.addLogCallback("success", `✨ Sincronizados ${discoveredGroups.length} grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los.`);
     } catch (err) {
       this.addLogCallback("warning", `Não foi possível listar os grupos automaticamente: ${(err as Error).message}`);
+      throw err;
     }
   }
 

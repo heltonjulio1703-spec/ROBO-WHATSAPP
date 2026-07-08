@@ -636,19 +636,38 @@ const whatsappEngine = new WhatsAppEngine(
   (discoveredGroups) => {
     // Merge discovered groups into sources and targets
     let addedCount = 0;
+    let updatedCount = 0;
+
     discoveredGroups.forEach(g => {
-      if (!state.groups.sources.some(s => s.id === g.id)) {
+      // Sources
+      const existingSource = state.groups.sources.find(s => s.id === g.id);
+      if (existingSource) {
+        if (existingSource.name !== g.name) {
+          existingSource.name = g.name;
+          updatedCount++;
+        }
+      } else {
         state.groups.sources.push({ id: g.id, name: g.name, active: false });
         addedCount++;
       }
-      if (!state.groups.targets.some(t => t.id === g.id)) {
+
+      // Targets
+      const existingTarget = state.groups.targets.find(t => t.id === g.id);
+      if (existingTarget) {
+        if (existingTarget.name !== g.name) {
+          existingTarget.name = g.name;
+          updatedCount++;
+        }
+      } else {
         state.groups.targets.push({ id: g.id, name: g.name, active: false });
         addedCount++;
       }
     });
-    if (addedCount > 0) {
-      addLog("info", `Novos grupos do WhatsApp identificados e sincronizados.`);
+
+    if (addedCount > 0 || updatedCount > 0) {
+      addLog("info", `Sincronização concluída: ${addedCount} novos e ${updatedCount} nomes de grupos atualizados.`);
     }
+    saveStateToFile();
   },
   async (groupJid, groupName, text, imageBuffer, imageUrl) => {
     // Check if this source group is active
@@ -826,7 +845,7 @@ app.post("/api/whatsapp/disconnect", async (req, res) => {
 
 // Sync real or simulated WhatsApp groups
 app.post("/api/whatsapp/sync-groups", async (req, res) => {
-  if (whatsappEngine.status.status !== "connected") {
+  if (whatsappEngine.status.status !== "connected" || !whatsappEngine.sock) {
     // If we are in simulated connection, or even if disconnected, return simulated groups so the user can test
     const simulatedGroups = [
       { id: "120363198421045239@g.us", name: "Shopee Ofertas Bombásticas 💣" },
@@ -845,6 +864,7 @@ app.post("/api/whatsapp/sync-groups", async (req, res) => {
       }
     });
 
+    saveStateToFile();
     addLog("success", `✨ Sincronizados ${simulatedGroups.length} grupos simulados! Vá em 'Grupos e Canais' para ativá-los.`);
     return res.json({ success: true, groups: state.groups });
   }
