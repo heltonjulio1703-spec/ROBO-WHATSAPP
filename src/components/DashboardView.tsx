@@ -1,6 +1,6 @@
 import React from "react";
 import { AppConfig, LogItem } from "../types";
-import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2 } from "lucide-react";
+import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2, Clipboard, ClipboardCheck, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 
 interface DashboardViewProps {
@@ -32,6 +32,118 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [shopeeAppKey, setShopeeAppKey] = React.useState(config.shopeeAppKey || "");
   const [shopeeAppSecret, setShopeeAppSecret] = React.useState(config.shopeeAppSecret || "");
   const [shopeeAffId, setShopeeAffId] = React.useState(config.shopeeAffiliateId || "");
+
+  const [smartPasteText, setSmartPasteText] = React.useState("");
+  const [smartPasteStatus, setSmartPasteStatus] = React.useState<{ success: boolean; message: string } | null>(null);
+  const [copiedField, setCopiedField] = React.useState<string | null>(null);
+
+  const handleSmartPaste = (text: string) => {
+    if (!text.trim()) {
+      setSmartPasteStatus({ success: false, message: "Por favor, cole algum texto contendo as credenciais." });
+      return;
+    }
+
+    let parsedKey = "";
+    let parsedSecret = "";
+    let parsedAff = "";
+    let method = "";
+
+    // 1. Try JSON parsing
+    try {
+      const trimmed = text.trim();
+      if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+        const data = JSON.parse(trimmed);
+        parsedKey = data.app_key || data.appKey || data.appkey || data.key || "";
+        parsedSecret = data.app_secret || data.appSecret || data.appsecret || data.secret || "";
+        parsedAff = data.affiliate_id || data.affiliateId || data.shopeeAffiliateId || data.affiliate || "";
+        method = "Formato JSON";
+      }
+    } catch (e) {
+      // Ignore JSON error and try text
+    }
+
+    // 2. Try label parsing (Key: Value or key = value)
+    if (!parsedKey || !parsedSecret) {
+      const lines = text.split(/\r?\n/);
+      for (const line of lines) {
+        const parts = line.split(/[:=]/);
+        if (parts.length >= 2) {
+          const fieldName = parts[0].trim().toLowerCase();
+          const fieldValue = parts.slice(1).join(":").trim();
+
+          if (fieldName.includes("key") || fieldName.includes("chave") || fieldName.includes("appkey") || fieldName.includes("app_key")) {
+            parsedKey = fieldValue.replace(/['"‘“’”’]/g, "").trim();
+          } else if (fieldName.includes("secret") || fieldName.includes("segredo") || fieldName.includes("appsecret") || fieldName.includes("app_secret")) {
+            parsedSecret = fieldValue.replace(/['"‘“’”’]/g, "").trim();
+          } else if (fieldName.includes("affiliate") || fieldName.includes("afiliado") || fieldName.includes("id")) {
+            parsedAff = fieldValue.replace(/['"‘“’”’]/g, "").trim();
+          }
+        }
+      }
+      if (parsedKey || parsedSecret) {
+        method = "Linha de Texto (Chave/Segredo)";
+      }
+    }
+
+    // 3. Regex block parsing - look for hex codes, alphanumeric strings, numbers
+    if (!parsedKey || !parsedSecret) {
+      const tokens = text.match(/[a-zA-Z0-9_\-]+/g) || [];
+      // Shopee Secret key is generally a 32 character alphanumeric
+      const secretCandidate = tokens.find(t => t.length === 32);
+      // App Key is usually a number or short string
+      const keyCandidate = tokens.find(t => t !== secretCandidate && t.length >= 5 && t.length <= 15 && /^\d+$/.test(t));
+
+      if (secretCandidate && keyCandidate) {
+        parsedKey = keyCandidate;
+        parsedSecret = secretCandidate;
+        method = "Associação de Padrões";
+      }
+    }
+
+    if (parsedKey || parsedSecret || parsedAff) {
+      if (parsedKey) setShopeeAppKey(parsedKey);
+      if (parsedSecret) setShopeeAppSecret(parsedSecret);
+      if (parsedAff) setShopeeAffId(parsedAff);
+      
+      setSaveStatus("unsaved");
+      setSmartPasteStatus({
+        success: true,
+        message: `Importado via ${method}! ${parsedKey ? "✅ Chave detectada" : ""} ${parsedSecret ? "✅ Segredo detectado" : ""} ${parsedAff ? "✅ ID Afiliado" : ""}`.trim()
+      });
+      setSmartPasteText("");
+    } else {
+      setSmartPasteStatus({
+        success: false,
+        message: "Não conseguimos identificar credenciais válidas. Tente colar uma por uma ou use formato JSON."
+      });
+    }
+  };
+
+  const handlePasteDirect = async (field: "key" | "secret" | "aff") => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text) return;
+      
+      const cleanText = text.trim();
+      if (field === "key") {
+        setShopeeAppKey(cleanText);
+      } else if (field === "secret") {
+        setShopeeAppSecret(cleanText);
+      } else if (field === "aff") {
+        setShopeeAffId(cleanText);
+      }
+      
+      setSaveStatus("unsaved");
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (err) {
+      console.warn("Direct clipboard paste failed:", err);
+      setSmartPasteStatus({
+        success: false,
+        message: "O navegador bloqueou a colagem automática neste modo iframe. Use a área de texto abaixo!"
+      });
+    }
+  };
 
   React.useEffect(() => {
     if (saveStatus !== "unsaved") {
@@ -228,56 +340,158 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       <label className="block text-xs font-semibold text-gray-700 mb-1">
                         Shopee API App Key (Chave do Aplicativo)
                       </label>
-                      <input
-                        id="shopee-app-key-input"
-                        type="text"
-                        value={shopeeAppKey}
-                        onChange={(e) => {
-                          setShopeeAppKey(e.target.value);
-                          setSaveStatus("unsaved");
-                        }}
-                        placeholder="Insira seu App Key"
-                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
-                        required={useShopeeApi}
-                      />
+                      <div className="flex gap-1.5">
+                        <input
+                          id="shopee-app-key-input"
+                          type="text"
+                          value={shopeeAppKey}
+                          onChange={(e) => {
+                            setShopeeAppKey(e.target.value);
+                            setSaveStatus("unsaved");
+                          }}
+                          placeholder="Insira seu App Key"
+                          className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
+                          required={useShopeeApi}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handlePasteDirect("key")}
+                          className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-250 border border-gray-200 hover:border-gray-300 text-gray-600 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors shrink-0"
+                          title="Colar da área de transferência"
+                        >
+                          {copiedField === "key" ? (
+                            <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
+                          ) : (
+                            <Clipboard className="w-3.5 h-3.5" />
+                          )}
+                          <span>{copiedField === "key" ? "Pronto!" : "Colar"}</span>
+                        </button>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1">
                         Shopee API App Secret (Segredo do Aplicativo)
                       </label>
-                      <input
-                        id="shopee-app-secret-input"
-                        type="password"
-                        value={shopeeAppSecret}
-                        onChange={(e) => {
-                          setShopeeAppSecret(e.target.value);
-                          setSaveStatus("unsaved");
-                        }}
-                        placeholder="••••••••••••••••"
-                        className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
-                        required={useShopeeApi}
-                      />
+                      <div className="flex gap-1.5">
+                        <input
+                          id="shopee-app-secret-input"
+                          type="password"
+                          value={shopeeAppSecret}
+                          onChange={(e) => {
+                            setShopeeAppSecret(e.target.value);
+                            setSaveStatus("unsaved");
+                          }}
+                          placeholder="••••••••••••••••"
+                          className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
+                          required={useShopeeApi}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handlePasteDirect("secret")}
+                          className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-250 border border-gray-200 hover:border-gray-300 text-gray-600 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors shrink-0"
+                          title="Colar da área de transferência"
+                        >
+                          {copiedField === "secret" ? (
+                            <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
+                          ) : (
+                            <Clipboard className="w-3.5 h-3.5" />
+                          )}
+                          <span>{copiedField === "secret" ? "Pronto!" : "Colar"}</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
                       ID de Afiliado Oficial da API (Opcional)
                     </label>
-                    <input
-                      id="shopee-api-affiliate-id-input"
-                      type="text"
-                      value={shopeeAffId}
-                      onChange={(e) => {
-                        setShopeeAffId(e.target.value);
-                        setSaveStatus("unsaved");
-                      }}
-                      placeholder="Deixe em branco para usar o ID padrão"
-                      className="w-full px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
-                    />
+                    <div className="flex gap-1.5">
+                      <input
+                        id="shopee-api-affiliate-id-input"
+                        type="text"
+                        value={shopeeAffId}
+                        onChange={(e) => {
+                          setShopeeAffId(e.target.value);
+                          setSaveStatus("unsaved");
+                        }}
+                        placeholder="Deixe em branco para usar o ID padrão"
+                        className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handlePasteDirect("aff")}
+                        className="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-250 border border-gray-200 hover:border-gray-300 text-gray-600 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors shrink-0"
+                        title="Colar da área de transferência"
+                      >
+                        {copiedField === "aff" ? (
+                          <ClipboardCheck className="w-3.5 h-3.5 text-emerald-600 animate-bounce" />
+                        ) : (
+                          <Clipboard className="w-3.5 h-3.5" />
+                        )}
+                        <span>{copiedField === "aff" ? "Pronto!" : "Colar"}</span>
+                      </button>
+                    </div>
                     <p className="text-[10px] text-gray-400 mt-1">
                       Se você tem um ID de Afiliado específico associado às suas chaves da API, insira-o aqui. Caso contrário, o ID padrão acima será utilizado.
                     </p>
                   </div>
+
+                  {/* Smart Paste Box */}
+                  <div className="border-t border-slate-200 pt-3 mt-3 space-y-2">
+                    <span className="text-[11px] font-bold text-indigo-600 flex items-center gap-1.5 uppercase tracking-wide">
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-500 animate-pulse" />
+                      Área de Importação Rápida (Colar bloco inteiro de dados)
+                    </span>
+                    <p className="text-[10.5px] text-gray-500 leading-relaxed">
+                      Cole qualquer bloco de texto ou JSON copiado da plataforma Shopee abaixo para extrair e preencher todos os dados da API de uma só vez.
+                    </p>
+                    <textarea
+                      rows={2}
+                      value={smartPasteText}
+                      onChange={(e) => {
+                        setSmartPasteText(e.target.value);
+                        if (e.target.value.length > 5) {
+                          handleSmartPaste(e.target.value);
+                        }
+                      }}
+                      onPaste={(e) => {
+                        const pastedData = e.clipboardData.getData("text");
+                        if (pastedData) {
+                          handleSmartPaste(pastedData);
+                        }
+                      }}
+                      placeholder="Cole o JSON ou texto corrido das credenciais aqui..."
+                      className="w-full px-3 py-1.5 border border-gray-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-white placeholder-gray-400 font-mono text-slate-800"
+                    />
+                    <div className="flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() => handleSmartPaste(smartPasteText)}
+                        className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-md text-[10px] font-bold transition-colors cursor-pointer"
+                      >
+                        Analisar e Preencher Dados
+                      </button>
+                      {smartPasteText && (
+                        <button
+                          type="button"
+                          onClick={() => setSmartPasteText("")}
+                          className="text-[10px] text-gray-400 hover:text-gray-600 underline"
+                        >
+                          Limpar campo
+                        </button>
+                      )}
+                    </div>
+                    {smartPasteStatus && (
+                      <div className={`p-2 rounded text-[10.5px] font-semibold ${
+                        smartPasteStatus.success
+                          ? "bg-emerald-50 border border-emerald-150 text-emerald-800"
+                          : "bg-amber-50 border border-amber-150 text-amber-800"
+                      }`}>
+                        {smartPasteStatus.message}
+                      </div>
+                    )}
+                  </div>
+
                   <div className="bg-blue-50 border border-blue-150 p-2.5 rounded-md text-[11px] text-blue-800 flex gap-2">
                     <Shield className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                     <div>

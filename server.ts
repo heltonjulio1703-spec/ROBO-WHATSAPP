@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import { WhatsAppEngine, GroupItem } from "./whatsappEngine";
 import fs from "fs";
 import crypto from "crypto";
+import os from "os";
 
 dotenv.config();
 
@@ -70,30 +71,37 @@ const state = {
 
 // State Persistence Helper Functions
 const STATE_FILE_PATH = (() => {
-  const isProd = process.env.NODE_ENV === "production" || process.env.PORT === "3000";
-  if (isProd) {
-    return "/tmp/state_data.json";
+  const isElectron = typeof process !== 'undefined' && (process.versions?.electron || process.env.ELECTRON_RUN_AS_NODE);
+  
+  if (isElectron) {
+    const homeDir = os.homedir();
+    const appDataPath = path.join(homeDir, ".shopee-bot-sessions");
+    if (!fs.existsSync(appDataPath)) {
+      fs.mkdirSync(appDataPath, { recursive: true });
+    }
+    return path.join(appDataPath, "state_data.json");
   }
+
   try {
     const testPath = path.join(process.cwd(), "test_write_perm");
     fs.mkdirSync(testPath, { recursive: true });
     fs.rmdirSync(testPath);
     return path.join(process.cwd(), "state_data.json");
   } catch {
-    return "/tmp/state_data.json";
+    return path.join(os.tmpdir(), "state_data.json");
   }
 })();
 
-// Copy initial state_data.json if we are using /tmp and the /tmp file doesn't exist yet
-if (STATE_FILE_PATH.startsWith("/tmp")) {
+// Copy initial state_data.json if we are using an external path and the file doesn't exist yet
+if (STATE_FILE_PATH !== path.join(process.cwd(), "state_data.json")) {
   try {
     const localPath = path.join(process.cwd(), "state_data.json");
     if (fs.existsSync(localPath) && !fs.existsSync(STATE_FILE_PATH)) {
       fs.copyFileSync(localPath, STATE_FILE_PATH);
-      console.log("Copiado arquivo de estado inicial para /tmp/state_data.json");
+      console.log(`Copiado arquivo de estado inicial para ${STATE_FILE_PATH}`);
     }
   } catch (err) {
-    console.error("Falha ao copiar estado inicial para /tmp:", err);
+    console.error("Falha ao copiar estado inicial:", err);
   }
 }
 
@@ -184,12 +192,14 @@ const convertWithShopeeApi = async (
   appSecret: string,
   subId: string = "bot"
 ): Promise<string | null> => {
-  const timestamp = Math.floor(Date.now() / 1000);
-  
+  // Escape strings to prevent invalid JSON/GraphQL syntax
+  const escapedUrl = originalUrl.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  const escapedSubId = subId.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+
   const query = `mutation {
     generatePromotionLink(linkParams: {
-      originalLink: "${originalUrl}",
-      subIds: ["${subId}"]
+      originalLink: "${escapedUrl}",
+      subIds: ["${escapedSubId}"]
     }) {
       code
       message
@@ -201,45 +211,61 @@ const convertWithShopeeApi = async (
 
   const requestBody = { query };
   const payloadStr = JSON.stringify(requestBody);
-  const signatureFactor = appKey + timestamp + payloadStr;
-  
-  const signature = crypto
-    .createHmac("sha256", appSecret)
-    .update(signatureFactor)
-    .digest("hex");
 
-  const authHeader = `SHA256 app_key=${appKey}, timestamp=${timestamp}, signature=${signature}`;
+  // We will try both the Global and Brazil endpoints to make sure any type of account credentials work perfectly!
+  const endpoints = [
+    "https://open-api.affiliate.shopee.com/v2/api", // Try global first
+    "https://open-api.affiliate.shopee.com.br/v2/api" // Fallback to Brazil
+  ];
 
-  try {
-    const response = await fetch("https://open-api.affiliate.shopee.com.br/v2/api", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": authHeader,
-      },
-      body: payloadStr,
-    });
+  let lastError: Error | null = null;
 
-    if (!response.ok) {
-      throw new Error(`Shopee API HTTP ${response.status} ${response.statusText}`);
+  for (const endpoint of endpoints) {
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+      const signatureFactor = appKey + timestamp + payloadStr;
+      
+      const signature = crypto
+        .createHmac("sha256", appSecret)
+        .update(signatureFactor)
+        .digest("hex");
+
+      const authHeader = `SHA256 app_key=${appKey}, timestamp=${timestamp}, signature=${signature}`;
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": authHeader,
+        },
+        body: payloadStr,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Shopee API HTTP ${response.status} ${response.statusText}`);
+      }
+
+      const json = await response.json() as any;
+      if (json.errors && json.errors.length > 0) {
+        throw new Error(json.errors[0].message || "GraphQL error");
+      }
+
+      const data = json.data?.generatePromotionLink;
+      if (data && data.code === 0 && data.data?.promotionLink) {
+        console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint}`);
+        return data.data.promotionLink;
+      } else {
+        const errorMsg = data?.message || "Sem link retornado da API";
+        throw new Error(`Shopee API cod ${data?.code}: ${errorMsg}`);
+      }
+    } catch (error) {
+      console.warn(`Falha na conversão Shopee API usando endpoint ${endpoint}:`, error);
+      lastError = error as Error;
     }
-
-    const json = await response.json() as any;
-    if (json.errors && json.errors.length > 0) {
-      throw new Error(json.errors[0].message || "GraphQL error");
-    }
-
-    const data = json.data?.generatePromotionLink;
-    if (data && data.code === 0 && data.data?.promotionLink) {
-      return data.data.promotionLink;
-    } else {
-      const errorMsg = data?.message || "Sem link retornado da API";
-      throw new Error(`Shopee API cod ${data?.code}: ${errorMsg}`);
-    }
-  } catch (error) {
-    console.error("Erro na conversão Shopee API:", error);
-    throw error;
   }
+
+  console.error("Erro em todos os endpoints da Shopee API:", lastError);
+  throw lastError || new Error("Erro na conversão da API da Shopee");
 };
 
 // Async Link Converter that automatically uses Shopee API if configured
@@ -293,6 +319,8 @@ Use as seguintes diretrizes para o "rewrittenMessage" de acordo com o estilo sel
 - minimal: Direto ao ponto, com poucos emojis, focado no preço e no link de compra. Sem enrolação.
 - creative: Crie um texto descontraído, engraçado ou que conte um caso rápido de uso para o produto.
 - direct: Profissional, amigável e claro. Formato limpo.
+
+ATENÇÃO (CRÍTICO): NÃO inclua nenhuma assinatura, rodapé, aviso ou menção indicando que o anúncio foi gerado por IA, robô, bot, assistente de IA, automação ou software. O anúncio deve parecer escrito 100% por um ser humano real. Não coloque mensagens como "Enviado por robô" ou "Gerado por assistente".
 
 Mensagem original a ser analisada:
 """
@@ -899,7 +927,12 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.join(process.cwd(), 'dist');
+    // server.cjs resides in dist/, so __dirname is exactly the absolute path to dist/
+    // Fall back to path.join(process.cwd(), 'dist') if running via tsx/ts-node in production mode directly.
+    const distPath = fs.existsSync(path.join(__dirname, 'index.html')) 
+      ? __dirname 
+      : path.join(process.cwd(), 'dist');
+
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));

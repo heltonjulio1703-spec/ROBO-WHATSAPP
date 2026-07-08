@@ -9,6 +9,7 @@ import pino from "pino";
 import QRCode from "qrcode";
 import fs from "fs";
 import path from "path";
+import os from "os";
 import { Boom } from "@hapi/boom";
 
 // Types matching the main app
@@ -39,17 +40,24 @@ export class WhatsAppEngine {
   
   private isConnecting = false;
   private authStatePath = (() => {
-    const isProd = process.env.NODE_ENV === "production" || process.env.PORT === "3000";
-    if (isProd) {
-      return "/tmp/auth_info_baileys";
+    const isElectron = typeof process !== 'undefined' && (process.versions?.electron || process.env.ELECTRON_RUN_AS_NODE);
+    
+    if (isElectron) {
+      const homeDir = os.homedir();
+      const appDataPath = path.join(homeDir, ".shopee-bot-sessions");
+      if (!fs.existsSync(appDataPath)) {
+        fs.mkdirSync(appDataPath, { recursive: true });
+      }
+      return path.join(appDataPath, "auth_info_baileys");
     }
+    
     try {
       const testPath = path.join(process.cwd(), "test_write_perm");
       fs.mkdirSync(testPath, { recursive: true });
       fs.rmdirSync(testPath);
       return path.join(process.cwd(), "auth_info_baileys");
     } catch {
-      return "/tmp/auth_info_baileys";
+      return path.join(os.tmpdir(), "auth_info_baileys");
     }
   })();
   private addLogCallback: (type: "info" | "success" | "warning" | "error", message: string) => void;
