@@ -1,6 +1,6 @@
 import React from "react";
 import { AppConfig, LogItem } from "../types";
-import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2, Clipboard, ClipboardCheck, Sparkles, Wifi, WifiOff, AlertCircle } from "lucide-react";
+import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2, Clipboard, ClipboardCheck, Sparkles, Wifi, WifiOff, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion } from "motion/react";
 
 interface DashboardViewProps {
@@ -32,6 +32,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [shopeeAppKey, setShopeeAppKey] = React.useState(config.shopeeAppKey || "");
   const [shopeeAppSecret, setShopeeAppSecret] = React.useState(config.shopeeAppSecret || "");
   const [shopeeAffId, setShopeeAffId] = React.useState(config.shopeeAffiliateId || "");
+  const [showAppKey, setShowAppKey] = React.useState(false);
+  const [showAppSecret, setShowAppSecret] = React.useState(false);
 
   const [smartPasteText, setSmartPasteText] = React.useState("");
   const [smartPasteStatus, setSmartPasteStatus] = React.useState<{ success: boolean; message: string } | null>(null);
@@ -383,7 +385,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       <div className="flex gap-1.5">
                         <input
                           id="shopee-app-key-input"
-                          type="text"
+                          type={showAppKey ? "text" : "password"}
                           value={shopeeAppKey}
                           onChange={(e) => {
                             setShopeeAppKey(e.target.value);
@@ -393,6 +395,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
                           required={useShopeeApi}
                         />
+                        <button
+                          type="button"
+                          onClick={() => setShowAppKey(!showAppKey)}
+                          className="px-2 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-500 rounded-lg text-xs"
+                        >
+                          {showAppKey ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                        </button>
                         <button
                           type="button"
                           onClick={() => handlePasteDirect("key")}
@@ -415,7 +424,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       <div className="flex gap-1.5">
                         <input
                           id="shopee-app-secret-input"
-                          type="password"
+                          type={showAppSecret ? "text" : "password"}
                           value={shopeeAppSecret}
                           onChange={(e) => {
                             setShopeeAppSecret(e.target.value);
@@ -425,6 +434,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                           className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
                           required={useShopeeApi}
                         />
+                        <button
+                          type="button"
+                          onClick={() => setShowAppSecret(!showAppSecret)}
+                          className="px-2 py-1.5 bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-500 rounded-lg text-xs"
+                        >
+                          {showAppSecret ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                        </button>
                         <button
                           type="button"
                           onClick={() => handlePasteDirect("secret")}

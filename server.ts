@@ -211,10 +211,9 @@ const convertWithShopeeApi = async (
   const requestBody = { query };
   const payloadStr = JSON.stringify(requestBody);
 
-  // We will try both the Global and Brazil endpoints to make sure any type of account credentials work perfectly!
+  // We will try the Brazil endpoint which is currently active.
   const endpoints = [
-    "https://open-api.affiliate.shopee.com/v2/api", // Try global first
-    "https://open-api.affiliate.shopee.com.br/v2/api" // Fallback to Brazil
+    "https://open-api.affiliate.shopee.com.br/v2/api"
   ];
 
   let lastError: Error | null = null;
@@ -222,6 +221,7 @@ const convertWithShopeeApi = async (
   for (const endpoint of endpoints) {
     try {
       const timestamp = Math.floor(Date.now() / 1000);
+      // Signature factor usually follows the pattern: appKey + timestamp + payloadStr
       const signatureFactor = appKey + timestamp + payloadStr;
       
       const signature = crypto
@@ -230,6 +230,10 @@ const convertWithShopeeApi = async (
         .digest("hex");
 
       const authHeader = `SHA256 app_key=${appKey}, timestamp=${timestamp}, signature=${signature}`;
+      
+      addLog("info", `Tentando endpoint: ${endpoint}`);
+      console.log(`[DEBUG] Authorization: ${authHeader}`);
+      console.log(`[DEBUG] Signature Factor: ${signatureFactor}`);
 
       const response = await fetch(endpoint, {
         method: "POST",
