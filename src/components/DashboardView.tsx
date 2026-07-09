@@ -1,6 +1,6 @@
 import React from "react";
 import { AppConfig, LogItem } from "../types";
-import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2, Clipboard, ClipboardCheck, Sparkles } from "lucide-react";
+import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2, Clipboard, ClipboardCheck, Sparkles, Wifi, WifiOff, AlertCircle } from "lucide-react";
 import { motion } from "motion/react";
 
 interface DashboardViewProps {
@@ -36,6 +36,41 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [smartPasteText, setSmartPasteText] = React.useState("");
   const [smartPasteStatus, setSmartPasteStatus] = React.useState<{ success: boolean; message: string } | null>(null);
   const [copiedField, setCopiedField] = React.useState<string | null>(null);
+
+  // States for testing Shopee API Connection
+  const [testConnectionStatus, setTestConnectionStatus] = React.useState<"idle" | "testing" | "success" | "error">("idle");
+  const [testConnectionMessage, setTestConnectionMessage] = React.useState<string>("");
+
+  const handleTestConnection = async () => {
+    if (!shopeeAppKey.trim() || !shopeeAppSecret.trim()) {
+      setTestConnectionStatus("error");
+      setTestConnectionMessage("Preencha o App Key e o App Secret antes de testar a conexão.");
+      return;
+    }
+
+    setTestConnectionStatus("testing");
+    setTestConnectionMessage("");
+
+    try {
+      const res = await fetch("/api/shopee/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ shopeeAppKey: shopeeAppKey.trim(), shopeeAppSecret: shopeeAppSecret.trim() }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setTestConnectionStatus("success");
+        setTestConnectionMessage("Conexão estabelecida com sucesso! Suas credenciais estão ativas e funcionando perfeitamente.");
+      } else {
+        setTestConnectionStatus("error");
+        setTestConnectionMessage(data.error || "Erro ao estabelecer conexão. Verifique suas credenciais.");
+      }
+    } catch (error: any) {
+      setTestConnectionStatus("error");
+      setTestConnectionMessage(error?.message || "Erro de rede ao conectar com o servidor.");
+    }
+  };
 
   const handleSmartPaste = (text: string) => {
     if (!text.trim()) {
@@ -440,6 +475,60 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     <p className="text-[10px] text-gray-400 mt-1">
                       Insira seu ID de Afiliado. Ele será usado para identificar suas conversões ou como reserva (fallback) direta caso a chamada da API falhe ou as credenciais estejam inativas.
                     </p>
+                  </div>
+
+                  {/* Test Connection Section */}
+                  <div className="pt-3 border-t border-dashed border-slate-200 mt-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-100 p-3 rounded-lg border border-slate-200">
+                      <div className="text-[11px] text-slate-600 leading-relaxed">
+                        <span className="font-semibold text-slate-700 block mb-0.5">Testar Credenciais da Shopee</span>
+                        Clique no botão ao lado para realizar um teste em tempo real de autenticação com a API Oficial da Shopee.
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleTestConnection}
+                        disabled={testConnectionStatus === "testing"}
+                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-750 disabled:bg-indigo-400 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer shrink-0"
+                      >
+                        {testConnectionStatus === "testing" ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Testando...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Wifi className="w-3.5 h-3.5" />
+                            <span>Testar Conexão</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    {testConnectionStatus !== "idle" && (
+                      <div className={`mt-3 p-3 rounded-lg border text-xs flex gap-2.5 items-start animate-fadeIn ${
+                        testConnectionStatus === "testing"
+                          ? "bg-slate-50 border-slate-200 text-slate-700"
+                          : testConnectionStatus === "success"
+                          ? "bg-emerald-50 border-emerald-250 text-emerald-850"
+                          : "bg-red-50 border-red-250 text-red-850"
+                      }`}>
+                        {testConnectionStatus === "testing" ? (
+                          <Loader2 className="w-4 h-4 text-slate-500 animate-spin shrink-0 mt-0.5" />
+                        ) : testConnectionStatus === "success" ? (
+                          <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        ) : (
+                          <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                        )}
+                        <div className="flex-1 leading-relaxed">
+                          <span className="font-bold block mb-0.5">
+                            {testConnectionStatus === "testing" && "Enviando requisição de teste para servidores da Shopee..."}
+                            {testConnectionStatus === "success" && "API Conectada com Sucesso!"}
+                            {testConnectionStatus === "error" && "Falha na Autenticação da API"}
+                          </span>
+                          <span className="text-[11px] block text-slate-600">{testConnectionMessage}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Smart Paste Box */}

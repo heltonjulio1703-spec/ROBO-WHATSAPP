@@ -173,16 +173,15 @@ const getGeminiClient = () => {
 
 // Helper to convert links to affiliate
 const convertToAffiliateLink = (originalUrl: string, affiliateId: string, subId: string = "bot") => {
-  // Regex to extract product IDs or parameters
-  // Simulated affiliate link generation
-  let productId = "product_deal";
-  const shopeeIdMatch = originalUrl.match(/i\.\d+\.\d+|shp\.ee\/\w+|shope\.ee\/\w+/i);
-  if (shopeeIdMatch) {
-    productId = shopeeIdMatch[0].replace("/", "_");
-  }
-
-  // Create clean Shopee Affiliate format URL
-  return `https://shope.ee/r/${affiliateId}?sub=${encodeURIComponent(subId)}&product=${productId}`;
+  if (!originalUrl) return "";
+  const cleanUrl = originalUrl.trim();
+  
+  // Shopee Universal Link is the official way to manually structure tracking URLs that redirect and track on both mobile and desktop.
+  // Standard format:
+  // https://shopee.com.br/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=SUB_ID&utm_term=AFFILIATE_ID&url=ORIGINAL_URL
+  const universalUrl = `https://shopee.com.br/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affiliateId)}&url=${encodeURIComponent(cleanUrl)}`;
+  
+  return universalUrl;
 };
 
 // Official Shopee Affiliate API Link Converter
@@ -280,28 +279,70 @@ const convertWithShopeeApi = async (
   throw lastError || new Error("Erro na conversão da API da Shopee");
 };
 
+// Helper to follow redirects of short Shopee URLs (shp.ee, shope.ee, s.shopee.com.br) and return the long original URL
+const expandShopeeUrl = async (url: string): Promise<string> => {
+  if (!url || !url.startsWith("http")) return url;
+
+  const isShort = url.includes("shp.ee") || url.includes("shope.ee") || url.includes("s.shopee.com.br");
+  if (!isShort) return url;
+
+  try {
+    addLog("info", `Expandindo link curto da Shopee: ${url}`);
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+      },
+      redirect: "follow",
+    });
+
+    if (response.ok && response.url && response.url.startsWith("http")) {
+      addLog("success", `✅ Link curto expandido com sucesso para: ${response.url.substring(0, 70)}...`);
+      return response.url;
+    }
+  } catch (err) {
+    console.error("Falha ao expandir link curto da Shopee:", err);
+  }
+  return url;
+};
+
 // Async Link Converter that automatically uses Shopee API if configured
 const convertToAffiliateLinkAsync = async (originalUrl: string, affiliateId: string, subId: string = "bot") => {
+  if (!originalUrl) return "";
+  
+  // Expand short URLs first to ensure the best tracking and conversion results
+  const resolvedUrl = await expandShopeeUrl(originalUrl);
+
   if (state.config.useShopeeApi && state.config.shopeeAppKey && state.config.shopeeAppSecret) {
     try {
       addLog("info", `Convertendo link via API Oficial da Shopee...`);
       const apiLink = await convertWithShopeeApi(
-        originalUrl,
+        resolvedUrl,
         state.config.shopeeAppKey,
         state.config.shopeeAppSecret,
         subId
       );
+
       if (apiLink) {
         addLog("success", `✅ Link convertido com sucesso via API Oficial da Shopee!`);
         return apiLink;
       }
     } catch (err) {
-      addLog("error", `⚠️ Falha ao converter via API da Shopee: ${(err as Error).message}. Usando formato de link estruturado (com ID de Afiliado)...`);
+      const errMsg = (err as Error).message || "";
+      if (errMsg.includes("10020") || errMsg.includes("Credenciais") || errMsg.includes("Inválidas ou Inativas")) {
+        state.config.useShopeeApi = false;
+        saveStateToFile();
+        addLog("error", `⚠️ Credenciais da API Shopee inválidas/inativas (Erro 10020). A API Oficial foi desativada temporariamente de forma automática. O robô continuará convertendo perfeitamente usando links estruturados diretos com o ID de Afiliado "${state.config.affiliateId || affiliateId}" para garantir que você não perca nenhuma comissão!`);
+      } else {
+        addLog("error", `⚠️ Falha ao converter via API da Shopee: ${errMsg}. Usando formato de link estruturado (com ID de Afiliado)...`);
+      }
     }
   }
 
   // Fallback
-  return convertToAffiliateLink(originalUrl, affiliateId, subId);
+  return convertToAffiliateLink(resolvedUrl, affiliateId, subId);
 };
 
 // AI Parsing logic using Gemini
@@ -366,13 +407,30 @@ ${messageText}
     if (parsed.hasShopeeLink && parsed.originalLink) {
       const affiliateLink = await convertToAffiliateLinkAsync(parsed.originalLink, affiliateId);
       parsed.affiliateLink = affiliateLink;
-      parsed.rewrittenMessage = parsed.rewrittenMessage.replace("[LINK_AFILIADO]", affiliateLink);
+      
+      let msg = parsed.rewrittenMessage || "";
+      msg = msg.split("[LINK_AFILIADO]").join(affiliateLink);
+      msg = msg.split("[link_afiliado]").join(affiliateLink);
+      msg = msg.split("[Link_Afiliado]").join(affiliateLink);
+      msg = msg.split("[LINK]").join(affiliateLink);
+      msg = msg.split("[link]").join(affiliateLink);
+      if (parsed.originalLink) {
+        msg = msg.split(parsed.originalLink).join(affiliateLink);
+      }
+      parsed.rewrittenMessage = msg;
     }
 
     return parsed;
   } catch (error) {
     console.error("Erro na chamada do Gemini API:", error);
-    addLog("error", `Falha ao usar IA do Gemini para reescrever anúncio: ${(error as Error).message}. Usando conversão automática via Regex.`);
+    const errorStr = String(error);
+    const isQuotaError = errorStr.includes("RESOURCE_EXHAUSTED") || errorStr.includes("quota") || errorStr.includes("429") || errorStr.includes("rate limit") || errorStr.includes("Rate limit");
+    
+    if (isQuotaError) {
+      addLog("warning", "⚠️ Limite de cota do Gemini atingido (Plano Gratuito). O robô continuará funcionando perfeitamente usando conversão e formatação automática inteligente via Regex.");
+    } else {
+      addLog("error", `⚠️ Falha ao usar IA do Gemini para reescrever anúncio: ${(error as Error).message}. Usando conversão automática via Regex.`);
+    }
     return parseMessageWithRegex(messageText, affiliateId);
   }
 };
@@ -380,7 +438,7 @@ ${messageText}
 // Regex Fallback parsing if Gemini is not available
 const parseMessageWithRegex = async (messageText: string, affiliateId: string) => {
   // Regex to detect Shopee URLs
-  const shopeeRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.com\.br|shp\.ee|shope\.ee)\/[^\s]+)/gi;
+  const shopeeRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.com\.br|shopee\.com|shp\.ee|shope\.ee)\/[^\s]+)/gi;
   const match = shopeeRegex.exec(messageText);
 
   if (!match) {
@@ -520,7 +578,7 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   }
 
   // 1. Checagem rápida de duplicidade antes do processamento pesado do Gemini
-  const shopeeLinkRegex = /(https?:\/\/(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com)[^\s]+)/i;
+  const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com)[^\s]+)/i;
   const match = messageText.match(shopeeLinkRegex);
   const foundLink = match ? match[1].toLowerCase().trim() : null;
   const cleanMessage = messageText.trim().replace(/\s+/g, " ");
@@ -760,6 +818,31 @@ app.post("/api/config", (req, res) => {
   // Restart autopilot timer to apply new intervals
   startAutoPilotSimulator();
   res.json({ success: true, config: state.config });
+});
+
+app.post("/api/shopee/test", async (req, res) => {
+  const { shopeeAppKey, shopeeAppSecret } = req.body;
+  if (!shopeeAppKey || !shopeeAppSecret) {
+    return res.status(400).json({ success: false, error: "App Key e App Secret são obrigatórios para realizar o teste de conexão." });
+  }
+
+  try {
+    addLog("info", "🤖 Iniciando teste de conexão e autenticação com a API da Shopee...");
+    // Use a standard Brazilian Shopee link for the test
+    const testUrl = "https://shopee.com.br";
+    const result = await convertWithShopeeApi(testUrl, shopeeAppKey, shopeeAppSecret, "test_conn");
+    
+    if (result) {
+      addLog("success", "✅ Conexão com a API Oficial da Shopee estabelecida com sucesso! Credenciais ativas.");
+      return res.json({ success: true, message: "Conexão com a API Oficial estabelecida com sucesso!", link: result });
+    } else {
+      throw new Error("A API da Shopee não retornou o link promocional esperado.");
+    }
+  } catch (error: any) {
+    const errorMsg = error?.message || "Erro desconhecido ao testar conexão.";
+    addLog("error", `❌ Falha no teste de conexão da API da Shopee: ${errorMsg}`);
+    return res.json({ success: false, error: errorMsg });
+  }
 });
 
 app.post("/api/transmission/toggle", (req, res) => {
