@@ -8,6 +8,115 @@ import { WhatsAppEngine, GroupItem } from "./whatsappEngine";
 import fs from "fs";
 import crypto from "crypto";
 import os from "os";
+import dns from "dns";
+
+// DNS-over-HTTPS (DoH) resolver helper using cloudflare-dns.com and dns.google
+async function resolveViaDoH(hostname: string): Promise<string[]> {
+  try {
+    const cfUrl = `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(hostname)}&type=A`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const response = await fetch(cfUrl, {
+      headers: { "accept": "application/dns-json" },
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    
+    if (response.ok) {
+      const json = await response.json() as any;
+      if (json && json.Answer && Array.isArray(json.Answer)) {
+        const ips = json.Answer
+          .filter((ans: any) => ans.type === 1) // Type 1 is A record
+          .map((ans: any) => ans.data);
+        if (ips.length > 0) return ips;
+      }
+    }
+  } catch (e) {
+    console.warn(`Cloudflare DoH failed for ${hostname}:`, e);
+  }
+
+  try {
+    const googleUrl = `https://dns.google/resolve?name=${encodeURIComponent(hostname)}&type=A`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    const response = await fetch(googleUrl, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    
+    if (response.ok) {
+      const json = await response.json() as any;
+      if (json && json.Answer && Array.isArray(json.Answer)) {
+        const ips = json.Answer
+          .filter((ans: any) => ans.type === 1) // Type 1 is A record
+          .map((ans: any) => ans.data);
+        if (ips.length > 0) return ips;
+      }
+    }
+  } catch (e) {
+    console.warn(`Google DoH failed for ${hostname}:`, e);
+  }
+
+  return [];
+}
+
+// DNS lookup override to handle ENOTFOUND issues in sandboxed Cloud Run environments
+const originalLookup = dns.lookup;
+// @ts-ignore
+dns.lookup = function (hostname: string, options: any, callback: any) {
+  let realOptions = options;
+  let realCallback = callback;
+  if (typeof options === "function") {
+    realCallback = options;
+    realOptions = {};
+  }
+
+  const cb = (err: any, address: any, family: any) => {
+    if (typeof realCallback === "function") {
+      realCallback(err, address, family);
+    }
+  };
+
+  // Intercept the DoH resolvers to prevent infinite recursion
+  if (hostname === "cloudflare-dns.com") {
+    const ip = "104.16.248.249";
+    if (realOptions && realOptions.all) {
+      return cb(null, [{ address: ip, family: 4 }], 4);
+    }
+    return cb(null, ip, 4);
+  }
+  if (hostname === "dns.google") {
+    const ip = "8.8.8.8";
+    if (realOptions && realOptions.all) {
+      return cb(null, [{ address: ip, family: 4 }], 4);
+    }
+    return cb(null, ip, 4);
+  }
+
+  // Try the system's original DNS resolver first
+  originalLookup(hostname, realOptions, (err, address, family) => {
+    if (err) {
+      // If system DNS fails, fallback to DoH (DNS-over-HTTPS)
+      resolveViaDoH(hostname)
+        .then((ips) => {
+          if (ips && ips.length > 0) {
+            if (realOptions && realOptions.all) {
+              cb(null, ips.map(ip => ({ address: ip, family: 4 })), 4);
+            } else {
+              cb(null, ips[0], 4);
+            }
+          } else {
+            cb(err, address, family);
+          }
+        })
+        .catch(() => {
+          cb(err, address, family);
+        });
+    } else {
+      cb(null, address, family);
+    }
+  });
+};
 
 dotenv.config();
 
@@ -140,6 +249,34 @@ const loadStateFromFile = () => {
 // Initial load
 loadStateFromFile();
 
+// Check for invalid/suspicious Shopee API configuration on startup to prevent annoying API errors
+if (state.config.useShopeeApi) {
+  const appKey = state.config.shopeeAppKey ? String(state.config.shopeeAppKey).trim() : "";
+  const appSecret = state.config.shopeeAppSecret ? String(state.config.shopeeAppSecret).trim() : "";
+  const affId = state.config.shopeeAffiliateId ? String(state.config.shopeeAffiliateId).trim() : "";
+  const generalAffId = state.config.affiliateId ? String(state.config.affiliateId).trim() : "";
+
+  let needsAutoDisable = false;
+  let disableReason = "";
+
+  if (!appKey || !appSecret) {
+    needsAutoDisable = true;
+    disableReason = "Chave (App Key) ou Segredo (App Secret) vazios.";
+  } else if (appKey === affId || appKey === generalAffId) {
+    needsAutoDisable = true;
+    disableReason = "A chave (App Key) está idêntica ao ID de Afiliado. A Shopee Open Platform exige um App Key numérico específico criado no painel de desenvolvedor.";
+  } else if (appKey.length > 25 && appKey.includes("@")) {
+    needsAutoDisable = true;
+    disableReason = "O App Key parece ser um e-mail ou formato inválido.";
+  }
+
+  if (needsAutoDisable) {
+    state.config.useShopeeApi = false;
+    saveStateToFile();
+    console.log(`[Shopee Config Guard] Conexão via API desativada preventivamente. Motivo: ${disableReason}`);
+  }
+}
+
 // Add initial logs
 const addLog = (type: "info" | "success" | "warning" | "error", message: string) => {
   const time = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -187,100 +324,147 @@ const convertToAffiliateLink = (originalUrl: string, affiliateId: string, subId:
 // Official Shopee Affiliate API Link Converter
 const convertWithShopeeApi = async (
   originalUrl: string,
-  appKey: string,
-  appSecret: string,
+  key: string,
+  secret: string,
   subId: string = "bot"
 ): Promise<string | null> => {
-  // Escape strings to prevent invalid JSON/GraphQL syntax
-  const escapedUrl = originalUrl.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-  const escapedSubId = subId.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  // Trim credentials to avoid errors from accidental whitespace
+  const appKey = (key || "").trim();
+  const appSecret = (secret || "").trim();
 
-  const query = `mutation {
-    generatePromotionLink(linkParams: {
-      originalLink: "${escapedUrl}",
-      subIds: ["${escapedSubId}"]
-    }) {
-      code
-      message
-      data {
-        promotionLink
-      }
-    }
-  }`;
-
-  const requestBody = { query };
-  const payloadStr = JSON.stringify(requestBody);
-
-  // We will try the Brazil endpoint which is currently active.
+  // Focus on Brazil and stable regional hubs (the non-existent global .com endpoint is excluded to avoid DNS ENOTFOUND)
   const endpoints = [
-    "https://open-api.affiliate.shopee.com.br/v2/api"
+    "https://open-api.affiliate.shopee.com.br/v2/api", // Primary for Brazil
+    "https://open-api.affiliate.shopee.sg/v2/api",    // Regional fallback hub
   ];
 
-  let lastError: Error | null = null;
+  let lastApiError: Error | null = null;
+  let lastNetworkError: Error | null = null;
 
-  for (const endpoint of endpoints) {
+  for (let i = 0; i < endpoints.length; i++) {
+    const endpoint = endpoints[i];
     try {
-      const timestamp = Math.floor(Date.now() / 1000);
-      // Signature factor usually follows the pattern: appKey + timestamp + payloadStr
-      const signatureFactor = appKey + timestamp + payloadStr;
+      // Add a tiny delay between retries if not the first attempt
+      if (i > 0) await new Promise(resolve => setTimeout(resolve, 500));
       
-      const signature = crypto
-        .createHmac("sha256", appSecret)
-        .update(signatureFactor)
-        .digest("hex");
-
-      const authHeader = `SHA256 app_key=${appKey}, timestamp=${timestamp}, signature=${signature}`;
-      
-      addLog("info", `Tentando endpoint: ${endpoint}`);
-      console.log(`[DEBUG] Authorization: ${authHeader}`);
-      console.log(`[DEBUG] Signature Factor: ${signatureFactor}`);
-
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": authHeader,
+      // We will try combinations of GraphQL Queries (ShortLink vs PromotionLink) with single-line minimized payload formatting
+      const queries = [
+        {
+          name: "generateShortLink",
+          body: `mutation{generateShortLink(input:{originUrl:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){shortLink}}`
         },
-        body: payloadStr,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Shopee API HTTP ${response.status} ${response.statusText}`);
-      }
-
-      const json = await response.json() as any;
-      if (json.errors && json.errors.length > 0) {
-        let msg = json.errors[0].message || "GraphQL error";
-        if (msg.includes("10020") || msg.toLowerCase().includes("invalid credential")) {
-          msg = "Erro 10020: Credenciais da API Shopee Inválidas ou Inativas. Verifique se copiou a Chave e Segredo corretamente no painel.";
+        {
+          name: "generatePromotionLink",
+          body: `mutation{generatePromotionLink(linkParams:{originalLink:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink}}}`
         }
-        throw new Error(msg);
-      }
+      ];
 
-      const data = json.data?.generatePromotionLink;
-      if (data && data.code === 0 && data.data?.promotionLink) {
-        console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint}`);
-        return data.data.promotionLink;
-      } else {
-        let errorMsg = data?.message || "Sem link retornado da API";
-        if (data?.code === 10020 || errorMsg.includes("10020") || errorMsg.toLowerCase().includes("invalid credential")) {
-          errorMsg = "Erro 10020: Credenciais da API Shopee Inválidas ou Inativas. Verifique se copiou a Chave e Segredo corretamente no painel.";
+      // Try each query, signature calculation, and authorization header combination
+      for (const queryObj of queries) {
+        const payloadStr = JSON.stringify({ query: queryObj.body });
+        const timestamp = Math.floor(Date.now() / 1000);
+        
+        // 1. Simple SHA256 concatenation based signature (The Official/Mandated calculation method: SHA256(Credential+Timestamp+Payload+Secret))
+        const factorSimple = appKey + timestamp + payloadStr + appSecret;
+        const simpleSignature = crypto
+          .createHash("sha256")
+          .update(factorSimple)
+          .digest("hex");
+
+        // 2. HMAC-SHA256 based signature (As a robust fallback variant)
+        const factorHmac = appKey + timestamp + payloadStr;
+        const hmacSignature = crypto
+          .createHmac("sha256", appSecret)
+          .update(factorHmac)
+          .digest("hex");
+
+        const signatureVariants = [
+          { value: simpleSignature, desc: "Official Simple SHA256" },
+          { value: hmacSignature, desc: "HMAC-SHA256" }
+        ];
+
+        for (const sigVar of signatureVariants) {
+          const signature = sigVar.value;
+
+          // Try all known formats of Shopee Open Platform v2 Affiliate Authorization Headers
+          const authHeaderFormats = [
+            `SHA256 Credential=${appKey}, Timestamp=${timestamp}, Signature=${signature}`,   // Official space-separated (documented)
+            `SHA256 Credential=${appKey},Timestamp=${timestamp},Signature=${signature}`,     // No space comma-separated
+            `SHA256 Credential=${appKey}, Timestamp=${timestamp},Signature=${signature}`,    // Mix spacing comma-separated
+            `SHA256 Credentials=${appKey}, Timestamp=${timestamp}, Signature=${signature}`,  // Credentials (plural) space-separated
+            `SHA256 app_key=${appKey}, timestamp=${timestamp}, signature=${signature}`,      // app_key comma-separated
+            `SHA256 ${appKey}:${timestamp}:${signature}`                                     // Alternative colon-separated
+          ];
+
+          for (const authHeader of authHeaderFormats) {
+            try {
+              const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+                  "Authorization": authHeader,
+                },
+                body: payloadStr,
+              });
+
+              const responseText = await response.text();
+              let json;
+              try {
+                json = JSON.parse(responseText);
+              } catch (e) {
+                lastApiError = new Error(`Resposta Shopee não é JSON: ${responseText.substring(0, 100)}`);
+                continue;
+              }
+
+              if (!response.ok) {
+                lastApiError = new Error(`Shopee API HTTP ${response.status}: ${JSON.stringify(json)}`);
+                continue;
+              }
+
+              if (json.errors && json.errors.length > 0) {
+                const msg = json.errors[0].message || "GraphQL error";
+                const errCode = json.errors[0].code;
+                
+                // Keep the exact error msg from Shopee so the user can diagnose the specific authentication/credential issue
+                if (errCode === 10020 || msg.includes("10020")) {
+                  lastApiError = new Error("Erro 10020: Credenciais da API Shopee Inválidas ou Inativas. Verifique se o seu aplicativo de tipo 'Affiliate' está ativo e aprovado com status 'Active' no painel Shopee Open Platform.");
+                } else if (msg.toLowerCase().includes("signature") || msg.toLowerCase().includes("credential") || msg.toLowerCase().includes("auth")) {
+                  lastApiError = new Error(`Erro de Autenticação Shopee (${sigVar.desc}): ${msg}`);
+                } else {
+                  lastApiError = new Error(`Erro Shopee: ${msg}`);
+                }
+                continue;
+              }
+
+              const result = json.data?.generatePromotionLink?.data?.promotionLink || 
+                             json.data?.generateShortLink?.shortLink || 
+                             json.data?.batchGetCustomLink?.customLinkList?.[0]?.customLink;
+
+              if (result) {
+                console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint} usando ${queryObj.name} (${sigVar.desc}) e formato de cabeçalho: ${authHeader.substring(0, 30)}...`);
+                return result;
+              }
+            } catch (innerErr: any) {
+              lastNetworkError = innerErr;
+            }
+          }
         }
-        throw new Error(`Shopee API cod ${data?.code}: ${errorMsg}`);
       }
     } catch (error) {
       const isDnsError = (error as any).code === "ENOTFOUND" || (error as Error).message?.includes("getaddrinfo") || (error as Error).message?.includes("fetch failed");
       if (isDnsError) {
-        console.log(`Endpoint ${endpoint} não pôde ser resolvido por DNS (ENOTFOUND).`);
+        console.log(`Endpoint ${endpoint} não pôde ser resolvido por DNS.`);
       } else {
         console.warn(`Falha na conversão Shopee API usando endpoint ${endpoint}:`, error);
       }
-      lastError = error as Error;
+      lastNetworkError = error as Error;
     }
   }
 
-  console.error("Erro em todos os endpoints da Shopee API:", lastError);
-  throw lastError || new Error("Erro na conversão da API da Shopee");
+  const finalError = lastApiError || lastNetworkError || new Error("Erro na conversão da API da Shopee");
+  console.log(`[Shopee Link Converter] ${finalError.message}`);
+  throw finalError;
 };
 
 // Helper to follow redirects of short Shopee URLs (shp.ee, shope.ee, s.shopee.com.br) and return the long original URL

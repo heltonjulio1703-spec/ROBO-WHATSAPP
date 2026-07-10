@@ -51,6 +51,70 @@ export default function App() {
   const [history, setHistory] = React.useState<HistoryItem[]>([]);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
+  // Toast State for iframe-safe external link guidance
+  const [showToast, setShowToast] = React.useState(false);
+  const [toastMessage, setToastMessage] = React.useState("");
+
+  const triggerToast = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+    // Dismiss after 7 seconds for optimal reading
+    setTimeout(() => {
+      setShowToast(false);
+    }, 7000);
+  };
+
+  const handleOpenShopeePanel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const url = "https://afiliados.shopee.com.br/";
+    
+    // 1. Copy URL to clipboard immediately (requires user-initiated event context to work reliably)
+    let copiedSuccessfully = false;
+    try {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = url;
+      tempInput.setAttribute("readonly", "");
+      tempInput.style.position = "absolute";
+      tempInput.style.left = "-9999px";
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      copiedSuccessfully = true;
+    } catch (err) {
+      console.warn("Legacy copy failed, trying navigator API:", err);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url)
+          .then(() => {
+            triggerToast("🔗 Link copiado! Se o navegador bloqueou o painel devido ao sandbox, cole o link (Ctrl+V) em uma nova aba.");
+          })
+          .catch(() => {
+            triggerToast("Copie o link manualmente: https://afiliados.shopee.com.br/");
+          });
+        return;
+      }
+    }
+
+    // 2. Try to open the URL in a new window/tab
+    try {
+      const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+      if (newWindow) {
+        newWindow.focus();
+        if (copiedSuccessfully) {
+          triggerToast("🚀 Tentando abrir o Painel da Shopee em nova aba! O link também foi copiado (Ctrl+V) de forma segura.");
+        }
+      } else {
+        triggerToast("🔗 Link copiado! O navegador bloqueou a abertura automática da janela por segurança (sandbox). Cole o link (Ctrl+V) em uma nova aba.");
+      }
+    } catch (err) {
+      if (copiedSuccessfully) {
+        triggerToast("🔗 Link copiado! O navegador bloqueou a abertura automática da janela por segurança (sandbox). Cole o link (Ctrl+V) em uma nova aba.");
+      } else {
+        triggerToast("Copie o link manualmente: https://afiliados.shopee.com.br/");
+      }
+    }
+  };
+
   // Initial Data Load
   const fetchAllData = async () => {
     try {
@@ -273,13 +337,16 @@ export default function App() {
             {/* Shopee Program Helper */}
             <a 
               href="https://afiliados.shopee.com.br/"
+              onClick={handleOpenShopeePanel}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:flex items-center gap-1 bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              className="flex items-center gap-1 bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+              title="Acessar painel ou copiar link"
             >
-              <DollarSign className="w-3.5 h-3.5" />
-              Painel Shopee Afiliados
-              <ExternalLink className="w-3 h-3 ml-0.5" />
+              <DollarSign className="w-3.5 h-3.5 text-orange-600" />
+              <span className="hidden md:inline">Painel Shopee Afiliados</span>
+              <span className="inline md:hidden">Painel Shopee</span>
+              <ExternalLink className="w-3 h-3 ml-0.5 opacity-70" />
             </a>
 
             {/* Simulated Session Status Badges */}
@@ -365,6 +432,7 @@ export default function App() {
                 clearLogs={handleClearLogs}
                 whatsappConnected={whatsapp.status === "connected"}
                 onRefreshLogs={handleRefreshLogsOnly}
+                onOpenShopeePanel={handleOpenShopeePanel}
               />
             </motion.div>
           )}
@@ -442,6 +510,31 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Toast Notification for Link Copy / Actions (Iframe-safe) */}
+      {showToast && (
+        <motion.div 
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          className="fixed bottom-6 right-6 z-50 max-w-sm bg-slate-900/95 backdrop-blur text-white p-4 rounded-xl shadow-2xl border border-slate-800 flex gap-3 items-start"
+        >
+          <div className="p-1 bg-orange-500 rounded-lg text-white shrink-0 mt-0.5">
+            <DollarSign className="w-4 h-4" />
+          </div>
+          <div className="flex-1 space-y-1">
+            <span className="font-bold text-xs block text-orange-400">Painel Shopee Afiliados</span>
+            <p className="text-[11px] text-slate-300 leading-normal">{toastMessage}</p>
+          </div>
+          <button 
+            onClick={() => setShowToast(false)} 
+            className="text-slate-400 hover:text-white text-xs font-bold px-1.5 py-0.5 hover:bg-slate-800 rounded transition-colors"
+          >
+            ×
+          </button>
+        </motion.div>
+      )}
 
     </div>
   );

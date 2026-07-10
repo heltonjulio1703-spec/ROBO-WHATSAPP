@@ -1,6 +1,6 @@
 import React from "react";
 import { AppConfig, LogItem } from "../types";
-import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2, Clipboard, ClipboardCheck, Sparkles, Wifi, WifiOff, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Sliders, RefreshCw, Trash2, Shield, Flame, Target, Play, Square, Settings2, Check, Loader2, Clipboard, ClipboardCheck, Sparkles, Wifi, WifiOff, AlertCircle, Eye, EyeOff, DollarSign, ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 
 interface DashboardViewProps {
@@ -11,6 +11,7 @@ interface DashboardViewProps {
   clearLogs: () => Promise<void>;
   whatsappConnected: boolean;
   onRefreshLogs: () => void;
+  onOpenShopeePanel?: (e: React.MouseEvent) => void;
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
@@ -21,6 +22,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   clearLogs,
   whatsappConnected,
   onRefreshLogs,
+  onOpenShopeePanel,
 }) => {
   const [saveStatus, setSaveStatus] = React.useState<"saved" | "saving" | "unsaved">("saved");
   const [affId, setAffId] = React.useState(config.affiliateId);
@@ -38,6 +40,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [smartPasteText, setSmartPasteText] = React.useState("");
   const [smartPasteStatus, setSmartPasteStatus] = React.useState<{ success: boolean; message: string } | null>(null);
   const [copiedField, setCopiedField] = React.useState<string | null>(null);
+  const smartPasteRef = React.useRef<HTMLTextAreaElement>(null);
 
   // States for testing Shopee API Connection
   const [testConnectionStatus, setTestConnectionStatus] = React.useState<"idle" | "testing" | "success" | "error">("idle");
@@ -57,7 +60,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       const res = await fetch("/api/shopee/test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ shopeeAppKey: shopeeAppKey.trim(), shopeeAppSecret: shopeeAppSecret.trim() }),
+        body: JSON.stringify({ 
+          shopeeAppKey: shopeeAppKey.trim(), 
+          shopeeAppSecret: shopeeAppSecret.trim() 
+        }),
       });
 
       const data = await res.json();
@@ -156,8 +162,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     }
   };
 
+  const [clipboardBlocked, setClipboardBlocked] = React.useState(false);
+
   const handlePasteDirect = async (field: "key" | "secret" | "aff") => {
     try {
+      setClipboardBlocked(false);
       const text = await navigator.clipboard.readText();
       if (!text) return;
       
@@ -175,10 +184,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       setTimeout(() => setCopiedField(null), 2000);
     } catch (err) {
       console.warn("Direct clipboard paste failed:", err);
-      setSmartPasteStatus({
-        success: false,
-        message: "O navegador bloqueou a colagem automática neste modo iframe. Use a área de texto abaixo!"
-      });
+      setClipboardBlocked(true);
+      
+      // Auto focus the input field directly so the user can just press Ctrl+V / Cmd+V
+      const inputId = field === "key" 
+        ? "shopee-app-key-input" 
+        : field === "secret" 
+        ? "shopee-app-secret-input" 
+        : "shopee-api-affiliate-id-input";
+        
+      const inputEl = document.getElementById(inputId);
+      if (inputEl) {
+        inputEl.focus();
+      }
     }
   };
 
@@ -305,9 +323,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                     required={!useShopeeApi}
                   />
-                  <p className="text-xs text-gray-400 mt-1">
-                    Seus links convertidos serão redirecionados usando este ID de rastreamento.
-                  </p>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mt-1.5">
+                    <p className="text-xs text-gray-400">
+                      Seus links convertidos serão redirecionados usando este ID de rastreamento.
+                    </p>
+                    <a
+                      href="https://afiliados.shopee.com.br/"
+                      onClick={onOpenShopeePanel}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 border border-orange-200 px-2 py-1 rounded text-[10.5px] font-bold transition-all cursor-pointer"
+                    >
+                      <DollarSign className="w-3 h-3 text-orange-500" />
+                      Painel Shopee Afiliados
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  </div>
                 </div>
               )}
 
@@ -377,6 +408,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
               {useShopeeApi && (
                 <div id="shopee-api-inputs-container" className="mt-4 p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+                  {clipboardBlocked && (
+                    <div className="p-3 bg-amber-50 border border-amber-250 text-amber-850 text-xs rounded-lg flex items-start gap-2.5 animate-fadeIn">
+                      <span className="text-amber-500 font-bold text-sm">💡</span>
+                      <div className="leading-relaxed">
+                        <span className="font-bold block mb-0.5">Colagem por botão bloqueada</span>
+                        O navegador bloqueou o acesso automático à área de transferência devido às regras de segurança do iframe. 
+                        <strong> Clique diretamente no campo desejado e use Ctrl+V (ou Cmd+V) ou clique com o botão direito para colar!</strong> O campo já foi selecionado para você.
+                      </div>
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-gray-700 mb-1">
@@ -488,9 +529,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         <span>{copiedField === "aff" ? "Pronto!" : "Colar"}</span>
                       </button>
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-1">
-                      Insira seu ID de Afiliado. Ele será usado para identificar suas conversões ou como reserva (fallback) direta caso a chamada da API falhe ou as credenciais estejam inativas.
-                    </p>
+                    <div className="flex flex-wrap items-center justify-between gap-2 mt-1.5">
+                      <p className="text-[10px] text-gray-400">
+                        Insira seu ID de Afiliado. Ele será usado para identificar suas conversões ou como reserva (fallback) direta caso a chamada da API falhe ou as credenciais estejam inativas.
+                      </p>
+                      <a
+                        href="https://afiliados.shopee.com.br/"
+                        onClick={onOpenShopeePanel}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-orange-600 hover:text-orange-700 bg-orange-50 hover:bg-orange-100 border border-orange-200 px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer"
+                      >
+                        <DollarSign className="w-2.5 h-2.5 text-orange-500" />
+                        Painel Shopee Afiliados
+                        <ExternalLink className="w-2 h-2" />
+                      </a>
+                    </div>
                   </div>
 
                   {/* Test Connection Section */}
@@ -521,28 +575,72 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </div>
 
                     {testConnectionStatus !== "idle" && (
-                      <div className={`mt-3 p-3 rounded-lg border text-xs flex gap-2.5 items-start animate-fadeIn ${
+                      <div className={`mt-3 p-3 rounded-lg border text-xs flex flex-col gap-2.5 animate-fadeIn ${
                         testConnectionStatus === "testing"
                           ? "bg-slate-50 border-slate-200 text-slate-700"
                           : testConnectionStatus === "success"
                           ? "bg-emerald-50 border-emerald-250 text-emerald-850"
                           : "bg-red-50 border-red-250 text-red-850"
                       }`}>
-                        {testConnectionStatus === "testing" ? (
-                          <Loader2 className="w-4 h-4 text-slate-500 animate-spin shrink-0 mt-0.5" />
-                        ) : testConnectionStatus === "success" ? (
-                          <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                        ) : (
-                          <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
-                        )}
-                        <div className="flex-1 leading-relaxed">
-                          <span className="font-bold block mb-0.5">
-                            {testConnectionStatus === "testing" && "Enviando requisição de teste para servidores da Shopee..."}
-                            {testConnectionStatus === "success" && "API Conectada com Sucesso!"}
-                            {testConnectionStatus === "error" && "Falha na Autenticação da API"}
-                          </span>
-                          <span className="text-[11px] block text-slate-600">{testConnectionMessage}</span>
+                        <div className="flex gap-2.5 items-start">
+                          {testConnectionStatus === "testing" ? (
+                            <Loader2 className="w-4 h-4 text-slate-500 animate-spin shrink-0 mt-0.5" />
+                          ) : testConnectionStatus === "success" ? (
+                            <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                          ) : (
+                            <AlertCircle className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
+                          )}
+                          <div className="flex-1 leading-relaxed">
+                            <span className="font-bold block mb-0.5">
+                              {testConnectionStatus === "testing" && "Enviando requisição de teste para servidores da Shopee..."}
+                              {testConnectionStatus === "success" && "API Conectada com Sucesso!"}
+                              {testConnectionStatus === "error" && "Falha na Autenticação da API"}
+                            </span>
+                            <span className="text-[11px] block text-slate-600">{testConnectionMessage}</span>
+                          </div>
                         </div>
+
+                        {testConnectionStatus === "error" && (testConnectionMessage.includes("10020") || testConnectionMessage.toLowerCase().includes("credential") || testConnectionMessage.toLowerCase().includes("inativas") || testConnectionMessage.toLowerCase().includes("app")) && (
+                          <div className="mt-2 bg-white/70 border border-red-100 rounded p-2.5 space-y-2">
+                            <span className="font-bold text-red-950 block text-[11px]">💡 Como resolver este erro?</span>
+                            <p className="text-[10.5px] text-red-900 leading-normal">
+                              Esse erro (Erro 10020) ocorre porque a Shopee exige que o seu aplicativo na <strong>Shopee Open Platform</strong> seja aprovado manualmente pelo suporte técnico deles e tenha o status <strong>"Active"</strong> do tipo <strong>"Affiliate"</strong> antes de aceitar conexões.
+                            </p>
+                            <div className="text-[10px] text-slate-500 leading-relaxed bg-slate-50 p-2 rounded border border-slate-150">
+                              <strong className="text-slate-700">Opções disponíveis para você:</strong>
+                              <ul className="list-disc list-inside mt-1 space-y-1">
+                                <li><strong>Opção 1 (Recomendada e Instantânea):</strong> Desative o botão de conexão da API Oficial acima e utilize o <strong>Modo Sem API (ID de Afiliado)</strong>. Ele gera links estruturados válidos na hora e garante 100% das suas comissões de forma imediata!</li>
+                                <li><strong>Opção 2:</strong> Acesse o console da Shopee Open Platform, confira se seu App está aprovado e ativo, e se copiou o App Key e Secret corretamente.</li>
+                              </ul>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  // Copy the API affiliate ID if present and general affiliate ID is empty
+                                  if (shopeeAffId && !affId) {
+                                    setAffId(shopeeAffId);
+                                  }
+                                  setUseShopeeApi(false);
+                                  setTestConnectionStatus("idle");
+                                  setTestConnectionMessage("");
+                                  setSaveStatus("unsaved");
+                                }}
+                                className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded text-[10px] shadow transition-all shrink-0 cursor-pointer text-center"
+                              >
+                                Alternar para Modo Sem API (Link Estruturado Rápido)
+                              </button>
+                              <a
+                                href="https://open.shopee.com/"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 font-bold rounded text-[10px] text-center transition-all shrink-0"
+                              >
+                                Acessar Shopee Open Platform
+                              </a>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -557,6 +655,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       Cole qualquer bloco de texto ou JSON copiado da plataforma Shopee abaixo para extrair e preencher todos os dados da API de uma só vez.
                     </p>
                     <textarea
+                      id="smart-paste-textarea"
+                      ref={smartPasteRef}
                       rows={2}
                       value={smartPasteText}
                       onChange={(e) => {
