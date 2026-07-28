@@ -9,6 +9,7 @@ import fs from "fs";
 import crypto from "crypto";
 import os from "os";
 import dns from "dns";
+import { generateShopeeAuthHeader } from "./src/services/shopeeApi";
 
 // DNS-over-HTTPS (DoH) resolver helper using cloudflare-dns.com and dns.google
 async function resolveViaDoH(hostname: string): Promise<string[]> {
@@ -313,10 +314,29 @@ const convertToAffiliateLink = (originalUrl: string, affiliateId: string, subId:
   if (!originalUrl) return "";
   const cleanUrl = originalUrl.trim();
   
+  // Extract domain from original URL to support other regions
+  let shopeeDomain = "shopee.com.br"; // Default
+  try {
+    const urlObj = new URL(cleanUrl);
+    const parts = urlObj.hostname.split('.');
+    // Look for 'shopee' in the hostname
+    if (parts.length >= 2) {
+      // e.g., shopee.com.mx -> shopee.com.mx
+      // e.g., shopee.sg -> shopee.sg
+      // Find the part that is "shopee" and take it + next parts
+      const shopeeIndex = parts.indexOf("shopee");
+      if (shopeeIndex !== -1 && parts.length > shopeeIndex + 1) {
+        shopeeDomain = parts.slice(shopeeIndex).join('.');
+      }
+    }
+  } catch (e) {
+    // Keep default domain if parsing fails
+  }
+
   // Shopee Universal Link is the official way to manually structure tracking URLs that redirect and track on both mobile and desktop.
   // Standard format:
   // https://shopee.com.br/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=SUB_ID&utm_term=AFFILIATE_ID&url=ORIGINAL_URL
-  const universalUrl = `https://shopee.com.br/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affiliateId)}&url=${encodeURIComponent(cleanUrl)}`;
+  const universalUrl = `https://${shopeeDomain}/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affiliateId)}&url=${encodeURIComponent(cleanUrl)}`;
   
   return universalUrl;
 };
@@ -347,63 +367,43 @@ const convertWithShopeeApi = async (
       // Add a tiny delay between retries if not the first attempt
       if (i > 0) await new Promise(resolve => setTimeout(resolve, 500));
       
-      // We will try combinations of GraphQL Queries (ShortLink vs PromotionLink) with single-line minimized payload formatting
+      // We will try combinations of GraphQL Queries with single-line minimized payload formatting
       const queries = [
+        {
+          name: "generatePromotionLink",
+          body: `mutation{generatePromotionLink(linkParams:{originalUrl:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink}}}`
+        },
+        {
+          name: "generatePromotionLinkAlt",
+          body: `mutation{generatePromotionLink(linkParams:{originUrl:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink}}}`
+        },
         {
           name: "generateShortLink",
           body: `mutation{generateShortLink(input:{originUrl:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){shortLink}}`
-        },
-        {
-          name: "generatePromotionLink",
-          body: `mutation{generatePromotionLink(linkParams:{originalLink:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink}}}`
         }
       ];
 
       // Try each query, signature calculation, and authorization header combination
       for (const queryObj of queries) {
-        const payloadStr = JSON.stringify({ query: queryObj.body });
-        const timestamp = Math.floor(Date.now() / 1000);
+        const initialPayload = JSON.stringify({ query: queryObj.body });
         
-        // 1. Simple SHA256 concatenation based signature (The Official/Mandated calculation method: SHA256(Credential+Timestamp+Payload+Secret))
-        const factorSimple = appKey + timestamp + payloadStr + appSecret;
-        const simpleSignature = crypto
-          .createHash("sha256")
-          .update(factorSimple)
-          .digest("hex");
+        try {
+          const authResult = generateShopeeAuthHeader({
+            appKey,
+            appSecret,
+            payload: initialPayload
+          });
 
-        // 2. HMAC-SHA256 based signature (As a robust fallback variant)
-        const factorHmac = appKey + timestamp + payloadStr;
-        const hmacSignature = crypto
-          .createHmac("sha256", appSecret)
-          .update(factorHmac)
-          .digest("hex");
+          const payloadStr = authResult.payloadStr;
 
-        const signatureVariants = [
-          { value: simpleSignature, desc: "Official Simple SHA256" },
-          { value: hmacSignature, desc: "HMAC-SHA256" }
-        ];
-
-        for (const sigVar of signatureVariants) {
-          const signature = sigVar.value;
-
-          // Try all known formats of Shopee Open Platform v2 Affiliate Authorization Headers
-          const authHeaderFormats = [
-            `SHA256 Credential=${appKey}, Timestamp=${timestamp}, Signature=${signature}`,   // Official space-separated (documented)
-            `SHA256 Credential=${appKey},Timestamp=${timestamp},Signature=${signature}`,     // No space comma-separated
-            `SHA256 Credential=${appKey}, Timestamp=${timestamp},Signature=${signature}`,    // Mix spacing comma-separated
-            `SHA256 Credentials=${appKey}, Timestamp=${timestamp}, Signature=${signature}`,  // Credentials (plural) space-separated
-            `SHA256 app_key=${appKey}, timestamp=${timestamp}, signature=${signature}`,      // app_key comma-separated
-            `SHA256 ${appKey}:${timestamp}:${signature}`                                     // Alternative colon-separated
-          ];
-
-          for (const authHeader of authHeaderFormats) {
+          for (const headerCandidate of authResult.headerVariants) {
             try {
               const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                   "Accept": "application/json",
-                  "Authorization": authHeader,
+                  "Authorization": headerCandidate,
                 },
                 body: payloadStr,
               });
@@ -426,11 +426,9 @@ const convertWithShopeeApi = async (
                 const msg = json.errors[0].message || "GraphQL error";
                 const errCode = json.errors[0].code;
                 
-                // Keep the exact error msg from Shopee so the user can diagnose the specific authentication/credential issue
-                if (errCode === 10020 || msg.includes("10020")) {
-                  lastApiError = new Error("Erro 10020: Credenciais da API Shopee Inválidas ou Inativas. Verifique se o seu aplicativo de tipo 'Affiliate' está ativo e aprovado com status 'Active' no painel Shopee Open Platform.");
-                } else if (msg.toLowerCase().includes("signature") || msg.toLowerCase().includes("credential") || msg.toLowerCase().includes("auth")) {
-                  lastApiError = new Error(`Erro de Autenticação Shopee (${sigVar.desc}): ${msg}`);
+                // Keep exact error details to assist user debugging while triggering safe fallback
+                if (errCode === 10020 || msg.includes("10020") || errCode === 10035 || msg.includes("10035")) {
+                  lastApiError = new Error("Erro de Acesso/Credenciais Shopee (10020/10035): Verifique se o seu aplicativo de tipo 'Affiliate' está ativo, aprovado com status 'Active' e com as permissões da API de Afiliados habilitadas no painel Shopee Open Platform.");
                 } else {
                   lastApiError = new Error(`Erro Shopee: ${msg}`);
                 }
@@ -442,13 +440,15 @@ const convertWithShopeeApi = async (
                              json.data?.batchGetCustomLink?.customLinkList?.[0]?.customLink;
 
               if (result) {
-                console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint} usando ${queryObj.name} (${sigVar.desc}) e formato de cabeçalho: ${authHeader.substring(0, 30)}...`);
+                console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint} usando ${queryObj.name}`);
                 return result;
               }
             } catch (innerErr: any) {
               lastNetworkError = innerErr;
             }
           }
+        } catch (authErr: any) {
+          lastApiError = authErr;
         }
       }
     } catch (error) {

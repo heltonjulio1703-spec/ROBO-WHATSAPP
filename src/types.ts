@@ -17,6 +17,7 @@ export interface WhatsAppStatus {
   userName: string;
   qrCodeProgress: number;
   connectedAt: string | null;
+  qrDataUrl?: string;
 }
 
 export interface GroupItem {
