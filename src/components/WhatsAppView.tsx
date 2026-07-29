@@ -1,26 +1,25 @@
 import React from "react";
 import { WhatsAppStatus } from "../types";
-import { Wifi, WifiOff, Loader2, CheckCircle2, ShieldCheck, LogOut, QrCode } from "lucide-react";
+import { Wifi, WifiOff, Loader2, ShieldCheck, LogOut, QrCode } from "lucide-react";
 import { motion } from "motion/react";
 
 interface WhatsAppViewProps {
   status: WhatsAppStatus;
   onConnect: () => Promise<void>;
-  onConfirmScan: () => Promise<void>;
+  onConfirmScan?: () => Promise<void>;
   onDisconnect: () => Promise<void>;
 }
 
 export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   status,
   onConnect,
-  onConfirmScan,
   onDisconnect,
 }) => {
   const [loading, setLoading] = React.useState(false);
   const [countdown, setCountdown] = React.useState(30);
   const [showConfirmDisconnect, setShowConfirmDisconnect] = React.useState(false);
 
-  // Countdown for simulated QR code expiration
+  // Countdown for QR code expiration
   React.useEffect(() => {
     let timer: NodeJS.Timeout;
     if (status.status === "qr_code") {
@@ -28,7 +27,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
       timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
-            return 30; // resets or simulates new QR code
+            return 30;
           }
           return prev - 1;
         });
@@ -42,12 +41,6 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   const handleGenerateQR = async () => {
     setLoading(true);
     await onConnect();
-    setLoading(false);
-  };
-
-  const handleSimulateScan = async () => {
-    setLoading(true);
-    await onConfirmScan();
     setLoading(false);
   };
 
@@ -89,8 +82,8 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
             </h2>
             <p className="text-sm text-gray-500 mt-1">
               {status.status === "connected" && `Dispositivo pareado como ${status.userName} (${status.phone})`}
-              {status.status === "connecting" && "Preparando serviços e gerando token de pareamento..."}
-              {status.status === "qr_code" && "Abra o WhatsApp no seu celular e simule o escaneamento abaixo."}
+              {status.status === "connecting" && "Preparando serviços e aguardando servidor do WhatsApp..."}
+              {status.status === "qr_code" && "Abra o WhatsApp no seu celular e escaneie o código QR oficial abaixo."}
               {status.status === "disconnected" && "Inicie a conexão para que o robô possa ler e reenviar mensagens."}
             </p>
           </div>
@@ -118,7 +111,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
             <div className="max-w-md mx-auto">
               <h3 className="text-lg font-bold text-gray-800 mb-2">Conectar Nova Conta</h3>
               <p className="text-sm text-gray-500 mb-6">
-                Nosso robô se conecta utilizando a API de simulação de WhatsApp Web. Para começar, clique no botão para gerar um novo código de acesso QR.
+                Para conectar seu WhatsApp ao robô de automação de afiliados, clique no botão abaixo para gerar o código QR oficial de conexão.
               </p>
               <button
                 id="generate-qr-btn"
@@ -167,10 +160,10 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                 <li>Aponte a câmera do celular para o código QR à direita para realizar o escaneamento.</li>
               </ol>
 
-              <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs text-blue-800 mt-6">
-                <p className="font-semibold mb-1">💡 Modo de Demonstração Inteligente</p>
+              <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 text-xs text-emerald-800 mt-6">
+                <p className="font-semibold mb-1">📱 Conexão Oficial via WhatsApp Web</p>
                 <p className="leading-relaxed">
-                  Para facilitar seu teste sem precisar expor seu WhatsApp real em nosso ambiente de testes, criamos um <strong>Simulador Automático de Leitura</strong>. Clique no botão de confirmação abaixo para simular um pareamento com sucesso imediatamente!
+                  O código abaixo é gerado em tempo real. Aponte a câmera do seu aplicativo oficial do WhatsApp no celular para parear a sessão.
                 </p>
               </div>
             </div>
@@ -189,53 +182,17 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    /* Styled simulated vector QR code using SVG */
-                    <svg viewBox="0 0 100 100" className="w-44 h-44 text-slate-800">
-                      {/* Corner squares (Position indicators) */}
-                      <rect x="0" y="0" width="25" height="25" fill="currentColor" rx="1" />
-                      <rect x="4" y="4" width="17" height="17" fill="white" rx="1" />
-                      <rect x="8" y="8" width="9" height="9" fill="currentColor" rx="0.5" />
-
-                      <rect x="75" y="0" width="25" height="25" fill="currentColor" rx="1" />
-                      <rect x="79" y="4" width="17" height="17" fill="white" rx="1" />
-                      <rect x="83" y="8" width="9" height="9" fill="currentColor" rx="0.5" />
-
-                      <rect x="0" y="75" width="25" height="25" fill="currentColor" rx="1" />
-                      <rect x="4" y="79" width="17" height="17" fill="white" rx="1" />
-                      <rect x="8" y="83" width="9" height="9" fill="currentColor" rx="0.5" />
-
-                      {/* Fake Data Blocks */}
-                      <rect x="35" y="5" width="10" height="5" fill="currentColor" />
-                      <rect x="40" y="15" width="20" height="5" fill="currentColor" />
-                      <rect x="60" y="5" width="5" height="15" fill="currentColor" />
-                      
-                      <rect x="5" y="35" width="15" height="5" fill="currentColor" />
-                      <rect x="15" y="45" width="10" height="10" fill="currentColor" />
-                      <rect x="5" y="60" width="5" height="10" fill="currentColor" />
-
-                      <rect x="35" y="35" width="30" height="30" fill="currentColor" rx="1" />
-                      <rect x="40" y="40" width="20" height="20" fill="white" rx="1" />
-                      <rect x="45" y="45" width="10" height="10" fill="currentColor" />
-
-                      <rect x="80" y="35" width="10" height="5" fill="currentColor" />
-                      <rect x="70" y="45" width="5" height="15" fill="currentColor" />
-                      <rect x="85" y="55" width="10" height="10" fill="currentColor" />
-
-                      <rect x="35" y="75" width="15" height="5" fill="currentColor" />
-                      <rect x="40" y="85" width="10" height="10" fill="currentColor" />
-                      <rect x="55" y="80" width="15" height="15" fill="currentColor" />
-                      
-                      <rect x="75" y="75" width="5" height="5" fill="currentColor" />
-                      <rect x="85" y="80" width="10" height="5" fill="currentColor" />
-                      <rect x="80" y="90" width="15" height="5" fill="currentColor" />
-                    </svg>
+                    <div className="flex flex-col items-center justify-center h-full text-center p-2">
+                      <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mb-2" />
+                      <p className="text-xs text-gray-500 font-medium">Gerando QR Code oficial do WhatsApp...</p>
+                    </div>
                   )}
                 </div>
 
                 {/* Expiration warning block */}
                 <div className="absolute inset-0 bg-white/95 backdrop-blur-xs flex flex-col items-center justify-center rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-350 cursor-pointer p-4 text-center">
                   <QrCode className="w-8 h-8 text-indigo-600 mb-2 animate-bounce" />
-                  <p className="text-xs font-bold text-gray-700">QR Code Dinâmico</p>
+                  <p className="text-xs font-bold text-gray-700">QR Code Oficial</p>
                   <p className="text-[10px] text-gray-400 mt-1">Atualiza a cada 30 segundos para segurança.</p>
                 </div>
               </div>
@@ -252,23 +209,6 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                   O código expira e renova em <strong className="text-gray-600 font-semibold">{countdown}s</strong>
                 </p>
               </div>
-
-              {/* Scan simulation activation button */}
-              <button
-                id="simulate-scan-btn"
-                onClick={handleSimulateScan}
-                disabled={loading}
-                className="mt-6 w-full max-w-[250px] bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-md shadow-green-600/10 flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                {loading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    Simular Leitura do QR Code
-                  </>
-                )}
-              </button>
 
             </div>
           </div>

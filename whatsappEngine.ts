@@ -130,18 +130,10 @@ export class WhatsAppEngine {
     const isAlreadyConnected = this.status.status === "connected";
 
     this.isConnecting = true;
-    this.addLogCallback("info", "Iniciando processo de conexão com WhatsApp...");
-
-    // Generate initial QR Code immediately so UI gets it right away without waiting
-    try {
-      const initialQrRaw = `2@${Math.random().toString(36).substring(2, 12)},${Date.now()},shopee-bot-pairing`;
-      this.status.qrDataUrl = await QRCode.toDataURL(initialQrRaw);
-      this.status.status = "qr_code";
-      this.status.qrCodeProgress = 95;
-      this.addLogCallback("info", "QR Code de conexão gerado com sucesso!");
-    } catch (e) {
-      console.error("Erro ao gerar QR Code inicial:", e);
-    }
+    this.status.status = "connecting";
+    this.status.qrCodeProgress = 10;
+    this.status.qrDataUrl = undefined;
+    this.addLogCallback("info", "Iniciando processo de conexão oficial com WhatsApp...");
 
     try {
       // Limpeza profunda se for forçado ou se não estiver conectado para garantir geração de QR Code limpo
@@ -186,22 +178,7 @@ export class WhatsAppEngine {
         console.warn("Usando fallback de versão Baileys:", err);
       }
 
-      this.addLogCallback("info", "Criando socket de conexão segura e gerando QR Code...");
-
-      // Garantia de QR Code visível: se o Baileys demorar para responder no sandbox, gera um QR Code interativo
-      const fallbackTimer = setTimeout(async () => {
-        if (this.status.status === "connecting" && !this.status.qrDataUrl) {
-          try {
-            const fakeQrRaw = `2@${Math.random().toString(36).substring(2, 10)},${Date.now()},shopee-bot-pairing`;
-            this.status.qrDataUrl = await QRCode.toDataURL(fakeQrRaw);
-            this.status.status = "qr_code";
-            this.status.qrCodeProgress = 90;
-            this.addLogCallback("info", "QR Code de conexão gerado e pronto para pareamento!");
-          } catch (e) {
-            console.error("Erro ao gerar fallback QR:", e);
-          }
-        }
-      }, 2500);
+      this.addLogCallback("info", "Aguardando geração do QR Code oficial pelo servidor WhatsApp...");
 
       this.sock = makeWASocket({
         version,
@@ -238,13 +215,12 @@ export class WhatsAppEngine {
         console.log("📡 Baileys Update:", { connection, qr: !!qr });
 
         if (qr) {
-          clearTimeout(fallbackTimer);
           this.status.status = "qr_code";
           this.status.qrCodeProgress = 50;
           try {
             this.status.qrDataUrl = await QRCode.toDataURL(qr);
             this.status.qrCodeProgress = 95;
-            this.addLogCallback("info", "QR Code do WhatsApp gerado com sucesso!");
+            this.addLogCallback("info", "QR Code oficial do WhatsApp gerado com sucesso! Escaneie com seu celular.");
           } catch (err) {
             console.error("Erro QR:", err);
             this.addLogCallback("error", "Falha ao gerar imagem do QR Code.");
@@ -252,7 +228,6 @@ export class WhatsAppEngine {
         }
 
         if (connection === "open") {
-          clearTimeout(fallbackTimer);
           this.isConnecting = false;
           const userJid = this.sock?.user?.id || "";
           const userName = this.sock?.user?.name || "Minha Conta";
@@ -271,7 +246,6 @@ export class WhatsAppEngine {
         }
 
         if (connection === "close") {
-          clearTimeout(fallbackTimer);
           this.isConnecting = false;
           const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode;
           console.log("📡 Conexão fechada. Código:", statusCode);

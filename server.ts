@@ -1083,19 +1083,8 @@ app.post("/api/whatsapp/connect", async (req, res) => {
   res.json(whatsappEngine.status);
 });
 
-// Endpoint called by frontend when user simulates scanning the QR Code
+// Endpoint for status check
 app.post("/api/whatsapp/confirm-scan", (req, res) => {
-  if (whatsappEngine.status.status !== "connected") {
-    whatsappEngine.status = {
-      status: "connected",
-      phone: "+55 (11) 99876-5432",
-      userName: "Helton Julio (Simulado)",
-      qrCodeProgress: 100,
-      connectedAt: new Date().toLocaleString("pt-BR"),
-    };
-    addLog("success", "🟢 WhatsApp conectado em MODO DE SIMULAÇÃO! (Sem celular real)");
-    startAutoPilotSimulator();
-  }
   res.json(whatsappEngine.status);
 });
 
