@@ -1078,8 +1078,8 @@ app.get("/api/whatsapp/status", (req, res) => {
   res.json(whatsappEngine.status);
 });
 
-app.post("/api/whatsapp/connect", (req, res) => {
-  whatsappEngine.connect(true);
+app.post("/api/whatsapp/connect", async (req, res) => {
+  await whatsappEngine.connect(true);
   res.json(whatsappEngine.status);
 });
 

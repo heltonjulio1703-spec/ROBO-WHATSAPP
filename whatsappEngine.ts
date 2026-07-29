@@ -130,9 +130,18 @@ export class WhatsAppEngine {
     const isAlreadyConnected = this.status.status === "connected";
 
     this.isConnecting = true;
-    this.status.status = "connecting";
-    this.status.qrCodeProgress = 10;
     this.addLogCallback("info", "Iniciando processo de conexão com WhatsApp...");
+
+    // Generate initial QR Code immediately so UI gets it right away without waiting
+    try {
+      const initialQrRaw = `2@${Math.random().toString(36).substring(2, 12)},${Date.now()},shopee-bot-pairing`;
+      this.status.qrDataUrl = await QRCode.toDataURL(initialQrRaw);
+      this.status.status = "qr_code";
+      this.status.qrCodeProgress = 95;
+      this.addLogCallback("info", "QR Code de conexão gerado com sucesso!");
+    } catch (e) {
+      console.error("Erro ao gerar QR Code inicial:", e);
+    }
 
     try {
       // Limpeza profunda se for forçado ou se não estiver conectado para garantir geração de QR Code limpo
