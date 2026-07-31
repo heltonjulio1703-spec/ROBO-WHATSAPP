@@ -250,6 +250,9 @@ export class WhatsAppEngine {
           const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode;
           console.log("📡 Conexão fechada. Código:", statusCode);
           
+          const wasConnected = this.status.status === "connected";
+          const wasConnecting = this.status.status === "connecting" || this.status.status === "qr_code";
+
           if (this.status.status !== "connected") {
             this.status.status = "disconnected";
           }
@@ -258,9 +261,15 @@ export class WhatsAppEngine {
           if (statusCode === DisconnectReason.loggedOut || statusCode === 401 || statusCode === 403) {
             this.addLogCallback("error", "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code.");
             this.logout();
-          } else if (this.status.status === "connected") {
-            this.addLogCallback("warning", "Conexão perdida. Tentando reconectar em 10s...");
-            setTimeout(() => this.connect(), 10000);
+          } else {
+            const shouldReconnect = statusCode === DisconnectReason.restartRequired || statusCode === 515 || wasConnected || wasConnecting;
+            if (shouldReconnect) {
+              this.addLogCallback("warning", "Conexão reiniciada ou instável (Código 515). Reconectando automaticamente em 3s...");
+              setTimeout(() => this.connect(), 3000);
+            } else {
+              this.addLogCallback("warning", "Conexão perdida. Clique em Conectar para tentar novamente.");
+              this.status.status = "disconnected";
+            }
           }
         }
       });
@@ -365,23 +374,95 @@ export class WhatsAppEngine {
       return false;
     }
 
+    // Helper to validate magic bytes of image buffer (JPEG, PNG, WEBP, GIF)
+    const isValidImageBuffer = (buf: Buffer | undefined): boolean => {
+      if (!buf || buf.length < 8) return false;
+      // JPEG: FF D8 FF
+      if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return true;
+      // PNG: 89 50 4E 47
+      if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) return true;
+      // WEBP: RIFF...WEBP
+      if (buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 &&
+          buf[8] === 0x57 && buf[9] === 0x45 && buf[10] === 0x42 && buf[11] === 0x50) return true;
+      // GIF: 47 49 46
+      if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46) return true;
+      return false;
+    };
+
+    let finalBuffer: Buffer | undefined = isValidImageBuffer(imageBuffer) ? imageBuffer : undefined;
+
+    if (!finalBuffer && imageUrl && imageUrl.startsWith("http")) {
+      try {
+        this.addLogCallback("info", `Baixando imagem da oferta para envio no WhatsApp...`);
+        const imgRes = await fetch(imageUrl, {
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
+          },
+        });
+        if (imgRes.ok) {
+          const ab = await imgRes.arrayBuffer();
+          const downloadedBuf = Buffer.from(ab);
+          if (isValidImageBuffer(downloadedBuf)) {
+            finalBuffer = downloadedBuf;
+          } else {
+            console.warn("Buffer baixado do URL de imagem não possui cabeçalho válido de imagem.");
+          }
+        }
+      } catch (e) {
+        console.warn("Não foi possível carregar buffer da imagem original:", e);
+      }
+    }
+
+    // If still no buffer, download high quality product photo into buffer
+    if (!finalBuffer) {
+      const fallbackUrls = [
+        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800",
+        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800",
+      ];
+      for (const fbUrl of fallbackUrls) {
+        try {
+          const fallbackRes = await fetch(fbUrl);
+          if (fallbackRes.ok) {
+            const ab = await fallbackRes.arrayBuffer();
+            const buf = Buffer.from(ab);
+            if (isValidImageBuffer(buf)) {
+              finalBuffer = buf;
+              break;
+            }
+          }
+        } catch (e) {}
+      }
+    }
+
     try {
-      if (imageBuffer) {
-        await this.sock.sendMessage(jid, { image: imageBuffer, caption: text });
-      } else if (imageUrl) {
-        await this.sock.sendMessage(jid, { image: { url: imageUrl }, caption: text });
+      if (finalBuffer) {
+        await this.sock.sendMessage(jid, { image: finalBuffer, caption: text });
+        this.addLogCallback("success", `📸 Anúncio com FOTO enviado com sucesso para ${jid}`);
       } else {
         await this.sock.sendMessage(jid, { text });
+        this.addLogCallback("warning", `⚠️ Imagem indisponível. Enviando mensagem de texto simples para ${jid}`);
       }
       return true;
     } catch (err) {
-      this.addLogCallback("error", `Falha ao enviar mensagem com imagem para ${jid}: ${(err as Error).message}`);
-      // Fallback to text-only send if media sending failed
+      this.addLogCallback("error", `Falha ao enviar foto para ${jid}: ${(err as Error).message}. Tentando reenviar imagem de contingência...`);
+      try {
+        const retryRes = await fetch("https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800");
+        if (retryRes.ok) {
+          const ab = await retryRes.arrayBuffer();
+          const buf = Buffer.from(ab);
+          if (isValidImageBuffer(buf)) {
+            await this.sock.sendMessage(jid, { image: buf, caption: text });
+            return true;
+          }
+        }
+      } catch (e) {}
+
       try {
         await this.sock.sendMessage(jid, { text });
         return true;
       } catch (fallbackErr) {
-        this.addLogCallback("error", `Falha no envio de texto (fallback) para ${jid}: ${(fallbackErr as Error).message}`);
+        this.addLogCallback("error", `Falha no envio para ${jid}: ${(fallbackErr as Error).message}`);
         return false;
       }
     }

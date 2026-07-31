@@ -58,8 +58,16 @@ export function generateShopeeAuthHeader({
     .createHash('sha256')
     .update(factorSimple)
     .digest('hex');
+  const signatureSimpleUpper = signatureSimple.toUpperCase();
 
-  // 2. HMAC-SHA256 variant
+  // 2. Secret-first SHA256 concatenation: Secret + AppKey + Timestamp + Payload
+  const factorSecretFirst = cleanAppSecret + cleanAppKey + timestamp + payloadStr;
+  const signatureSecretFirst = crypto
+    .createHash('sha256')
+    .update(factorSecretFirst)
+    .digest('hex');
+
+  // 3. HMAC-SHA256 variant
   const factorHmac = cleanAppKey + timestamp + payloadStr;
   const signatureHmac = crypto
     .createHmac('sha256', cleanAppSecret)
@@ -73,6 +81,8 @@ export function generateShopeeAuthHeader({
   const headerVariants = [
     `SHA256 Credential=${cleanAppKey}, Timestamp=${timestamp}, Signature=${signatureSimple}`,
     `SHA256 Credential=${cleanAppKey},Timestamp=${timestamp},Signature=${signatureSimple}`,
+    `SHA256 Credential=${cleanAppKey}, Timestamp=${timestamp}, Signature=${signatureSimpleUpper}`,
+    `SHA256 Credential=${cleanAppKey}, Timestamp=${timestamp}, Signature=${signatureSecretFirst}`,
     `SHA256 Credential=${cleanAppKey}, Timestamp=${timestamp}, Signature=${signatureHmac}`,
     `SHA256 Credential=${cleanAppKey},Timestamp=${timestamp},Signature=${signatureHmac}`
   ];

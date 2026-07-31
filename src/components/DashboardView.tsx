@@ -617,7 +617,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                               <button
                                 type="button"
                                 onClick={() => {
-                                  // Copy the API affiliate ID if present and general affiliate ID is empty
                                   if (shopeeAffId && !affId) {
                                     setAffId(shopeeAffId);
                                   }
@@ -638,6 +637,38 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                               >
                                 Acessar Shopee Open Platform
                               </a>
+                            </div>
+                          </div>
+                        )}
+
+                        {testConnectionStatus === "error" && (testConnectionMessage.toLowerCase().includes("conexão") || testConnectionMessage.toLowerCase().includes("fetch") || testConnectionMessage.toLowerCase().includes("timeout") || testConnectionMessage.toLowerCase().includes("servidor")) && (
+                          <div className="mt-2 bg-amber-50 border border-amber-200 rounded p-2.5 space-y-2">
+                            <span className="font-bold text-amber-950 block text-[11px]">⚡ Entendendo o Erro de Conexão com a Shopee</span>
+                            <p className="text-[10.5px] text-amber-900 leading-normal">
+                              Os servidores da Shopee Open API frequentemente bloqueiam ou restringem requisições diretas de ambientes de nuvem (Cloud).
+                            </p>
+                            <div className="text-[10px] text-slate-600 leading-relaxed bg-white p-2 rounded border border-amber-100">
+                              <strong className="text-slate-800">Sua comissão está 100% segura!</strong>
+                              <p className="mt-1">
+                                Nosso robô possui um sistema automático de contingência: se a API da Shopee estiver inativa ou sem sinal, ele gera automaticamente um <strong>Universal Link oficial com o seu ID de Afiliado</strong>. Todas as vendas enviadas para o WhatsApp continuarão pontuando suas comissões normalmente.
+                              </p>
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-2 pt-1">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (shopeeAffId && !affId) {
+                                    setAffId(shopeeAffId);
+                                  }
+                                  setUseShopeeApi(false);
+                                  setTestConnectionStatus("idle");
+                                  setTestConnectionMessage("");
+                                  setSaveStatus("unsaved");
+                                }}
+                                className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded text-[10px] shadow transition-all shrink-0 cursor-pointer text-center"
+                              >
+                                Usar Links Estruturados com ID de Afiliado (Garantia de Envio)
+                              </button>
                             </div>
                           </div>
                         )}

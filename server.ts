@@ -352,10 +352,12 @@ const convertWithShopeeApi = async (
   const appKey = (key || "").trim();
   const appSecret = (secret || "").trim();
 
-  // Focus on Brazil and stable regional hubs (the non-existent global .com endpoint is excluded to avoid DNS ENOTFOUND)
+  // Primary Brazilian and regional GraphQL endpoints for Shopee Open Platform
   const endpoints = [
-    "https://open-api.affiliate.shopee.com.br/v2/api", // Primary for Brazil
-    "https://open-api.affiliate.shopee.sg/v2/api",    // Regional fallback hub
+    "https://open-api.affiliate.shopee.com.br/graphql",
+    "https://open-api.affiliate.shopee.com.br/v2/api",
+    "https://open-api.affiliate.shopee.sg/graphql",
+    "https://open-api.affiliate.shopee.sg/v2/api",
   ];
 
   let lastApiError: Error | null = null;
@@ -364,10 +366,8 @@ const convertWithShopeeApi = async (
   for (let i = 0; i < endpoints.length; i++) {
     const endpoint = endpoints[i];
     try {
-      // Add a tiny delay between retries if not the first attempt
-      if (i > 0) await new Promise(resolve => setTimeout(resolve, 500));
+      if (i > 0) await new Promise(resolve => setTimeout(resolve, 300));
       
-      // We will try combinations of GraphQL Queries with single-line minimized payload formatting
       const queries = [
         {
           name: "generatePromotionLink",
@@ -383,7 +383,6 @@ const convertWithShopeeApi = async (
         }
       ];
 
-      // Try each query, signature calculation, and authorization header combination
       for (const queryObj of queries) {
         const initialPayload = JSON.stringify({ query: queryObj.body });
         
@@ -398,22 +397,29 @@ const convertWithShopeeApi = async (
 
           for (const headerCandidate of authResult.headerVariants) {
             try {
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 7000);
+
               const response = await fetch(endpoint, {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                   "Accept": "application/json",
+                  "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
                   "Authorization": headerCandidate,
                 },
                 body: payloadStr,
+                signal: controller.signal,
               });
+
+              clearTimeout(timeoutId);
 
               const responseText = await response.text();
               let json;
               try {
                 json = JSON.parse(responseText);
               } catch (e) {
-                lastApiError = new Error(`Resposta Shopee não é JSON: ${responseText.substring(0, 100)}`);
+                lastApiError = new Error(`Resposta Shopee não é JSON válido (HTTP ${response.status}): ${responseText.substring(0, 100)}`);
                 continue;
               }
 
@@ -426,11 +432,10 @@ const convertWithShopeeApi = async (
                 const msg = json.errors[0].message || "GraphQL error";
                 const errCode = json.errors[0].code;
                 
-                // Keep exact error details to assist user debugging while triggering safe fallback
                 if (errCode === 10020 || msg.includes("10020") || errCode === 10035 || msg.includes("10035")) {
-                  lastApiError = new Error("Erro de Acesso/Credenciais Shopee (10020/10035): Verifique se o seu aplicativo de tipo 'Affiliate' está ativo, aprovado com status 'Active' e com as permissões da API de Afiliados habilitadas no painel Shopee Open Platform.");
+                  lastApiError = new Error("Erro de Permissão (10020/10035): O seu aplicativo no Shopee Open Platform precisa ser do tipo 'Affiliate' e estar com status 'Active' (Aprovado).");
                 } else {
-                  lastApiError = new Error(`Erro Shopee: ${msg}`);
+                  lastApiError = new Error(`Erro Shopee API: ${msg}`);
                 }
                 continue;
               }
@@ -444,25 +449,30 @@ const convertWithShopeeApi = async (
                 return result;
               }
             } catch (innerErr: any) {
-              lastNetworkError = innerErr;
+              if (innerErr.name === "AbortError") {
+                lastNetworkError = new Error(`Tempo limite esgotado (timeout) ao conectar no endpoint ${endpoint}`);
+              } else {
+                lastNetworkError = innerErr;
+              }
             }
           }
         } catch (authErr: any) {
           lastApiError = authErr;
         }
       }
-    } catch (error) {
-      const isDnsError = (error as any).code === "ENOTFOUND" || (error as Error).message?.includes("getaddrinfo") || (error as Error).message?.includes("fetch failed");
-      if (isDnsError) {
-        console.log(`Endpoint ${endpoint} não pôde ser resolvido por DNS.`);
+    } catch (error: any) {
+      const isDnsOrConn = error.code === "ENOTFOUND" || error.name === "AbortError" || error.message?.includes("fetch failed");
+      if (isDnsOrConn) {
+        console.log(`Endpoint ${endpoint} não respondeu à conexão.`);
+        lastNetworkError = new Error(`Falha de conexão com os servidores da Shopee Open API (${endpoint}).`);
       } else {
-        console.warn(`Falha na conversão Shopee API usando endpoint ${endpoint}:`, error);
+        console.warn(`Erro no endpoint ${endpoint}:`, error);
+        lastNetworkError = error as Error;
       }
-      lastNetworkError = error as Error;
     }
   }
 
-  const finalError = lastApiError || lastNetworkError || new Error("Erro na conversão da API da Shopee");
+  const finalError = lastApiError || lastNetworkError || new Error("Não foi possível conectar à API da Shopee.");
   console.log(`[Shopee Link Converter] ${finalError.message}`);
   throw finalError;
 };
@@ -479,16 +489,36 @@ const expandShopeeUrl = async (url: string): Promise<string> => {
     const response = await fetch(url, {
       method: "GET",
       headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
         "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
       },
       redirect: "follow",
     });
 
-    if (response.ok && response.url && response.url.startsWith("http")) {
-      addLog("success", `✅ Link curto expandido com sucesso para: ${response.url.substring(0, 70)}...`);
-      return response.url;
+    if (response.ok) {
+      if (response.url && response.url.includes("shopee.com") && !response.url.includes("s.shopee.com")) {
+        addLog("success", `✅ Link curto expandido com sucesso para: ${response.url.substring(0, 70)}...`);
+        return response.url;
+      }
+
+      const html = await response.text();
+      const canonicalMatch = html.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i);
+      if (canonicalMatch && canonicalMatch[1] && canonicalMatch[1].startsWith("http")) {
+        return canonicalMatch[1];
+      }
+      const locMatch = html.match(/(?:location\.href|location\.replace|window\.location)\s*=\s*["']([^"']+)["']/i) ||
+                       html.match(/<meta\s+http-equiv=["']refresh["']\s+content=["'][0-9]+;\s*url=([^"']+)["']/i);
+      if (locMatch && locMatch[1] && locMatch[1].startsWith("http")) {
+        return locMatch[1];
+      }
+      const shopeeFullMatch = html.match(/https?:\/\/(?:www\.)?shopee\.com\.br\/[^\s"'\<\>]+/i);
+      if (shopeeFullMatch && shopeeFullMatch[0]) {
+        return shopeeFullMatch[0];
+      }
+      if (response.url && response.url.startsWith("http")) {
+        return response.url;
+      }
     }
   } catch (err) {
     console.error("Falha ao expandir link curto da Shopee:", err);
@@ -673,48 +703,108 @@ const parseMessageWithRegex = async (messageText: string, affiliateId: string) =
   };
 };
 
-// Helper to fetch original product photo from Shopee URL by following redirects and reading OpenGraph tags
+// Helper to fetch original product photo from Shopee URL by following redirects, API, and reading OpenGraph tags
 const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => {
   if (!url || !url.startsWith("http")) return null;
   
   try {
-    addLog("info", `Buscando foto original do produto no link: ${url}`);
-    const response = await fetch(url, {
+    const targetUrl = await expandShopeeUrl(url);
+    addLog("info", `Buscando foto original do produto no link: ${targetUrl}`);
+
+    // Try Shopee API first if shopid and itemid can be extracted from targetUrl or original url
+    let shopid: string | null = null;
+    let itemid: string | null = null;
+
+    const matchI = targetUrl.match(/i\.(\d+)\.(\d+)/i) || url.match(/i\.(\d+)\.(\d+)/i);
+    if (matchI) {
+      shopid = matchI[1];
+      itemid = matchI[2];
+    } else {
+      const matchProd = targetUrl.match(/product\/(\d+)\/(\d+)/i) || url.match(/product\/(\d+)\/(\d+)/i);
+      if (matchProd) {
+        shopid = matchProd[1];
+        itemid = matchProd[2];
+      }
+    }
+
+    if (shopid && itemid) {
+      try {
+        addLog("info", `🔎 Consultando foto original via API Shopee (Item: ${itemid}, Loja: ${shopid})...`);
+        const apiUrls = [
+          `https://shopee.com.br/api/v4/item/get?itemid=${itemid}&shopid=${shopid}`,
+          `https://shopee.com.br/api/v2/item/get?itemid=${itemid}&shopid=${shopid}`
+        ];
+        for (const apiUrl of apiUrls) {
+          const apiRes = await fetch(apiUrl, {
+            headers: {
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+              "Accept": "application/json",
+              "Referer": targetUrl,
+            }
+          });
+          if (apiRes.ok) {
+            const json = await apiRes.json();
+            const imgHash = json?.data?.image || json?.data?.item?.image || json?.item?.image || (json?.data?.images && json.data.images[0]) || (json?.data?.item?.images && json.data.item.images[0]);
+            if (imgHash && typeof imgHash === "string" && imgHash.length > 5) {
+              const cleanHash = imgHash.trim();
+              const fullImgUrl = cleanHash.startsWith("http") ? cleanHash : `https://down-br.img.susercontent.com/file/${cleanHash}`;
+              addLog("success", `📸 Foto original do anúncio encontrada (API Shopee): ${fullImgUrl.substring(0, 60)}...`);
+              return fullImgUrl;
+            }
+          }
+        }
+      } catch (apiErr) {
+        console.warn("Falha na chamada API de item Shopee:", apiErr);
+      }
+    }
+
+    // HTML fallback
+    const response = await fetch(targetUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
         "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
       },
       redirect: "follow",
     });
 
-    if (!response.ok) {
-      console.warn(`Shopee request returned status: ${response.status}`);
-      return null;
-    }
-
-    const html = await response.text();
-    
-    // Pattern matches for og:image
-    const matches = [
-      /<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i,
-      /<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i,
-      /<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i,
-      /meta\s+property="og:image"\s+content="([^"]+)"/i,
-      /"image":\s*"([^"]+)"/i,
-    ];
-
-    for (const regex of matches) {
-      const match = html.match(regex);
-      if (match && match[1]) {
-        let imageUrl = match[1].trim();
-        if (imageUrl.startsWith("//")) {
-          imageUrl = "https:" + imageUrl;
+    if (response.ok) {
+      const html = await response.text();
+      
+      const metaMatches = [
+        /<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i,
+        /<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i,
+        /<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i,
+        /<link\s+rel=["']image_src["']\s+href=["']([^"']+)["']/i,
+      ];
+      for (const r of metaMatches) {
+        const m = html.match(r);
+        if (m && m[1] && m[1].trim().startsWith("http")) {
+          const cleanUrl = m[1].trim().replace(/\\u002F/g, "/");
+          addLog("success", `📸 Foto original encontrada (Meta tag): ${cleanUrl.substring(0, 60)}...`);
+          return cleanUrl;
         }
-        if (imageUrl.startsWith("http")) {
-          addLog("success", `📸 Foto original encontrada: ${imageUrl.substring(0, 60)}...`);
-          return imageUrl;
+      }
+
+      const jsonImgMatch = html.match(/"image":\s*"([^"]+)"/i) || html.match(/"images":\s*\["([^"]+)"/i);
+      if (jsonImgMatch && jsonImgMatch[1]) {
+        let imgStr = jsonImgMatch[1].trim().replace(/\\u002F/g, "/");
+        if (imgStr.startsWith("http")) {
+          addLog("success", `📸 Foto original encontrada (JSON): ${imgStr.substring(0, 60)}...`);
+          return imgStr;
+        } else if (imgStr.length > 10 && !imgStr.includes(" ")) {
+          const fullUrl = `https://down-br.img.susercontent.com/file/${imgStr}`;
+          addLog("success", `📸 Foto original encontrada (Hash JSON): ${fullUrl.substring(0, 60)}...`);
+          return fullUrl;
         }
+      }
+
+      const cdnMatch = html.match(/https?:\/\/down-[a-z0-9-]+\.img\.susercontent\.com\/file\/[a-zA-Z0-9_.-]+/i) ||
+                       html.match(/https?:\/\/cf\.shopee\.com\.br\/file\/[a-zA-Z0-9_.-]+/i);
+      if (cdnMatch && cdnMatch[0]) {
+        const cdnUrl = cdnMatch[0].trim();
+        addLog("success", `📸 Foto original encontrada (Shopee CDN): ${cdnUrl.substring(0, 60)}...`);
+        return cdnUrl;
       }
     }
   } catch (err) {
@@ -860,12 +950,8 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   // Send rewritten message to target groups with image if connected
   for (const target of activeTargets) {
     if (typeof whatsappEngine !== "undefined" && whatsappEngine && whatsappEngine.status.status === "connected") {
-      if (target.id.endsWith("@g.us")) {
-        await whatsappEngine.sendMessage(target.id, parsed.rewrittenMessage, imageBuffer, resolvedImageUrl);
-        addLog("success", `✨ [WhatsApp REAL] Anúncio enviado com IMAGEM para "${target.name}": ${parsed.productTitle}`);
-      } else {
-        addLog("success", `✨ Anúncio encaminhado para "${target.name}": ${parsed.productTitle}`);
-      }
+      await whatsappEngine.sendMessage(target.id, parsed.rewrittenMessage, imageBuffer, resolvedImageUrl);
+      addLog("success", `✨ [WhatsApp REAL] Anúncio enviado com IMAGEM para "${target.name}": ${parsed.productTitle}`);
     } else {
       addLog("success", `✨ Anúncio encaminhado para "${target.name}" (Simulado): ${parsed.productTitle}`);
     }
