@@ -563,8 +563,8 @@ const convertToAffiliateLinkAsync = async (originalUrl: string, affiliateId: str
   return convertToAffiliateLink(resolvedUrl, affiliateId, subId);
 };
 
-// Helper to ensure the message footer below the link is strictly replaced with @isamara.manoel
-const applyFooterToMessage = (msg: string, footer: string = "@isamara.manoel"): string => {
+// Helper to ensure the message footer below the link is strictly replaced with Instagram @isamara.manoel
+const applyFooterToMessage = (msg: string, footer: string = "Instagram @isamara.manoel"): string => {
   if (!msg) return msg;
 
   const urlRegex = /(https?:\/\/[^\s]+)/gi;
@@ -613,7 +613,7 @@ Mantenha os valores de preços, parcelamento, preço de tabela ("De R$ X"), pre�
 
 REGRA DO RODAPÉ (MANDATÓRIO):
 Abaixo do link [LINK_AFILIADO], substitua QUALQUER texto de rodapé, assinatura, aviso ou canal original estritamente por:
-@isamara.manoel
+Instagram @isamara.manoel
 
 Use as seguintes diretrizes para o "rewrittenMessage" de acordo com o estilo selecionado "${style}":
 - excited: Use muitos emojis (🔥, 😱, 🚨, ✨), texto entusiasmado e tom urgente, mantendo a parte dos preços idêntica ao anúncio de origem. Ex: "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥"
