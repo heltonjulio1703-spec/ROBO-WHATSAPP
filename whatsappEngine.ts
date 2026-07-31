@@ -528,6 +528,7 @@ export class WhatsAppEngine {
         const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
         const twoHoursInSec = 2 * 60 * 60; // 2 hours = 7200 seconds
         const minAllowedSec = refTimeSec - twoHoursInSec;
+        const seenLinksInScan = new Set<string>();
         
         for (const msg of messages) {
           const timestamp = Number(msg.messageTimestamp);
@@ -540,12 +541,22 @@ export class WhatsAppEngine {
                        msg.message?.extendedTextMessage?.text || 
                        msg.message?.imageMessage?.caption || 
                        "";
-                        
+                         
           if (!text) continue;
           
-          // Check if it has any URL or Shopee keyword
-          const hasAnyLink = /https?:\/\/[^\s]+/i.test(text) || /shp\.ee|shope\.ee|shopee/i.test(text);
-          if (!hasAnyLink) continue;
+          // Check if it has any Shopee link
+          const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com)[^\s]+)/i;
+          const match = text.match(shopeeLinkRegex);
+          
+          if (!match) continue;
+
+          const foundLink = match[1].toLowerCase().trim();
+          
+          // Discard if repeated within the same 2-hour window scan
+          if (seenLinksInScan.has(foundLink)) {
+            continue;
+          }
+          seenLinksInScan.add(foundLink);
           
           totalFound++;
           

@@ -1004,7 +1004,7 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   };
 
   state.history.unshift(historyItem);
-  if (state.history.length > 50) state.history.pop();
+  if (state.history.length > 200) state.history.pop();
 
   // Send rewritten message to target groups with image if connected
   for (const target of activeTargets) {
