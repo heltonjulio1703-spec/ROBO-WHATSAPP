@@ -36,6 +36,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [shopeeAffId, setShopeeAffId] = React.useState(config.shopeeAffiliateId || "");
   const [showAppKey, setShowAppKey] = React.useState(false);
   const [showAppSecret, setShowAppSecret] = React.useState(false);
+  const [footer, setFooter] = React.useState(config.customFooter || "");
 
   const [smartPasteText, setSmartPasteText] = React.useState("");
   const [smartPasteStatus, setSmartPasteStatus] = React.useState<{ success: boolean; message: string } | null>(null);
@@ -213,6 +214,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       setShopeeAppKey(config.shopeeAppKey || "");
       setShopeeAppSecret(config.shopeeAppSecret || "");
       setShopeeAffId(initialShopeeAffId);
+      setFooter(config.customFooter || "");
     }
   }, [config, saveStatus]);
 
@@ -232,6 +234,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         shopeeAppKey,
         shopeeAppSecret,
         shopeeAffiliateId: resolvedAffId,
+        customFooter: footer,
       };
       setConfig(updatedConfig);
       await saveConfig(updatedConfig);
@@ -364,6 +367,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   Frequência com que o simulador gera e encaminha novos anúncios de teste.
                 </p>
               </div>
+            </div>
+
+            {/* Custom Footer */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Frase do Rodapé (aparecerá nos anúncios)
+              </label>
+              <input
+                id="custom-footer-input"
+                type="text"
+                value={footer}
+                onChange={(e) => {
+                  setFooter(e.target.value);
+                  setSaveStatus("unsaved");
+                }}
+                placeholder="Ex: Siga no Instagram @seu.usuario"
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+              />
+              <p className="text-xs text-gray-400 mt-1">
+                Deixe em branco para não exibir rodapé nos anúncios.
+              </p>
             </div>
 
             {/* Keyword Filters (Disabled per user request) */}

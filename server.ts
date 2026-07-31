@@ -142,6 +142,7 @@ const state = {
     shopeeAppSecret: "",
     shopeeAffiliateId: "",
     useShopeeApi: false,
+    customFooter: "",
   },
   whatsapp: {
     status: "disconnected", // "disconnected", "connecting", "qr_code", "connected"
@@ -564,8 +565,10 @@ const convertToAffiliateLinkAsync = async (originalUrl: string, affiliateId: str
 };
 
 // Helper to ensure the message footer below the link is strictly replaced with Instagram @isamara.manoel
-const applyFooterToMessage = (msg: string, footer: string = "Instagram @isamara.manoel"): string => {
+const applyFooterToMessage = (msg: string): string => {
+  const footer = state.config.customFooter || "";
   if (!msg) return msg;
+  if (!footer) return msg;
 
   const urlRegex = /(https?:\/\/[^\s]+)/gi;
   let lastUrlIndex = -1;

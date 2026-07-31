@@ -501,12 +501,14 @@ export default function App() {
       {/* Footer copyright info */}
       <footer id="app-workspace-footer" className="bg-white border-t border-gray-100 py-6 mt-12 text-center text-xs text-gray-400 shrink-0">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 Instagram @isamara.manoel. Todos os direitos reservados.</p>
-          <div className="flex gap-4">
-            <span className="flex items-center gap-1 font-medium text-purple-600">
-              Instagram @isamara.manoel
-            </span>
-          </div>
+          <p>© 2026. Todos os direitos reservados.</p>
+          {config.customFooter && (
+            <div className="flex gap-4">
+              <span className="flex items-center gap-1 font-medium text-purple-600">
+                {config.customFooter}
+              </span>
+            </div>
+          )}
         </div>
       </footer>
 

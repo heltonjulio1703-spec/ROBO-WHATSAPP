@@ -9,6 +9,7 @@ export interface AppConfig {
   shopeeAppSecret?: string;
   shopeeAffiliateId?: string;
   useShopeeApi?: boolean;
+  customFooter?: string;
 }
 
 export interface WhatsAppStatus {
