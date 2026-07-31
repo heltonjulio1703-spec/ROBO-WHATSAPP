@@ -30,6 +30,7 @@ export interface GroupItem {
 
 export class WhatsAppEngine {
   public sock: WASocket | null = null;
+  public connectionTimestampSec: number = 0;
   public status: WhatsAppStatus = {
     status: "disconnected",
     phone: "",
@@ -229,6 +230,7 @@ export class WhatsAppEngine {
 
         if (connection === "open") {
           this.isConnecting = false;
+          this.connectionTimestampSec = Math.floor(Date.now() / 1000);
           const userJid = this.sock?.user?.id || "";
           const userName = this.sock?.user?.name || "Minha Conta";
           const phone = userJid.split(":")[0] || "";
@@ -284,6 +286,22 @@ export class WhatsAppEngine {
 
           const from = msg.key.remoteJid;
           if (!from || !from.endsWith("@g.us")) continue; // Only group chats
+
+          // Regra: filtrar anúncios feitos a mais de 2 horas antes da conexão ser estabelecida
+          const msgTimeSec = Number(msg.messageTimestamp) || 0;
+          if (msgTimeSec > 0) {
+            const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
+            const twoHoursInSec = 2 * 60 * 60; // 2h = 7200s
+            const minAllowedSec = refTimeSec - twoHoursInSec;
+
+            if (msgTimeSec < minAllowedSec) {
+              this.addLogCallback(
+                "info",
+                `Mensagem recebida ignorada (enviada há mais de 2 horas em relação à conexão: ${new Date(msgTimeSec * 1000).toLocaleTimeString("pt-BR")}).`
+              );
+              continue;
+            }
+          }
 
           const text = msg.message?.conversation || 
                        msg.message?.extendedTextMessage?.text || 
@@ -497,7 +515,7 @@ export class WhatsAppEngine {
       throw new Error("WhatsApp não está conectado.");
     }
 
-    this.addLogCallback("info", `🔎 Iniciando varredura de histórico no grupo para buscar ofertas de hoje...`);
+    this.addLogCallback("info", `🔎 Varrendo histórico do grupo buscando ofertas feitas nas últimas 2 horas (em relação à conexão)...`);
     
     let totalFound = 0;
     let processedCount = 0;
@@ -507,18 +525,16 @@ export class WhatsAppEngine {
       const messages = await (this.sock as any).fetchMessagesFromWAServer(groupId, 100);
       
       if (messages && Array.isArray(messages)) {
-        const today = new Date();
+        const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
+        const twoHoursInSec = 2 * 60 * 60; // 2 hours = 7200 seconds
+        const minAllowedSec = refTimeSec - twoHoursInSec;
         
         for (const msg of messages) {
           const timestamp = Number(msg.messageTimestamp);
           if (!timestamp) continue;
           
-          const msgDate = new Date(timestamp * 1000);
-          const isToday = msgDate.getDate() === today.getDate() &&
-                          msgDate.getMonth() === today.getMonth() &&
-                          msgDate.getFullYear() === today.getFullYear();
-                          
-          if (!isToday) continue;
+          // Rule: Only process messages made at most 2 hours before connection
+          if (timestamp < minAllowedSec) continue;
           
           const text = msg.message?.conversation || 
                        msg.message?.extendedTextMessage?.text || 

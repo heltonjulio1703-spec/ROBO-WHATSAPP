@@ -628,35 +628,48 @@ Mensagem original a ser analisada:
 ${messageText}
 """`;
 
-  const modelsToTry = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"];
+  const modelsToTry = ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite"];
   let response = null;
 
   for (const modelName of modelsToTry) {
-    try {
-      response = await ai.models.generateContent({
-        model: modelName,
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.OBJECT,
-            properties: {
-              hasShopeeLink: { type: Type.BOOLEAN },
-              originalLink: { type: Type.STRING },
-              productTitle: { type: Type.STRING },
-              price: { type: Type.STRING },
-              coupon: { type: Type.STRING },
-              rewrittenMessage: { type: Type.STRING },
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        response = await ai.models.generateContent({
+          model: modelName,
+          contents: prompt,
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                hasShopeeLink: { type: Type.BOOLEAN },
+                originalLink: { type: Type.STRING },
+                productTitle: { type: Type.STRING },
+                price: { type: Type.STRING },
+                coupon: { type: Type.STRING },
+                rewrittenMessage: { type: Type.STRING },
+              },
+              required: ["hasShopeeLink", "originalLink", "productTitle", "rewrittenMessage"],
             },
-            required: ["hasShopeeLink", "originalLink", "productTitle", "rewrittenMessage"],
           },
-        },
-      });
-      if (response && response.text) {
-        break;
+        });
+        if (response && response.text) {
+          break;
+        }
+      } catch (modelError) {
+        const errMsg = (modelError as Error).message || String(modelError);
+        console.warn(`Modelo ${modelName} (tentativa ${attempt + 1}) falhou:`, errMsg);
+        // If 503 (service unavailable / high demand), wait 1s before retrying
+        if (errMsg.includes("503") || errMsg.includes("UNAVAILABLE")) {
+          await new Promise((r) => setTimeout(r, 1000));
+        } else {
+          // If 429 or 404, switch to next model immediately
+          break;
+        }
       }
-    } catch (modelError) {
-      console.warn(`Modelo ${modelName} falhou:`, (modelError as Error).message);
+    }
+    if (response && response.text) {
+      break;
     }
   }
 
