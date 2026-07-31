@@ -563,6 +563,29 @@ const convertToAffiliateLinkAsync = async (originalUrl: string, affiliateId: str
   return convertToAffiliateLink(resolvedUrl, affiliateId, subId);
 };
 
+// Helper to ensure the message footer below the link is strictly replaced with @isamara.manoel
+const applyFooterToMessage = (msg: string, footer: string = "@isamara.manoel"): string => {
+  if (!msg) return msg;
+
+  const urlRegex = /(https?:\/\/[^\s]+)/gi;
+  let lastUrlIndex = -1;
+  let lastUrlLength = 0;
+  let match;
+  while ((match = urlRegex.exec(msg)) !== null) {
+    lastUrlIndex = match.index;
+    lastUrlLength = match[0].length;
+  }
+
+  if (lastUrlIndex !== -1) {
+    const upToLastUrl = msg.substring(0, lastUrlIndex + lastUrlLength).trimEnd();
+    return `${upToLastUrl}\n\n${footer}`;
+  }
+
+  const trimmed = msg.trimEnd();
+  if (trimmed.endsWith(footer)) return trimmed;
+  return `${trimmed}\n\n${footer}`;
+};
+
 // AI Parsing logic using Gemini
 const parseMessageWithGemini = async (messageText: string, affiliateId: string, style: string) => {
   const ai = getGeminiClient();
@@ -585,41 +608,63 @@ Responda EXCLUSIVAMENTE em formato JSON com a seguinte estrutura:
   "rewrittenMessage": "Uma cópia reformulada da promoção em português para enviar no WhatsApp. Use emojis adequados. Substitua o link promocional por [LINK_AFILIADO] exatamente assim."
 }
 
-Use as seguintes diretrizes para o "rewrittenMessage" de acordo com o estilo selecionado "${style}":
-- excited: Use muitos emojis (🔥, 😱, 🚨, ✨), texto entusiasmado, tom urgente, ideal para grupos de achados. Ex: "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥"
-- minimal: Direto ao ponto, com poucos emojis, focado no preço e no link de compra. Sem enrolação.
-- creative: Crie um texto descontraído, engraçado ou que conte um caso rápido de uso para o produto.
-- direct: Profissional, amigável e claro. Formato limpo.
+REGRA CRÍTICA DE PREÇOS (MANDATÓRIO):
+Mantenha os valores de preços, parcelamento, preço de tabela ("De R$ X"), preço promocional ("Por R$ Y"), porcentagem de desconto e cupons RIGOROSAMENTE IGUAIS aos da mensagem de origem. NÃO invente novos preços, NÃO modifique nem remova a estrutura e os valores de preço da mensagem original. Se a mensagem original tiver "De R$ 99 por R$ 49,90" ou "10x de R$ 4,99", mantenha exatamente essas mesmas informações de preços na mensagem reformulada.
 
-ATENÇÃO (CRÍTICO): NÃO inclua nenhuma assinatura, rodapé, aviso ou menção indicando que o anúncio foi gerado por IA, robô, bot, assistente de IA, automação ou software. O anúncio deve parecer escrito 100% por um ser humano real. Não coloque mensagens como "Enviado por robô" ou "Gerado por assistente".
+REGRA DO RODAPÉ (MANDATÓRIO):
+Abaixo do link [LINK_AFILIADO], substitua QUALQUER texto de rodapé, assinatura, aviso ou canal original estritamente por:
+@isamara.manoel
+
+Use as seguintes diretrizes para o "rewrittenMessage" de acordo com o estilo selecionado "${style}":
+- excited: Use muitos emojis (🔥, 😱, 🚨, ✨), texto entusiasmado e tom urgente, mantendo a parte dos preços idêntica ao anúncio de origem. Ex: "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥"
+- minimal: Direto ao ponto, com poucos emojis, mantendo a parte dos preços idêntica ao anúncio de origem e o link [LINK_AFILIADO].
+- creative: Crie um texto descontraído, mantendo os preços idênticos ao anúncio de origem.
+- direct: Profissional, amigável e claro. Formato limpo com preços idênticos ao anúncio de origem.
+
+ATENÇÃO (CRÍTICO): NÃO inclua nenhuma assinatura de robô ou aviso indicando que o anúncio foi gerado por IA/bot/automação.
 
 Mensagem original a ser analisada:
 """
 ${messageText}
 """`;
 
-  try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3.5-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            hasShopeeLink: { type: Type.BOOLEAN },
-            originalLink: { type: Type.STRING },
-            productTitle: { type: Type.STRING },
-            price: { type: Type.STRING },
-            coupon: { type: Type.STRING },
-            rewrittenMessage: { type: Type.STRING },
-          },
-          required: ["hasShopeeLink", "originalLink", "productTitle", "rewrittenMessage"],
-        },
-      },
-    });
+  const modelsToTry = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.1-flash-lite"];
+  let response = null;
 
-    const resultText = response.text?.trim() || "";
+  for (const modelName of modelsToTry) {
+    try {
+      response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              hasShopeeLink: { type: Type.BOOLEAN },
+              originalLink: { type: Type.STRING },
+              productTitle: { type: Type.STRING },
+              price: { type: Type.STRING },
+              coupon: { type: Type.STRING },
+              rewrittenMessage: { type: Type.STRING },
+            },
+            required: ["hasShopeeLink", "originalLink", "productTitle", "rewrittenMessage"],
+          },
+        },
+      });
+      if (response && response.text) {
+        break;
+      }
+    } catch (modelError) {
+      console.warn(`Modelo ${modelName} falhou:`, (modelError as Error).message);
+    }
+  }
+
+  try {
+    if (!response || !response.text) {
+      throw new Error("Não foi possível obter resposta de nenhum modelo Gemini.");
+    }
+    const resultText = response.text.trim();
     const parsed = JSON.parse(resultText);
 
     if (parsed.hasShopeeLink && parsed.originalLink) {
@@ -635,19 +680,19 @@ ${messageText}
       if (parsed.originalLink) {
         msg = msg.split(parsed.originalLink).join(affiliateLink);
       }
-      parsed.rewrittenMessage = msg;
+      parsed.rewrittenMessage = applyFooterToMessage(msg);
     }
 
     return parsed;
   } catch (error) {
-    console.error("Erro na chamada do Gemini API:", error);
+    console.error("Erro na chamada do Gemini API ou parse de JSON:", error);
     const errorStr = String(error);
     const isQuotaError = errorStr.includes("RESOURCE_EXHAUSTED") || errorStr.includes("quota") || errorStr.includes("429") || errorStr.includes("rate limit") || errorStr.includes("Rate limit");
     
     if (isQuotaError) {
-      addLog("warning", "⚠️ Limite de cota do Gemini atingido (Plano Gratuito). O robô continuará funcionando perfeitamente usando conversão e formatação automática inteligente via Regex.");
+      addLog("warning", "⚠️ Limite de cota do Gemini atingido. O robô continuará funcionando perfeitamente usando conversão e formatação automática inteligente via Regex.");
     } else {
-      addLog("error", `⚠️ Falha ao usar IA do Gemini para reescrever anúncio: ${(error as Error).message}. Usando conversão automática via Regex.`);
+      addLog("warning", `⚠️ Falha ao usar IA do Gemini para reescrever anúncio. Usando conversão automática via Regex.`);
     }
     return parseMessageWithRegex(messageText, affiliateId);
   }
@@ -657,20 +702,20 @@ ${messageText}
 const parseMessageWithRegex = async (messageText: string, affiliateId: string) => {
   // Regex to detect Shopee URLs
   const shopeeRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.com\.br|shopee\.com|shp\.ee|shope\.ee)\/[^\s]+)/gi;
-  const match = shopeeRegex.exec(messageText);
+  const matches = messageText.match(shopeeRegex);
 
-  if (!match) {
+  if (!matches || matches.length === 0) {
     return {
       hasShopeeLink: false,
       originalLink: "",
       productTitle: "Mensagem Informativa",
       price: null,
       coupon: null,
-      rewrittenMessage: messageText,
+      rewrittenMessage: applyFooterToMessage(messageText),
     };
   }
 
-  const originalLink = match[0];
+  const originalLink = matches[0];
   const affiliateLink = await convertToAffiliateLinkAsync(originalLink, affiliateId);
 
   // Guess product title from the message text (first line or first few words)
@@ -684,20 +729,21 @@ const parseMessageWithRegex = async (messageText: string, affiliateId: string) =
       .trim();
   }
 
-  // Construct a default rewritten message
-  const rewrittenMessage = `⚡ *PROMOÇÃO DETECTADA!* ⚡
-  
-🛍️ *${productTitle || "Produto Achado"}*
+  // Preserve the exact original message structure and prices, replacing shopee URLs with affiliate links
+  let rewrittenMessage = messageText;
+  for (const foundUrl of matches) {
+    const converted = await convertToAffiliateLinkAsync(foundUrl, affiliateId);
+    rewrittenMessage = rewrittenMessage.split(foundUrl).join(converted);
+  }
 
-🔗 Compre aqui com desconto garantido:
-👉 ${affiliateLink}`;
+  rewrittenMessage = applyFooterToMessage(rewrittenMessage);
 
   return {
     hasShopeeLink: true,
     originalLink,
     affiliateLink,
     productTitle,
-    price: "Ver no site",
+    price: "Ver na oferta",
     coupon: null,
     rewrittenMessage,
   };

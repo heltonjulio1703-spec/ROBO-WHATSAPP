@@ -501,11 +501,10 @@ export default function App() {
       {/* Footer copyright info */}
       <footer id="app-workspace-footer" className="bg-white border-t border-gray-100 py-6 mt-12 text-center text-xs text-gray-400 shrink-0">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 Robô Shopee Afiliados para WhatsApp. Todos os direitos reservados.</p>
+          <p>© 2026 @isamara.manoel. Todos os direitos reservados.</p>
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
-              <AlertCircle className="w-3.5 h-3.5 text-gray-400" />
-              Desenvolvido com o modelo Gemini 3.5 Flash
+              @isamara.manoel
             </span>
           </div>
         </div>
