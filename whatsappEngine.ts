@@ -291,8 +291,7 @@ export class WhatsAppEngine {
           const msgTimeSec = Number(msg.messageTimestamp) || 0;
           if (msgTimeSec > 0) {
             const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
-            const twoHoursInSec = 2 * 60 * 60; // 2h = 7200s
-            const minAllowedSec = refTimeSec - twoHoursInSec;
+            const minAllowedSec = refTimeSec - 30 * 60; // 30 mins = 1800s
 
             if (msgTimeSec < minAllowedSec) {
               this.addLogCallback(
@@ -526,8 +525,7 @@ export class WhatsAppEngine {
       
       if (messages && Array.isArray(messages)) {
         const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
-        const twoHoursInSec = 2 * 60 * 60; // 2 hours = 7200 seconds
-        const minAllowedSec = refTimeSec - twoHoursInSec;
+        const minAllowedSec = refTimeSec - 30 * 60; // 30 minutes = 1800 seconds
         const seenLinksInScan = new Set<string>();
         
         for (const msg of messages) {

@@ -923,6 +923,17 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   const foundLink = match ? match[1].toLowerCase().trim() : null;
   const cleanMessage = messageText.trim().replace(/\s+/g, " ");
 
+  // 1.1 Checagem de horário de envio permitido
+  const isSendingTimeAllowed = () => {
+    const hour = new Date().getHours();
+    return hour >= 8 && hour < 23;
+  };
+
+  if (!isSendingTimeAllowed()) {
+    addLog("info", `Horário restrito (fora de 08:00-23:00). Anúncio ignorado.`);
+    return null;
+  }
+
   const isDuplicatePre = state.history.some(h => {
     if (h.originalMessage && h.originalMessage.trim().replace(/\s+/g, " ") === cleanMessage) {
       return true;
