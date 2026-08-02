@@ -143,6 +143,8 @@ const state = {
     shopeeAffiliateId: "",
     useShopeeApi: false,
     customFooter: "",
+    quietStart: "08:00",
+    quietEnd: "23:00",
   },
   whatsapp: {
     status: "disconnected", // "disconnected", "connecting", "qr_code", "connected"
@@ -925,12 +927,29 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
 
   // 1.1 Checagem de horário de envio permitido
   const isSendingTimeAllowed = () => {
-    const hour = new Date().getHours();
-    return hour >= 8 && hour < 23;
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    const [startH, startM] = (state.config.quietStart || "23:00").split(":").map(Number);
+    const [endH, endM] = (state.config.quietEnd || "08:00").split(":").map(Number);
+    
+    const quietStartMin = startH * 60 + startM;
+    const quietEndMin = endH * 60 + endM;
+
+    let isQuiet = false;
+    if (quietStartMin < quietEndMin) {
+        // Same day
+        isQuiet = currentMinutes >= quietStartMin && currentMinutes < quietEndMin;
+    } else {
+        // Spans midnight
+        isQuiet = currentMinutes >= quietStartMin || currentMinutes < quietEndMin;
+    }
+    
+    return !isQuiet;
   };
 
   if (!isSendingTimeAllowed()) {
-    addLog("info", `Horário restrito (fora de 08:00-23:00). Anúncio ignorado.`);
+    addLog("info", `Horário restrito (Configurado silêncio das ${state.config.quietStart || "23:00"} até ${state.config.quietEnd || "08:00"}). Anúncio ignorado.`);
     return null;
   }
 

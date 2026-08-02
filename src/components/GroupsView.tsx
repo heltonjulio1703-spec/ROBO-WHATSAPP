@@ -1,6 +1,6 @@
 import React from "react";
 import { GroupConfig } from "../types";
-import { Trash2, ArrowRightLeft, RefreshCw, Smartphone, Search, Send } from "lucide-react";
+import { Trash2, RefreshCw, Smartphone, Search, Send } from "lucide-react";
 
 interface GroupsViewProps {
   groups: GroupConfig;
@@ -108,17 +108,6 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
 
   return (
     <div id="groups-view-container" className="space-y-6">
-      {/* Informative banner */}
-      <div id="groups-info-banner" className="bg-indigo-50 border border-indigo-150 rounded-2xl p-5 flex items-start gap-4 text-indigo-950">
-        <ArrowRightLeft className="w-6 h-6 text-indigo-600 shrink-0 mt-0.5" />
-        <div>
-          <h3 className="font-bold text-base">Filtro de Fluxo de Grupos</h3>
-          <p className="text-sm text-indigo-700 mt-1 leading-relaxed">
-            Configure quais chats ou grupos o robô deve monitorar para coletar links da Shopee e para quais grupos você deseja enviar as mensagens formatadas com seu ID de afiliado.
-          </p>
-        </div>
-      </div>
-
       {/* WhatsApp Groups Sincronizador Card */}
       <div id="whatsapp-sync-control-card" className="bg-white rounded-2xl p-5 border border-emerald-100 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">

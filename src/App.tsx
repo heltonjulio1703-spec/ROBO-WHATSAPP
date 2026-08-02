@@ -4,13 +4,11 @@ import { DashboardView } from "./components/DashboardView";
 import { WhatsAppView } from "./components/WhatsAppView";
 import { GroupsView } from "./components/GroupsView";
 import { HistoryView } from "./components/HistoryView";
-import { SandboxView } from "./components/SandboxView";
 import { 
   Bot, 
   Smartphone, 
   Layers, 
   History, 
-  FlaskConical, 
   Settings, 
   Bell, 
   User, 
@@ -22,7 +20,7 @@ import {
 import { motion } from "motion/react";
 
 export default function App() {
-  const [activeTab, setActiveTab] = React.useState<"dashboard" | "whatsapp" | "groups" | "history" | "sandbox">("dashboard");
+  const [activeTab, setActiveTab] = React.useState<"dashboard" | "whatsapp" | "groups" | "history">("dashboard");
   
   // App States
   const [config, setConfig] = React.useState<AppConfig>({
@@ -383,7 +381,6 @@ export default function App() {
             { id: "whatsapp", label: "Conexão WhatsApp", icon: Smartphone, badge: whatsapp.status !== "connected" ? "!" : undefined },
             { id: "groups", label: "Grupos e Canais", icon: Layers, badge: `${groups.sources.filter(s => s.active).length}»${groups.targets.filter(t => t.active).length}` },
             { id: "history", label: "Histórico de Envios", icon: History, badge: history.length > 0 ? String(history.length) : undefined },
-            { id: "sandbox", label: "Laboratório de Testes", icon: FlaskConical },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -477,20 +474,6 @@ export default function App() {
                 history={history}
                 clearHistory={handleClearHistory}
                 onRefreshHistory={handleRefreshHistoryOnly}
-              />
-            </motion.div>
-          )}
-
-          {activeTab === "sandbox" && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <SandboxView
-                groups={groups}
-                onSimulateIncoming={handleSimulateIncoming}
-                whatsappConnected={whatsapp.status === "connected"}
               />
             </motion.div>
           )}

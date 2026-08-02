@@ -250,7 +250,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
             <div className="bg-green-50 border border-green-200/50 rounded-xl p-4 text-xs text-green-800 text-left">
               <p className="font-bold mb-1">🚀 Robô em Prontidão!</p>
               <p className="leading-relaxed">
-                Agora o robô está ativo e pronto para receber mensagens. Ative o <strong>Piloto Automático</strong> na página inicial para ver simulações de anúncios em tempo real, ou vá para o <strong>Laboratório de Testes</strong> para enviar mensagens manuais.
+                Agora o robô está ativo e pronto para receber mensagens. Ative o <strong>Piloto Automático</strong> na página inicial para ver encaminhamentos de anúncios em tempo real.
               </p>
             </div>
           </div>
