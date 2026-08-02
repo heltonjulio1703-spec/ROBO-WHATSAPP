@@ -116,19 +116,29 @@ export default function App() {
   // Initial Data Load
   const fetchAllData = async () => {
     try {
+      const safeFetch = async (url: string) => {
+        try {
+          const r = await fetch(url);
+          if (!r.ok) return null;
+          return await r.json();
+        } catch (e) {
+          return null;
+        }
+      };
+
       const [configRes, whatsappRes, groupsRes, logsRes, historyRes] = await Promise.all([
-        fetch("/api/config").then(r => r.json()),
-        fetch("/api/whatsapp/status").then(r => r.json()),
-        fetch("/api/groups").then(r => r.json()),
-        fetch("/api/logs").then(r => r.json()),
-        fetch("/api/history").then(r => r.json()),
+        safeFetch("/api/config"),
+        safeFetch("/api/whatsapp/status"),
+        safeFetch("/api/groups"),
+        safeFetch("/api/logs"),
+        safeFetch("/api/history"),
       ]);
 
-      setConfig(configRes);
-      setWhatsapp(whatsappRes);
-      setGroups(groupsRes);
-      setLogs(logsRes);
-      setHistory(historyRes);
+      if (configRes) setConfig(configRes);
+      if (whatsappRes) setWhatsapp(whatsappRes);
+      if (groupsRes) setGroups(groupsRes);
+      if (logsRes) setLogs(logsRes);
+      if (historyRes) setHistory(historyRes);
     } catch (err) {
       console.error("Erro ao carregar dados da API:", err);
     }
@@ -140,19 +150,19 @@ export default function App() {
     // Set polling for logs, history and WhatsApp status so UI stays fully in sync
     const interval = setInterval(() => {
       fetch("/api/whatsapp/status")
-        .then((r) => r.json())
-        .then((data) => setWhatsapp(data))
-        .catch((e) => console.error(e));
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => { if (data) setWhatsapp(data); })
+        .catch(() => {});
 
       fetch("/api/logs")
-        .then((r) => r.json())
-        .then((data) => setLogs(data))
-        .catch((e) => console.error(e));
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => { if (data) setLogs(data); })
+        .catch(() => {});
 
       fetch("/api/history")
-        .then((r) => r.json())
-        .then((data) => setHistory(data))
-        .catch((e) => console.error(e));
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => { if (data) setHistory(data); })
+        .catch(() => {});
     }, 1500);
 
     return () => clearInterval(interval);

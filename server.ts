@@ -1144,32 +1144,38 @@ const startAutoPilotSimulator = () => {
   if (autoPilotTimer) clearInterval(autoPilotTimer);
 
   const runSimulationTick = async () => {
-    if (whatsappEngine.status.status !== "connected") {
-      // Don't process autopilot if WhatsApp is disconnected
-      return;
+    try {
+      if (whatsappEngine.status.status !== "connected") {
+        // Don't process autopilot if WhatsApp is disconnected
+        return;
+      }
+
+      if (!state.config.autoPilot || !state.config.isTransmissionEnabled) return;
+
+      // Pick random source group that is active
+      const activeSources = state.groups.sources.filter(g => g.active);
+      if (activeSources.length === 0) return;
+      const randomSource = activeSources[Math.floor(Math.random() * activeSources.length)];
+
+      // Pick random product
+      const randomProduct = SIMULATED_PRODUCTS[Math.floor(Math.random() * SIMULATED_PRODUCTS.length)];
+
+      await processIncomingMessage(randomSource.name, randomProduct.rawCopy);
+    } catch (err) {
+      console.error("Erro no ciclo do Piloto Automático:", err);
     }
-
-    if (!state.config.autoPilot || !state.config.isTransmissionEnabled) return;
-
-    // Pick random source group that is active
-    const activeSources = state.groups.sources.filter(g => g.active);
-    if (activeSources.length === 0) return;
-    const randomSource = activeSources[Math.floor(Math.random() * activeSources.length)];
-
-    // Pick random product
-    const randomProduct = SIMULATED_PRODUCTS[Math.floor(Math.random() * SIMULATED_PRODUCTS.length)];
-
-    await processIncomingMessage(randomSource.name, randomProduct.rawCopy);
   };
 
   // Run initial simulation soon after connection
   setTimeout(() => {
     if (whatsappEngine.status.status === "connected" && state.config.autoPilot) {
-      runSimulationTick();
+      runSimulationTick().catch(() => {});
     }
   }, 4000);
 
-  autoPilotTimer = setInterval(runSimulationTick, state.config.autoPilotInterval * 1000);
+  autoPilotTimer = setInterval(() => {
+    runSimulationTick().catch(() => {});
+  }, state.config.autoPilotInterval * 1000);
 };
 
 // API Routes
