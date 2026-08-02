@@ -41,6 +41,30 @@ export class WhatsAppEngine {
   
   private isConnecting = false;
   private groupNameCache = new Map<string, string>();
+  private messageStore = new Map<string, Array<any>>();
+
+  private storeGroupMessage(msg: any) {
+    if (!msg || !msg.key || !msg.key.remoteJid) return;
+    const rawJid = msg.key.remoteJid;
+    const cleanJid = rawJid.split(":")[0];
+    if (!cleanJid.endsWith("@g.us")) return;
+
+    let list = this.messageStore.get(cleanJid);
+    if (!list) {
+      list = [];
+      this.messageStore.set(cleanJid, list);
+    }
+
+    const msgId = msg.key.id;
+    if (msgId && list.some(m => m.key?.id === msgId)) {
+      return;
+    }
+
+    list.push(msg);
+    if (list.length > 500) {
+      list.shift();
+    }
+  }
   private authStatePath = (() => {
     const isElectron = typeof process !== 'undefined' && (process.versions?.electron || process.env.ELECTRON_RUN_AS_NODE);
     
@@ -276,18 +300,61 @@ export class WhatsAppEngine {
         }
       });
 
+      // Sync and store history messages
+      this.sock.ev.on("messaging-history.set" as any, ({ messages }: { messages: any[] }) => {
+        if (Array.isArray(messages)) {
+          for (const msg of messages) {
+            this.storeGroupMessage(msg);
+          }
+        }
+      });
+
+      this.sock.ev.on("messages.set" as any, ({ messages }: { messages: any[] }) => {
+        if (Array.isArray(messages)) {
+          for (const msg of messages) {
+            this.storeGroupMessage(msg);
+          }
+        }
+      });
+
+      // Helper to extract text and image content from wrapped message objects
+      const extractMsgContent = (msg: any) => {
+        if (!msg || !msg.message) return { text: "", imageMsg: null };
+        let m = msg.message;
+        if (m.ephemeralMessage?.message) m = m.ephemeralMessage.message;
+        if (m.viewOnceMessage?.message) m = m.viewOnceMessage.message;
+        if (m.viewOnceMessageV2?.message) m = m.viewOnceMessageV2.message;
+        if (m.documentWithCaptionMessage?.message) m = m.documentWithCaptionMessage.message;
+        if (m.editedMessage?.message) m = m.editedMessage.message;
+
+        const text = m.conversation || 
+                     m.extendedTextMessage?.text || 
+                     m.imageMessage?.caption || 
+                     m.videoMessage?.caption || 
+                     "";
+
+        return { text, imageMsg: m.imageMessage || null };
+      };
+
       // Incoming messages listener
       this.sock.ev.on("messages.upsert", async (m) => {
+        // Store all incoming group messages regardless of type
+        for (const msg of m.messages) {
+          this.storeGroupMessage(msg);
+        }
+
         if (m.type !== "notify") return;
 
         for (const msg of m.messages) {
           // Ignore messages sent by ourselves to avoid loops
           if (msg.key.fromMe) continue;
 
-          const from = msg.key.remoteJid;
-          if (!from || !from.endsWith("@g.us")) continue; // Only group chats
+          const rawFrom = msg.key.remoteJid;
+          if (!rawFrom) continue;
+          const from = rawFrom.split(":")[0];
+          if (!from.endsWith("@g.us")) continue; // Only group chats
 
-          // Regra: filtrar anúncios feitos a mais de 2 horas antes da conexão ser estabelecida
+          // Regra: filtrar anúncios feitos a mais de 30 minutos antes da conexão ser estabelecida
           const msgTimeSec = Number(msg.messageTimestamp) || 0;
           if (msgTimeSec > 0) {
             const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
@@ -296,18 +363,14 @@ export class WhatsAppEngine {
             if (msgTimeSec < minAllowedSec) {
               this.addLogCallback(
                 "info",
-                `Mensagem recebida ignorada (enviada há mais de 2 horas em relação à conexão: ${new Date(msgTimeSec * 1000).toLocaleTimeString("pt-BR")}).`
+                `Mensagem recebida ignorada (enviada há mais de 30 minutos em relação à conexão: ${new Date(msgTimeSec * 1000).toLocaleTimeString("pt-BR")}).`
               );
               continue;
             }
           }
 
-          const text = msg.message?.conversation || 
-                       msg.message?.extendedTextMessage?.text || 
-                       msg.message?.imageMessage?.caption || 
-                       "";
-
-          if (!text && !msg.message?.imageMessage) continue;
+          const { text, imageMsg } = extractMsgContent(msg);
+          if (!text && !imageMsg) continue;
 
           // Obtain sender group name if cached, or use remoteJid
           let groupName = "Grupo WhatsApp";
@@ -327,7 +390,7 @@ export class WhatsAppEngine {
           }
 
           let imageBuffer: Buffer | undefined = undefined;
-          if (msg.message?.imageMessage) {
+          if (imageMsg) {
             try {
               this.addLogCallback("info", `Baixando imagem recebida de "${groupName}"...`);
               const buffer = await downloadMediaMessage(msg, 'buffer', {});
@@ -514,67 +577,76 @@ export class WhatsAppEngine {
       throw new Error("WhatsApp não está conectado.");
     }
 
-    this.addLogCallback("info", `🔎 Varrendo histórico do grupo buscando ofertas feitas nas últimas 2 horas (em relação à conexão)...`);
+    const cleanGroupId = groupId.split(":")[0];
+    const messages = this.messageStore.get(cleanGroupId) || [];
+
+    this.addLogCallback("info", `🔎 Varrendo histórico de mensagens do grupo selecionado (${messages.length} mensagens analisadas)...`);
     
     let totalFound = 0;
     let processedCount = 0;
     
     try {
-      // Fetch last 100 messages from the WhatsApp server
-      const messages = await (this.sock as any).fetchMessagesFromWAServer(groupId, 100);
+      const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
+      const minAllowedSec = refTimeSec - 30 * 60; // 30 minutes = 1800 seconds
+      const seenLinksInScan = new Set<string>();
       
-      if (messages && Array.isArray(messages)) {
-        const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
-        const minAllowedSec = refTimeSec - 30 * 60; // 30 minutes = 1800 seconds
-        const seenLinksInScan = new Set<string>();
+      for (const msg of messages) {
+        const timestamp = Number(msg.messageTimestamp) || 0;
+        if (timestamp > 0 && timestamp < minAllowedSec) continue;
         
-        for (const msg of messages) {
-          const timestamp = Number(msg.messageTimestamp);
-          if (!timestamp) continue;
-          
-          // Rule: Only process messages made at most 2 hours before connection
-          if (timestamp < minAllowedSec) continue;
-          
-          const text = msg.message?.conversation || 
-                       msg.message?.extendedTextMessage?.text || 
-                       msg.message?.imageMessage?.caption || 
-                       "";
-                         
-          if (!text) continue;
-          
-          // Check if it has any Shopee link
-          const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com)[^\s]+)/i;
-          const match = text.match(shopeeLinkRegex);
-          
-          if (!match) continue;
+        let m = msg.message || {};
+        if (m.ephemeralMessage?.message) m = m.ephemeralMessage.message;
+        if (m.viewOnceMessage?.message) m = m.viewOnceMessage.message;
+        if (m.viewOnceMessageV2?.message) m = m.viewOnceMessageV2.message;
+        if (m.documentWithCaptionMessage?.message) m = m.documentWithCaptionMessage.message;
+        if (m.editedMessage?.message) m = m.editedMessage.message;
 
-          const foundLink = match[1].toLowerCase().trim();
-          
-          // Discard if repeated within the same 2-hour window scan
-          if (seenLinksInScan.has(foundLink)) {
-            continue;
-          }
-          seenLinksInScan.add(foundLink);
-          
-          totalFound++;
-          
-          let imageBuffer: Buffer | undefined = undefined;
-          if (msg.message?.imageMessage) {
-            try {
-              imageBuffer = await downloadMediaMessage(msg, 'buffer', {}) as Buffer;
-            } catch (err) {
-              this.addLogCallback("warning", `Não foi possível carregar a imagem do histórico da mensagem.`);
-            }
-          }
-          
-          const result = await processCallback(text, imageBuffer);
-          if (result) {
-            processedCount++;
+        const text = m.conversation || 
+                     m.extendedTextMessage?.text || 
+                     m.imageMessage?.caption || 
+                     m.videoMessage?.caption || 
+                     "";
+                       
+        if (!text) continue;
+        
+        // Check if it has any Shopee link
+        const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com)[^\s]+)/i;
+        const match = text.match(shopeeLinkRegex);
+        
+        if (!match) continue;
+
+        const foundLink = match[1].toLowerCase().trim();
+        
+        // Discard if repeated within the same scan batch
+        if (seenLinksInScan.has(foundLink)) {
+          continue;
+        }
+        seenLinksInScan.add(foundLink);
+        
+        totalFound++;
+        
+        let imageBuffer: Buffer | undefined = undefined;
+        if (m.imageMessage) {
+          try {
+            imageBuffer = await downloadMediaMessage(msg, 'buffer', {}) as Buffer;
+          } catch (err) {
+            this.addLogCallback("warning", `Não foi possível carregar a imagem do histórico da mensagem.`);
           }
         }
+        
+        const result = await processCallback(text, imageBuffer);
+        if (result) {
+          processedCount++;
+        }
+      }
+
+      if (totalFound === 0) {
+        this.addLogCallback("info", `Varredura concluída: Nenhuma oferta nova com link da Shopee nas últimas 0,5h encontrada no histórico deste grupo.`);
+      } else {
+        this.addLogCallback("success", `Varredura concluída: ${totalFound} ofertas encontradas e ${processedCount} processadas com sucesso!`);
       }
     } catch (err) {
-      this.addLogCallback("error", `Erro ao varrer histórico de mensagens: ${(err as Error).message}`);
+      this.addLogCallback("error", `Erro ao varrer histórico do grupo: ${(err as Error).message}`);
       throw err;
     }
     

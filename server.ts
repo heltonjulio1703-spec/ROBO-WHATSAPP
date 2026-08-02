@@ -1075,8 +1075,9 @@ const whatsappEngine = new WhatsAppEngine(
     saveStateToFile();
   },
   async (groupJid, groupName, text, imageBuffer, imageUrl) => {
-    // Check if this source group is active
-    const sourceGroup = state.groups.sources.find(s => s.id === groupJid && s.active);
+    // Check if this source group is active (comparing clean JID)
+    const cleanFrom = groupJid.split(":")[0];
+    const sourceGroup = state.groups.sources.find(s => s.id.split(":")[0] === cleanFrom && s.active);
     if (!sourceGroup) return;
 
     // Process the message and convert links (this will also send to active targets automatically inside processIncomingMessage)
