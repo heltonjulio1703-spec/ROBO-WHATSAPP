@@ -1,0 +1,951 @@
+{
+  "config": {
+    "affiliateId": "18399950350",
+    "autoPilot": true,
+    "autoPilotInterval": 30,
+    "rewriteStyle": "excited",
+    "keywords": "promocao, cupom, desconto, oferta, achado, frete gratis, shopee, shp.ee",
+    "isTransmissionEnabled": false,
+    "shopeeAppKey": "18399950350",
+    "shopeeAppSecret": "VWHFAPVVLM4XQCSJQ4M6RIQDDGCQNL7K",
+    "shopeeAffiliateId": "18399950350",
+    "useShopeeApi": false,
+    "customFooter": "@isamara.manoel",
+    "quietStart": "00:00",
+    "quietEnd": "08:00"
+  },
+  "groups": {
+    "sources": [
+      {
+        "id": "src_1",
+        "name": "Achadinhos Shopee Brasil 🇧🇷",
+        "active": true
+      },
+      {
+        "id": "src_2",
+        "name": "Ofertas e Cupons Relâmpago ⚡",
+        "active": true
+      },
+      {
+        "id": "src_3",
+        "name": "Shopee Achados do Dia 🛒",
+        "active": false
+      },
+      {
+        "id": "src_4",
+        "name": "Descontos da China 🇨🇳",
+        "active": true
+      },
+      {
+        "id": "120363167209342873@g.us",
+        "name": ". ",
+        "active": false
+      },
+      {
+        "id": "5514998812177-1622595612@g.us",
+        "name": "Meraki Shoes",
+        "active": false
+      },
+      {
+        "id": "120363426835048842@g.us",
+        "name": "Promo Isa",
+        "active": false
+      },
+      {
+        "id": "120363429760637815@g.us",
+        "name": "Robô destinos anúncios",
+        "active": false
+      },
+      {
+        "id": "120363426093529775@g.us",
+        "name": "Robô origem dos anúncios",
+        "active": true
+      },
+      {
+        "id": "120363037892006979@g.us",
+        "name": "GERENTES DE CDD CAE BTU",
+        "active": false
+      },
+      {
+        "id": "120363061855129936@g.us",
+        "name": "Aplicação|reforma|interiores",
+        "active": false
+      },
+      {
+        "id": "120363420577023035@g.us",
+        "name": "Motociclistas correios São Manuel",
+        "active": false
+      },
+      {
+        "id": "120363408217423365@g.us",
+        "name": "SUPORTE - APLICATIVO ADI LENÇÓIS",
+        "active": false
+      },
+      {
+        "id": "120363409240541459@g.us",
+        "name": "Frequência Máxima",
+        "active": false
+      },
+      {
+        "id": "5514981017533-1606836555@g.us",
+        "name": "ENCOMENDAS SAO MANUEL",
+        "active": false
+      },
+      {
+        "id": "120363410349404636@g.us",
+        "name": "Jundiaí apoio",
+        "active": false
+      },
+      {
+        "id": "5514981564474-1619818180@g.us",
+        "name": "Gestores CDD Gerae Bauru",
+        "active": false
+      },
+      {
+        "id": "120363408778855077@g.us",
+        "name": "Postos pra abastecimento",
+        "active": false
+      },
+      {
+        "id": "120363371785522113@g.us",
+        "name": "Recados Cdd São Manuel ",
+        "active": false
+      },
+      {
+        "id": "120363388332817938@g.us",
+        "name": "Primos ",
+        "active": false
+      },
+      {
+        "id": "120363382278720847@g.us",
+        "name": "Véspera&Natal",
+        "active": false
+      },
+      {
+        "id": "120363356619075576@g.us",
+        "name": "Confraternização Gerae Bauru",
+        "active": false
+      },
+      {
+        "id": "120363359100074318@g.us",
+        "name": "GERAE01 - CDDS",
+        "active": false
+      },
+      {
+        "id": "5514998743236-1606491165@g.us",
+        "name": "Família ❤",
+        "active": false
+      },
+      {
+        "id": "120363400506194517@g.us",
+        "name": "CAE AVARÉ - INFORMAÇÕES GERAIS",
+        "active": false
+      },
+      {
+        "id": "120363026630838721@g.us",
+        "name": "BRU - Cada Objeto Importa",
+        "active": false
+      },
+      {
+        "id": "120363171151693649@g.us",
+        "name": "Gerentes Gerae Bauru",
+        "active": false
+      },
+      {
+        "id": "120363406889192234@g.us",
+        "name": "***Operação PAC Saúde***",
+        "active": false
+      },
+      {
+        "id": "5514997373690-1542984895@g.us",
+        "name": "GERAE Bauru- Gestores",
+        "active": false
+      },
+      {
+        "id": "120363426714650720@g.us",
+        "name": "Bem Viver",
+        "active": false
+      },
+      {
+        "id": "5514996896533-1513633750@g.us",
+        "name": "UGADILP SETORIAL VAROES",
+        "active": false
+      },
+      {
+        "id": "120363403903837006@g.us",
+        "name": "#799 Franquia Oba Mix",
+        "active": false
+      },
+      {
+        "id": "120363403083896588@g.us",
+        "name": "# 111 achadinhos da Isa 👶🏠🧰",
+        "active": false
+      },
+      {
+        "id": "120363027523926570@g.us",
+        "name": "Envio s/extravio é legal!",
+        "active": false
+      },
+      {
+        "id": "5514991125312-1444314825@g.us",
+        "name": "Gerentes de Distribuição",
+        "active": false
+      },
+      {
+        "id": "120363028364884485@g.us",
+        "name": "Camisetas operacionais",
+        "active": false
+      },
+      {
+        "id": "120363426084294233@g.us",
+        "name": "Vence HJ valor Declarado Alto",
+        "active": false
+      },
+      {
+        "id": "120363409667574882@g.us",
+        "name": "Chá de FRALDA DA SARAH 20/06",
+        "active": false
+      },
+      {
+        "id": "120363240700845252@g.us",
+        "name": "Dropshipping #34",
+        "active": false
+      },
+      {
+        "id": "120363391954429606@g.us",
+        "name": "7ATUALIZAÇÕES DA FRANQUIA DIGITAL GPS",
+        "active": false
+      },
+      {
+        "id": "120363316958390425@g.us",
+        "name": "AULA AO VIVO: 11/07, ÀS 20H 🔥 #2",
+        "active": false
+      },
+      {
+        "id": "120363417256352223@g.us",
+        "name": "TURMA DE NOVOS MENTORADOS ABRIL 2025",
+        "active": false
+      },
+      {
+        "id": "120363347831926224@g.us",
+        "name": "⛔ AVISOS 5 ⛔ OBA OBA MIX 🟡",
+        "active": false
+      }
+    ],
+    "targets": [
+      {
+        "id": "tgt_1",
+        "name": "Meus Achados Shopee - Helton 🛍️",
+        "active": true
+      },
+      {
+        "id": "tgt_2",
+        "name": "Grupo da Família Descontos 🏠",
+        "active": false
+      },
+      {
+        "id": "tgt_3",
+        "name": "Ofertas Exclusivas Afiliado 💎",
+        "active": true
+      },
+      {
+        "id": "120363167209342873@g.us",
+        "name": ". ",
+        "active": false
+      },
+      {
+        "id": "5514998812177-1622595612@g.us",
+        "name": "Meraki Shoes",
+        "active": false
+      },
+      {
+        "id": "120363426835048842@g.us",
+        "name": "Promo Isa",
+        "active": false
+      },
+      {
+        "id": "120363429760637815@g.us",
+        "name": "Robô destinos anúncios",
+        "active": true
+      },
+      {
+        "id": "120363426093529775@g.us",
+        "name": "Robô origem dos anúncios",
+        "active": false
+      },
+      {
+        "id": "120363037892006979@g.us",
+        "name": "GERENTES DE CDD CAE BTU",
+        "active": false
+      },
+      {
+        "id": "120363061855129936@g.us",
+        "name": "Aplicação|reforma|interiores",
+        "active": false
+      },
+      {
+        "id": "120363420577023035@g.us",
+        "name": "Motociclistas correios São Manuel",
+        "active": false
+      },
+      {
+        "id": "120363408217423365@g.us",
+        "name": "SUPORTE - APLICATIVO ADI LENÇÓIS",
+        "active": false
+      },
+      {
+        "id": "120363409240541459@g.us",
+        "name": "Frequência Máxima",
+        "active": false
+      },
+      {
+        "id": "5514981017533-1606836555@g.us",
+        "name": "ENCOMENDAS SAO MANUEL",
+        "active": false
+      },
+      {
+        "id": "120363410349404636@g.us",
+        "name": "Jundiaí apoio",
+        "active": false
+      },
+      {
+        "id": "5514981564474-1619818180@g.us",
+        "name": "Gestores CDD Gerae Bauru",
+        "active": false
+      },
+      {
+        "id": "120363408778855077@g.us",
+        "name": "Postos pra abastecimento",
+        "active": false
+      },
+      {
+        "id": "120363371785522113@g.us",
+        "name": "Recados Cdd São Manuel ",
+        "active": false
+      },
+      {
+        "id": "120363388332817938@g.us",
+        "name": "Primos ",
+        "active": false
+      },
+      {
+        "id": "120363382278720847@g.us",
+        "name": "Véspera&Natal",
+        "active": false
+      },
+      {
+        "id": "120363356619075576@g.us",
+        "name": "Confraternização Gerae Bauru",
+        "active": false
+      },
+      {
+        "id": "120363359100074318@g.us",
+        "name": "GERAE01 - CDDS",
+        "active": false
+      },
+      {
+        "id": "5514998743236-1606491165@g.us",
+        "name": "Família ❤",
+        "active": false
+      },
+      {
+        "id": "120363400506194517@g.us",
+        "name": "CAE AVARÉ - INFORMAÇÕES GERAIS",
+        "active": false
+      },
+      {
+        "id": "120363026630838721@g.us",
+        "name": "BRU - Cada Objeto Importa",
+        "active": false
+      },
+      {
+        "id": "120363171151693649@g.us",
+        "name": "Gerentes Gerae Bauru",
+        "active": false
+      },
+      {
+        "id": "120363406889192234@g.us",
+        "name": "***Operação PAC Saúde***",
+        "active": false
+      },
+      {
+        "id": "5514997373690-1542984895@g.us",
+        "name": "GERAE Bauru- Gestores",
+        "active": false
+      },
+      {
+        "id": "120363426714650720@g.us",
+        "name": "Bem Viver",
+        "active": false
+      },
+      {
+        "id": "5514996896533-1513633750@g.us",
+        "name": "UGADILP SETORIAL VAROES",
+        "active": false
+      },
+      {
+        "id": "120363403903837006@g.us",
+        "name": "#799 Franquia Oba Mix",
+        "active": false
+      },
+      {
+        "id": "120363403083896588@g.us",
+        "name": "# 111 achadinhos da Isa 👶🏠🧰",
+        "active": false
+      },
+      {
+        "id": "120363027523926570@g.us",
+        "name": "Envio s/extravio é legal!",
+        "active": false
+      },
+      {
+        "id": "5514991125312-1444314825@g.us",
+        "name": "Gerentes de Distribuição",
+        "active": false
+      },
+      {
+        "id": "120363028364884485@g.us",
+        "name": "Camisetas operacionais",
+        "active": false
+      },
+      {
+        "id": "120363426084294233@g.us",
+        "name": "Vence HJ valor Declarado Alto",
+        "active": false
+      },
+      {
+        "id": "120363409667574882@g.us",
+        "name": "Chá de FRALDA DA SARAH 20/06",
+        "active": false
+      },
+      {
+        "id": "120363240700845252@g.us",
+        "name": "Dropshipping #34",
+        "active": false
+      },
+      {
+        "id": "120363391954429606@g.us",
+        "name": "7ATUALIZAÇÕES DA FRANQUIA DIGITAL GPS",
+        "active": false
+      },
+      {
+        "id": "120363316958390425@g.us",
+        "name": "AULA AO VIVO: 11/07, ÀS 20H 🔥 #2",
+        "active": false
+      },
+      {
+        "id": "120363417256352223@g.us",
+        "name": "TURMA DE NOVOS MENTORADOS ABRIL 2025",
+        "active": false
+      },
+      {
+        "id": "120363347831926224@g.us",
+        "name": "⛔ AVISOS 5 ⛔ OBA OBA MIX 🟡",
+        "active": false
+      }
+    ]
+  },
+  "history": [],
+  "logs": [
+    {
+      "time": "17:00:38",
+      "type": "info",
+      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+    },
+    {
+      "time": "17:00:38",
+      "type": "info",
+      "message": "Iniciando processo de conexão oficial com WhatsApp..."
+    },
+    {
+      "time": "17:00:38",
+      "type": "info",
+      "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
+    },
+    {
+      "time": "17:00:38",
+      "type": "info",
+      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
+    },
+    {
+      "time": "17:00:35",
+      "type": "success",
+      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "17:00:34",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "17:00:34",
+      "type": "success",
+      "message": "🟢 Conectado com sucesso como HELTON MANOEL"
+    },
+    {
+      "time": "17:00:33",
+      "type": "info",
+      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+    },
+    {
+      "time": "17:00:33",
+      "type": "info",
+      "message": "Iniciando processo de conexão oficial com WhatsApp..."
+    },
+    {
+      "time": "17:00:33",
+      "type": "info",
+      "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
+    },
+    {
+      "time": "17:00:33",
+      "type": "info",
+      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
+    },
+    {
+      "time": "16:59:37",
+      "type": "info",
+      "message": "🧹 Histórico de envios limpo automaticamente ao desligar o robô."
+    },
+    {
+      "time": "16:58:55",
+      "type": "info",
+      "message": "▶️ Robô de transmissão de anúncios reativado pelo usuário."
+    },
+    {
+      "time": "16:58:52",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:58:52",
+      "type": "success",
+      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:58:52",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:58:51",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:58:44",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:58:37",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:58:37",
+      "type": "success",
+      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:58:37",
+      "type": "success",
+      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:58:37",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:58:37",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:58:35",
+      "type": "success",
+      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:58:35",
+      "type": "info",
+      "message": "Sincronização concluída: 78 novos e 0 nomes de grupos atualizados."
+    },
+    {
+      "time": "16:58:34",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:58:34",
+      "type": "success",
+      "message": "🟢 Conectado com sucesso como Minha Conta"
+    },
+    {
+      "time": "16:58:34",
+      "type": "info",
+      "message": "🧹 Histórico de envios limpo automaticamente ao desligar o robô."
+    },
+    {
+      "time": "16:58:33",
+      "type": "info",
+      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+    },
+    {
+      "time": "16:58:33",
+      "type": "info",
+      "message": "Iniciando processo de conexão oficial com WhatsApp..."
+    },
+    {
+      "time": "16:58:30",
+      "type": "warning",
+      "message": "Conexão reiniciada ou instável (Código 515). Reconectando automaticamente em 3s..."
+    },
+    {
+      "time": "16:58:13",
+      "type": "info",
+      "message": "QR Code oficial do WhatsApp gerado com sucesso! Escaneie com seu celular."
+    },
+    {
+      "time": "16:58:13",
+      "type": "info",
+      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+    },
+    {
+      "time": "16:58:13",
+      "type": "info",
+      "message": "Iniciando processo de conexão oficial com WhatsApp..."
+    },
+    {
+      "time": "16:58:11",
+      "type": "error",
+      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
+    },
+    {
+      "time": "16:58:11",
+      "type": "info",
+      "message": "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos."
+    },
+    {
+      "time": "16:58:11",
+      "type": "info",
+      "message": "Dados de autenticação locais removidos com sucesso."
+    },
+    {
+      "time": "16:58:05",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:58:04",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:58:04",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:57:49",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:57:49",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:57:49",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:57:34",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:57:34",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:57:34",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:57:19",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:57:19",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:57:19",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:57:04",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:57:04",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:57:04",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:56:49",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:56:49",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:56:49",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:56:34",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:56:34",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:56:34",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:56:19",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:56:19",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:56:19",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:56:04",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:56:04",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:56:04",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:55:49",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:55:49",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:55:49",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:55:34",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:55:34",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:55:34",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:55:23",
+      "type": "success",
+      "message": "Imagem baixada com sucesso da mensagem de \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"!"
+    },
+    {
+      "time": "16:55:23",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
+    },
+    {
+      "time": "16:55:19",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:55:19",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:55:19",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:55:05",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:55:04",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:55:04",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:54:49",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:54:49",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:54:49",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:54:45",
+      "type": "info",
+      "message": "▶️ Robô de transmissão de anúncios reativado pelo usuário."
+    },
+    {
+      "time": "16:54:34",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "16:54:34",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:54:34",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:54:34",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:54:34",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:48:45",
+      "type": "success",
+      "message": "Imagem baixada com sucesso da mensagem de \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"!"
+    },
+    {
+      "time": "16:48:45",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
+    },
+    {
+      "time": "16:46:04",
+      "type": "info",
+      "message": "Transmissão pausada: Mensagem de \"#101 HELEN INDICA  🏠\" ignorada."
+    },
+    {
+      "time": "16:46:04",
+      "type": "success",
+      "message": "Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+    },
+    {
+      "time": "16:46:04",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+    },
+    {
+      "time": "16:41:32",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "16:41:32",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:41:32",
+      "type": "success",
+      "message": "🟢 Conectado com sucesso como Isamara Manoel"
+    },
+    {
+      "time": "16:41:31",
+      "type": "info",
+      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+    },
+    {
+      "time": "16:41:30",
+      "type": "info",
+      "message": "Iniciando processo de conexão oficial com WhatsApp..."
+    },
+    {
+      "time": "16:41:30",
+      "type": "info",
+      "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
+    },
+    {
+      "time": "16:41:30",
+      "type": "info",
+      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
+    },
+    {
+      "time": "16:41:10",
+      "type": "success",
+      "message": "✨ Sincronizados 24 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    }
+  ]
+}

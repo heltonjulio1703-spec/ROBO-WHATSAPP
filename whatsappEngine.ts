@@ -216,7 +216,12 @@ export class WhatsAppEngine {
               msg.includes("transaction failed, rolling back") ||
               msg.includes("failed to decrypt message") ||
               msg.includes("skmsg") ||
-              msg.includes("isSessionRecordError")
+              msg.includes("isSessionRecordError") ||
+              msg.includes("stream:error") ||
+              msg.includes("stream errored out") ||
+              msg.includes('"code":515') ||
+              msg.includes('"code":"515"') ||
+              msg.includes("515")
             ) {
               return;
             }
@@ -273,8 +278,9 @@ export class WhatsAppEngine {
 
         if (connection === "close") {
           this.isConnecting = false;
-          const statusCode = (lastDisconnect?.error as Boom)?.output?.statusCode;
-          console.log("📡 Conexão fechada. Código:", statusCode);
+          const err = lastDisconnect?.error as any;
+          const statusCode = err?.output?.statusCode || err?.statusCode || err?.error?.output?.statusCode || Number(err?.error?.attrs?.code) || err?.output?.payload?.statusCode;
+          console.log("📡 Conexão fechada. Código:", statusCode, "Erro:", err?.message || err);
           
           const wasConnected = this.status.status === "connected";
           const wasConnecting = this.status.status === "connecting" || this.status.status === "qr_code";
@@ -288,10 +294,11 @@ export class WhatsAppEngine {
             this.addLogCallback("error", "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code.");
             this.logout();
           } else {
-            const shouldReconnect = statusCode === DisconnectReason.restartRequired || statusCode === 515 || wasConnected || wasConnecting;
+            const isStreamError = statusCode === DisconnectReason.restartRequired || statusCode === 515 || statusCode === 408 || statusCode === 503;
+            const shouldReconnect = isStreamError || wasConnected || wasConnecting || !lastDisconnect;
             if (shouldReconnect) {
-              this.addLogCallback("warning", "Conexão reiniciada ou instável (Código 515). Reconectando automaticamente em 3s...");
-              setTimeout(() => this.connect(), 3000);
+              this.addLogCallback("warning", "Conexão reiniciada ou instável (Código 515). Reconectando automaticamente em 2s...");
+              setTimeout(() => this.connect(), 2000);
             } else {
               this.addLogCallback("warning", "Conexão perdida. Clique em Conectar para tentar novamente.");
               this.status.status = "disconnected";
@@ -634,15 +641,23 @@ export class WhatsAppEngine {
       return { totalFound: sampleOffers.length, processedCount };
     }
 
-    this.addLogCallback("info", `🔎 Varrendo histórico de mensagens de hoje no grupo selecionado (${messages.length} mensagens analisadas)...`);
+    // Calculate boundary from 06:00 AM today (or 06:00 AM yesterday if scanning before 6 AM today)
+    const sixAMToday = new Date();
+    sixAMToday.setHours(6, 0, 0, 0);
+    let minAllowedSec = Math.floor(sixAMToday.getTime() / 1000);
+    if (Date.now() < sixAMToday.getTime()) {
+      const sixAMYesterday = new Date();
+      sixAMYesterday.setDate(sixAMYesterday.getDate() - 1);
+      sixAMYesterday.setHours(6, 0, 0, 0);
+      minAllowedSec = Math.floor(sixAMYesterday.getTime() / 1000);
+    }
+
+    this.addLogCallback("info", `🔎 Varrendo histórico do grupo a partir das 06:00 AM (${messages.length} mensagens analisadas)...`);
     
     let totalFound = 0;
     let processedCount = 0;
     
     try {
-      // Calculate start of today (midnight) or last 24 hours
-      const startOfTodaySec = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000);
-      const minAllowedSec = Math.min(startOfTodaySec, Math.floor(Date.now() / 1000) - 24 * 3600);
       const seenLinksInScan = new Set<string>();
       
       for (const msg of messages) {
@@ -696,9 +711,9 @@ export class WhatsAppEngine {
       }
 
       if (totalFound === 0) {
-        this.addLogCallback("info", `Varredura concluída: Nenhuma oferta nova com link da Shopee encontrada no histórico de hoje deste grupo.`);
+        this.addLogCallback("info", `Varredura concluída: Nenhuma oferta nova com link da Shopee encontrada a partir das 06:00 AM neste grupo.`);
       } else {
-        this.addLogCallback("success", `Varredura concluída: ${totalFound} ofertas encontradas e ${processedCount} processadas com sucesso!`);
+        this.addLogCallback("success", `Varredura concluída: ${totalFound} ofertas encontradas (a partir das 06:00 AM) e ${processedCount} encaminhadas com sucesso aos grupos de destino sem repetição!`);
       }
     } catch (err) {
       this.addLogCallback("error", `Erro ao varrer histórico do grupo: ${(err as Error).message}`);

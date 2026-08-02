@@ -295,7 +295,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
                           type="button"
                           onClick={() => handleScanToday(group.id)}
                           disabled={!whatsappConnected || scanningGroupId === group.id}
-                          title={!whatsappConnected ? "Conecte o WhatsApp para buscar ofertas de hoje" : "Buscar ofertas geradas hoje neste grupo"}
+                          title={!whatsappConnected ? "Conecte o WhatsApp para buscar ofertas a partir das 06h" : "Buscar e encaminhar ofertas a partir das 06h00 sem repetição"}
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
                             scanningGroupId === group.id
                               ? "bg-amber-100 text-amber-700 cursor-wait"
@@ -305,7 +305,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
                           }`}
                         >
                           <RefreshCw className={`w-3.5 h-3.5 ${scanningGroupId === group.id ? "animate-spin" : ""}`} />
-                          <span>{scanningGroupId === group.id ? "Buscando..." : "Buscar Ofertas de Hoje"}</span>
+                          <span>{scanningGroupId === group.id ? "Buscando..." : "Buscar Ofertas (a partir das 06h)"}</span>
                         </button>
 
                         <button
