@@ -315,31 +315,26 @@ const getGeminiClient = () => {
 // Helper to convert links to affiliate
 const convertToAffiliateLink = (originalUrl: string, affiliateId: string, subId: string = "bot") => {
   if (!originalUrl) return "";
-  const cleanUrl = originalUrl.trim();
+  const cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]]+$/, "");
   
+  // Resolve effective affiliate ID from user settings or parameter
+  const affIdToUse = (state.config.shopeeAffiliateId || state.config.affiliateId || affiliateId || "heltonjulio1703").trim();
+
   // Extract domain from original URL to support other regions
   let shopeeDomain = "shopee.com.br"; // Default
   try {
     const urlObj = new URL(cleanUrl);
     const parts = urlObj.hostname.split('.');
-    // Look for 'shopee' in the hostname
-    if (parts.length >= 2) {
-      // e.g., shopee.com.mx -> shopee.com.mx
-      // e.g., shopee.sg -> shopee.sg
-      // Find the part that is "shopee" and take it + next parts
-      const shopeeIndex = parts.indexOf("shopee");
-      if (shopeeIndex !== -1 && parts.length > shopeeIndex + 1) {
-        shopeeDomain = parts.slice(shopeeIndex).join('.');
-      }
+    const shopeeIndex = parts.indexOf("shopee");
+    if (shopeeIndex !== -1 && parts.length > shopeeIndex + 1) {
+      shopeeDomain = parts.slice(shopeeIndex).join('.');
     }
   } catch (e) {
     // Keep default domain if parsing fails
   }
 
-  // Shopee Universal Link is the official way to manually structure tracking URLs that redirect and track on both mobile and desktop.
-  // Standard format:
-  // https://shopee.com.br/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=SUB_ID&utm_term=AFFILIATE_ID&url=ORIGINAL_URL
-  const universalUrl = `https://${shopeeDomain}/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affiliateId)}&url=${encodeURIComponent(cleanUrl)}`;
+  // Shopee Universal Link structure for reliable tracking
+  const universalUrl = `https://${shopeeDomain}/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affIdToUse)}&url=${encodeURIComponent(cleanUrl)}`;
   
   return universalUrl;
 };
@@ -351,9 +346,9 @@ const convertWithShopeeApi = async (
   secret: string,
   subId: string = "bot"
 ): Promise<string | null> => {
-  // Trim credentials to avoid errors from accidental whitespace
   const appKey = (key || "").trim();
   const appSecret = (secret || "").trim();
+  const cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]]+$/, "");
 
   // Primary Brazilian and regional GraphQL endpoints for Shopee Open Platform
   const endpoints = [
@@ -374,15 +369,15 @@ const convertWithShopeeApi = async (
       const queries = [
         {
           name: "generatePromotionLink",
-          body: `mutation{generatePromotionLink(linkParams:{originalUrl:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink}}}`
+          body: `mutation{generatePromotionLink(linkParams:{originalUrl:${JSON.stringify(cleanUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink shortLink}}}`
         },
         {
           name: "generatePromotionLinkAlt",
-          body: `mutation{generatePromotionLink(linkParams:{originUrl:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink}}}`
+          body: `mutation{generatePromotionLink(linkParams:{originUrl:${JSON.stringify(cleanUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink shortLink}}}`
         },
         {
           name: "generateShortLink",
-          body: `mutation{generateShortLink(input:{originUrl:${JSON.stringify(originalUrl)},subIds:[${JSON.stringify(subId)}]}){shortLink}}`
+          body: `mutation{generateShortLink(input:{originUrl:${JSON.stringify(cleanUrl)},subIds:[${JSON.stringify(subId)}]}){shortLink}}`
         }
       ];
 
@@ -444,6 +439,9 @@ const convertWithShopeeApi = async (
               }
 
               const result = json.data?.generatePromotionLink?.data?.promotionLink || 
+                             json.data?.generatePromotionLink?.data?.shortLink ||
+                             json.data?.generatePromotionLink?.promotionLink ||
+                             json.data?.generatePromotionLink?.shortLink ||
                              json.data?.generateShortLink?.shortLink || 
                              json.data?.batchGetCustomLink?.customLinkList?.[0]?.customLink;
 
@@ -484,12 +482,53 @@ const convertWithShopeeApi = async (
 const expandShopeeUrl = async (url: string): Promise<string> => {
   if (!url || !url.startsWith("http")) return url;
 
-  const isShort = url.includes("shp.ee") || url.includes("shope.ee") || url.includes("s.shopee.com.br");
-  if (!isShort) return url;
+  const cleanUrl = url.trim().replace(/[.,;:!?)\]]+$/, "");
+  const isShort = cleanUrl.includes("shp.ee") || 
+                  cleanUrl.includes("shope.ee") || 
+                  cleanUrl.includes("s.shopee.com") || 
+                  cleanUrl.includes("s.shopee.com.br");
+
+  if (!isShort) return cleanUrl;
 
   try {
-    addLog("info", `Expandindo link curto da Shopee: ${url}`);
-    const response = await fetch(url, {
+    addLog("info", `Expandindo link curto da Shopee: ${cleanUrl}`);
+
+    // Fast check via manual redirect to capture Location header
+    let current = cleanUrl;
+    for (let hop = 0; hop < 4; hop++) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+
+        const response = await fetch(current, {
+          method: "GET",
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          },
+          redirect: "manual",
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        const loc = response.headers.get("location");
+        if (loc && loc.startsWith("http")) {
+          current = loc;
+          if (current.includes("shopee.com") && !current.includes("s.shopee.com")) {
+            addLog("success", `✅ Link curto expandido com sucesso para: ${current.substring(0, 70)}...`);
+            return current;
+          }
+        } else {
+          break;
+        }
+      } catch (e) {
+        break;
+      }
+    }
+
+    // Fallback GET request with redirect follow
+    const response = await fetch(current, {
       method: "GET",
       headers: {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -526,44 +565,45 @@ const expandShopeeUrl = async (url: string): Promise<string> => {
   } catch (err) {
     console.error("Falha ao expandir link curto da Shopee:", err);
   }
-  return url;
+  return cleanUrl;
 };
 
-// Async Link Converter that automatically uses Shopee API if configured
+// Async Link Converter that automatically attempts Shopee API if configured, falling back to Affiliate ID link
 const convertToAffiliateLinkAsync = async (originalUrl: string, affiliateId: string, subId: string = "bot") => {
   if (!originalUrl) return "";
+
+  const cleanInputUrl = originalUrl.trim().replace(/[.,;:!?)\]]+$/, "");
+  const effAffId = (state.config.shopeeAffiliateId || state.config.affiliateId || affiliateId || "heltonjulio1703").trim();
   
   // Expand short URLs first to ensure the best tracking and conversion results
-  const resolvedUrl = await expandShopeeUrl(originalUrl);
+  const resolvedUrl = await expandShopeeUrl(cleanInputUrl);
 
-  if (state.config.useShopeeApi && state.config.shopeeAppKey && state.config.shopeeAppSecret) {
+  const hasAppKey = !!(state.config.shopeeAppKey && state.config.shopeeAppKey.trim());
+  const hasAppSecret = !!(state.config.shopeeAppSecret && state.config.shopeeAppSecret.trim());
+
+  if (hasAppKey && hasAppSecret) {
     try {
-      addLog("info", `Convertendo link via API Oficial da Shopee...`);
+      addLog("info", `Tentando gerar link via API Oficial da Shopee...`);
       const apiLink = await convertWithShopeeApi(
         resolvedUrl,
-        state.config.shopeeAppKey,
-        state.config.shopeeAppSecret,
+        state.config.shopeeAppKey!.trim(),
+        state.config.shopeeAppSecret!.trim(),
         subId
       );
 
       if (apiLink) {
-        addLog("success", `✅ Link convertido com sucesso via API Oficial da Shopee!`);
+        addLog("success", `✅ Link gerado com sucesso via API Oficial da Shopee!`);
         return apiLink;
       }
+      addLog("warning", `⚠️ Resposta da API Shopee sem link retornado. Alternando automaticamente para conversão direta com ID de Afiliado "${effAffId}"...`);
     } catch (err) {
       const errMsg = (err as Error).message || "";
-      if (errMsg.includes("10020") || errMsg.includes("Credenciais") || errMsg.includes("Inválidas ou Inativas")) {
-        state.config.useShopeeApi = false;
-        saveStateToFile();
-        addLog("error", `⚠️ Credenciais da API Shopee inválidas/inativas (Erro 10020). A API Oficial foi desativada temporariamente de forma automática. O robô continuará convertendo perfeitamente usando links estruturados diretos com o ID de Afiliado "${state.config.affiliateId || affiliateId}" para garantir que você não perca nenhuma comissão!`);
-      } else {
-        addLog("error", `⚠️ Falha ao converter via API da Shopee: ${errMsg}. Usando formato de link estruturado (com ID de Afiliado)...`);
-      }
+      addLog("warning", `⚠️ Falha de conexão com a API da Shopee (${errMsg}). Alternando automaticamente para conversão direta com ID de Afiliado "${effAffId}"...`);
     }
   }
 
-  // Fallback
-  return convertToAffiliateLink(resolvedUrl, affiliateId, subId);
+  // Fallback to Universal Link with Affiliate ID
+  return convertToAffiliateLink(resolvedUrl, effAffId, subId);
 };
 
 // Helper to ensure the message footer below the link is strictly replaced with Instagram @isamara.manoel
@@ -686,7 +726,10 @@ ${messageText}
     const parsed = JSON.parse(resultText);
 
     if (parsed.hasShopeeLink && parsed.originalLink) {
-      const affiliateLink = await convertToAffiliateLinkAsync(parsed.originalLink, affiliateId);
+      const effAffId = state.config.shopeeAffiliateId || state.config.affiliateId || affiliateId;
+      const cleanOrig = parsed.originalLink.trim().replace(/[.,;:!?)\]]+$/, "");
+      const affiliateLink = await convertToAffiliateLinkAsync(cleanOrig, effAffId);
+      parsed.originalLink = cleanOrig;
       parsed.affiliateLink = affiliateLink;
       
       let msg = parsed.rewrittenMessage || "";
@@ -698,6 +741,16 @@ ${messageText}
       if (parsed.originalLink) {
         msg = msg.split(parsed.originalLink).join(affiliateLink);
       }
+
+      // Replace any remaining Shopee links in rewrittenMessage
+      const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?)[^\s]+)/gi;
+      msg = msg.replace(shopeeLinkRegex, (foundUrl) => {
+        if (foundUrl.includes("universal-link") || foundUrl.includes("utm_term=")) {
+          return foundUrl;
+        }
+        return affiliateLink;
+      });
+
       parsed.rewrittenMessage = applyFooterToMessage(msg);
     }
 
@@ -718,8 +771,10 @@ ${messageText}
 
 // Regex Fallback parsing if Gemini is not available
 const parseMessageWithRegex = async (messageText: string, affiliateId: string) => {
-  // Regex to detect Shopee URLs
-  const shopeeRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.com\.br|shopee\.com|shp\.ee|shope\.ee)\/[^\s]+)/gi;
+  const effAffId = state.config.shopeeAffiliateId || state.config.affiliateId || affiliateId;
+
+  // Regex to detect all Shopee URL variants
+  const shopeeRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?)[^\s]+)/gi;
   const matches = messageText.match(shopeeRegex);
 
   if (!matches || matches.length === 0) {
@@ -733,10 +788,11 @@ const parseMessageWithRegex = async (messageText: string, affiliateId: string) =
     };
   }
 
-  const originalLink = matches[0];
-  const affiliateLink = await convertToAffiliateLinkAsync(originalLink, affiliateId);
+  const rawOriginalLink = matches[0];
+  const originalLink = rawOriginalLink.replace(/[.,;:!?)\]]+$/, "");
+  const affiliateLink = await convertToAffiliateLinkAsync(originalLink, effAffId);
 
-  // Guess product title from the message text (first line or first few words)
+  // Guess product title from the message text
   let productTitle = "Produto da Shopee";
   const lines = messageText.split("\n").map(l => l.trim()).filter(l => l.length > 0);
   if (lines.length > 0) {
@@ -749,9 +805,10 @@ const parseMessageWithRegex = async (messageText: string, affiliateId: string) =
 
   // Preserve the exact original message structure and prices, replacing shopee URLs with affiliate links
   let rewrittenMessage = messageText;
-  for (const foundUrl of matches) {
-    const converted = await convertToAffiliateLinkAsync(foundUrl, affiliateId);
-    rewrittenMessage = rewrittenMessage.split(foundUrl).join(converted);
+  for (const rawUrl of matches) {
+    const cleaned = rawUrl.replace(/[.,;:!?)\]]+$/, "");
+    const converted = await convertToAffiliateLinkAsync(cleaned, effAffId);
+    rewrittenMessage = rewrittenMessage.split(rawUrl).join(converted);
   }
 
   rewrittenMessage = applyFooterToMessage(rewrittenMessage);
@@ -1052,6 +1109,28 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   return historyItem;
 };
 
+// Helper to check if an incoming message's group matches an active source group (by JID or Group Name)
+const isSourceGroupActive = (groupJid: string, groupName: string): boolean => {
+  const cleanFromJid = groupJid.split(":")[0].toLowerCase().trim();
+  const cleanFromName = groupName.toLowerCase().trim();
+
+  return state.groups.sources.some(s => {
+    if (!s.active) return false;
+    const cleanSourceId = s.id.split(":")[0].toLowerCase().trim();
+    const cleanSourceName = s.name.toLowerCase().trim();
+
+    // 1. Direct JID match
+    if (cleanSourceId === cleanFromJid || cleanFromJid.includes(cleanSourceId) || cleanSourceId.includes(cleanFromJid)) {
+      return true;
+    }
+    // 2. Group name match
+    if (cleanSourceName && cleanFromName && (cleanSourceName === cleanFromName || cleanFromName.includes(cleanSourceName) || cleanSourceName.includes(cleanFromName))) {
+      return true;
+    }
+    return false;
+  });
+};
+
 // Initialize the real WhatsApp Engine
 const whatsappEngine = new WhatsAppEngine(
   (type, msg) => {
@@ -1094,10 +1173,10 @@ const whatsappEngine = new WhatsAppEngine(
     saveStateToFile();
   },
   async (groupJid, groupName, text, imageBuffer, imageUrl) => {
-    // Check if this source group is active (comparing clean JID)
-    const cleanFrom = groupJid.split(":")[0];
-    const sourceGroup = state.groups.sources.find(s => s.id.split(":")[0] === cleanFrom && s.active);
-    if (!sourceGroup) return;
+    // Check if this source group is active (comparing clean JID or group name)
+    if (!isSourceGroupActive(groupJid, groupName)) {
+      return;
+    }
 
     // Process the message and convert links (this will also send to active targets automatically inside processIncomingMessage)
     await processIncomingMessage(groupName, text, imageBuffer, imageUrl);
@@ -1220,8 +1299,19 @@ app.post("/api/shopee/test", async (req, res) => {
 
 app.post("/api/transmission/toggle", (req, res) => {
   state.config.isTransmissionEnabled = !state.config.isTransmissionEnabled;
-  addLog("info", `Transmissão de anúncios ${state.config.isTransmissionEnabled ? "REATIVADA" : "PAUSADA"} pelo usuário.`);
-  res.json({ success: true, isTransmissionEnabled: state.config.isTransmissionEnabled });
+  if (!state.config.isTransmissionEnabled) {
+    state.history = [];
+    addLog("info", "🧹 Histórico de envios limpo automaticamente ao desligar o robô.");
+  } else {
+    addLog("info", "▶️ Robô de transmissão de anúncios reativado pelo usuário.");
+  }
+  saveStateToFile();
+  res.json({
+    success: true,
+    isTransmissionEnabled: state.config.isTransmissionEnabled,
+    historyCleared: !state.config.isTransmissionEnabled,
+    history: state.history,
+  });
 });
 
 // Groups

@@ -16,9 +16,14 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
   const [scanningGroupId, setScanningGroupId] = React.useState<string | null>(null);
   const [scanResult, setScanResult] = React.useState<{ groupId: string; message: string; success: boolean } | null>(null);
 
-  // Filter only groups that are synchronized from a connected WhatsApp (id ending in @g.us)
-  const displayedSources = groups.sources.filter((g) => g.id.endsWith("@g.us"));
-  const displayedTargets = groups.targets.filter((g) => g.id.endsWith("@g.us"));
+  // Show synchronized WhatsApp groups (@g.us) or all available groups
+  const displayedSources = groups.sources.some((g) => g.id.endsWith("@g.us"))
+    ? groups.sources.filter((g) => g.id.endsWith("@g.us"))
+    : groups.sources;
+
+  const displayedTargets = groups.targets.some((g) => g.id.endsWith("@g.us"))
+    ? groups.targets.filter((g) => g.id.endsWith("@g.us"))
+    : groups.targets;
 
   // Automatic group synchronization routine
   React.useEffect(() => {

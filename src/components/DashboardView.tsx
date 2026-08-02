@@ -29,7 +29,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [intervalTime, setIntervalTime] = React.useState(config.autoPilotInterval);
   const [kw, setKw] = React.useState(config.keywords);
   const [ap, setAp] = React.useState(config.autoPilot);
-  const [useShopeeApi, setUseShopeeApi] = React.useState(config.useShopeeApi || false);
   const [shopeeAppKey, setShopeeAppKey] = React.useState(config.shopeeAppKey || "");
   const [shopeeAppSecret, setShopeeAppSecret] = React.useState(config.shopeeAppSecret || "");
   const [shopeeAffId, setShopeeAffId] = React.useState(config.shopeeAffiliateId || "");
@@ -125,7 +124,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       setIntervalTime(config.autoPilotInterval);
       setKw(config.keywords);
       setAp(config.autoPilot);
-      setUseShopeeApi(config.useShopeeApi || false);
       setShopeeAppKey(config.shopeeAppKey || "");
       setShopeeAppSecret(config.shopeeAppSecret || "");
       setShopeeAffId(initialShopeeAffId);
@@ -137,14 +135,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     e.preventDefault();
     setSaveStatus("saving");
     try {
-      const resolvedAffId = useShopeeApi ? shopeeAffId : affId;
+      const resolvedAffId = shopeeAffId || affId;
       const updatedConfig = {
         ...config,
         affiliateId: resolvedAffId,
         autoPilotInterval: Number(intervalTime),
         keywords: kw,
         autoPilot: ap,
-        useShopeeApi,
         shopeeAppKey,
         shopeeAppSecret,
         shopeeAffiliateId: resolvedAffId,
@@ -304,35 +301,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-gray-900">Conectar via API Oficial da Shopee</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                      useShopeeApi ? "bg-emerald-100 text-emerald-800 border border-emerald-200" : "bg-gray-200 text-gray-600"
-                    }`}>
-                      {useShopeeApi ? "Uso de API Ativado" : "Uso de API Desativado"}
+                    <span className="text-sm font-bold text-gray-900">Configuração de Afiliado e API Shopee</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      Conversão Inteligente
                     </span>
                   </div>
-                  <span className="text-xs text-gray-500 mt-0.5">
-                    Converta anúncios usando suas credenciais da Shopee Open Platform ou apenas o ID de Afiliado.
+                  <span className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                    O sistema buscará a conexão com a API da Shopee caso o App Key e App Secret estejam preenchidos. Se não houver conexão, usará automaticamente a conversão direta pelo ID de Afiliado.
                   </span>
                 </div>
-
-                {/* Switch Button */}
-                <button
-                  type="button"
-                  id="use-shopee-api-toggle-btn"
-                  onClick={() => {
-                    setUseShopeeApi(!useShopeeApi);
-                    setSaveStatus("unsaved");
-                  }}
-                  className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shrink-0 border ${
-                    useShopeeApi
-                      ? "bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-600 shadow-xs"
-                      : "bg-white hover:bg-gray-100 text-gray-700 border-gray-300"
-                  }`}
-                >
-                  <div className={`w-2.5 h-2.5 rounded-full ${useShopeeApi ? "bg-emerald-400 animate-pulse" : "bg-gray-400"}`} />
-                  <span>{useShopeeApi ? "Usar API Oficial: SIM" : "Usar API Oficial: NÃO"}</span>
-                </button>
               </div>
 
               {/* Always visible inputs container */}
@@ -350,7 +327,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Shopee API App Key (Chave do Aplicativo)
+                      Shopee API App Key (opcional)
                     </label>
                     <div className="flex gap-1.5">
                       <input
@@ -363,7 +340,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         }}
                         placeholder="Insira seu App Key"
                         className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
-                        required={useShopeeApi}
                       />
                       <button
                         type="button"
@@ -389,7 +365,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">
-                      Shopee API App Secret (Segredo do Aplicativo)
+                      Shopee API App Secret (opcional)
                     </label>
                     <div className="flex gap-1.5">
                       <input
@@ -402,7 +378,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         }}
                         placeholder="••••••••••••••••"
                         className="flex-1 px-3 py-1.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-xs text-slate-800"
-                        required={useShopeeApi}
                       />
                       <button
                         type="button"
@@ -524,28 +499,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                               Esse erro (Erro 10020) ocorre porque a Shopee exige que o seu aplicativo na <strong>Shopee Open Platform</strong> seja aprovado manualmente pelo suporte técnico deles e tenha o status <strong>"Active"</strong> do tipo <strong>"Affiliate"</strong> antes de aceitar conexões.
                             </p>
                             <div className="text-[10px] text-slate-500 leading-relaxed bg-slate-50 p-2 rounded border border-slate-150">
-                              <strong className="text-slate-700">Opções disponíveis para você:</strong>
+                              <strong className="text-slate-700">O que você pode fazer:</strong>
                               <ul className="list-disc list-inside mt-1 space-y-1">
-                                <li><strong>Opção 1 (Recomendada e Instantânea):</strong> Desative o botão de conexão da API Oficial acima e utilize o <strong>Modo Sem API (ID de Afiliado)</strong>. Ele gera links estruturados válidos na hora e garante 100% das suas comissões de forma imediata!</li>
-                                <li><strong>Opção 2:</strong> Acesse o console da Shopee Open Platform, confira se seu App está aprovado e ativo, e se copiou o App Key e Secret corretamente.</li>
+                                <li><strong>Modo Automático:</strong> Se a API falhar ou estiver com credenciais incorretas, o robô utilizará automaticamente a conversão direta com o seu ID de Afiliado, garantindo 100% das suas comissões!</li>
+                                <li><strong>Para usar a API Oficial:</strong> Acesse o console da Shopee Open Platform, confira se seu App está aprovado e se copiou o App Key e Secret corretamente.</li>
                               </ul>
                             </div>
                             <div className="flex flex-col sm:flex-row gap-2 pt-1">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (shopeeAffId && !affId) {
-                                    setAffId(shopeeAffId);
-                                  }
-                                  setUseShopeeApi(false);
-                                  setTestConnectionStatus("idle");
-                                  setTestConnectionMessage("");
-                                  setSaveStatus("unsaved");
-                                }}
-                                className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded text-[10px] shadow transition-all shrink-0 cursor-pointer text-center"
-                              >
-                                Alternar para Modo Sem API (Link Estruturado Rápido)
-                              </button>
                               <a
                                 href="https://open.shopee.com/"
                                 target="_blank"
@@ -569,23 +529,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                               <p className="mt-1">
                                 Nosso robô possui um sistema automático de contingência: se a API da Shopee estiver inativa ou sem sinal, ele gera automaticamente um <strong>Universal Link oficial com o seu ID de Afiliado</strong>. Todas as vendas enviadas para o WhatsApp continuarão pontuando suas comissões normalmente.
                               </p>
-                            </div>
-                            <div className="flex flex-col sm:flex-row gap-2 pt-1">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  if (shopeeAffId && !affId) {
-                                    setAffId(shopeeAffId);
-                                  }
-                                  setUseShopeeApi(false);
-                                  setTestConnectionStatus("idle");
-                                  setTestConnectionMessage("");
-                                  setSaveStatus("unsaved");
-                                }}
-                                className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded text-[10px] shadow transition-all shrink-0 cursor-pointer text-center"
-                              >
-                                Usar Links Estruturados com ID de Afiliado (Garantia de Envio)
-                              </button>
                             </div>
                           </div>
                         )}

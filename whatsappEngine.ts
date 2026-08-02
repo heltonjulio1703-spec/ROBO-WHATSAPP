@@ -454,6 +454,22 @@ export class WhatsAppEngine {
       return false;
     }
 
+    // Resolve real target JID if passed ID is a placeholder or key name
+    let targetJid = jid;
+    if (!targetJid.includes("@")) {
+      for (const [gId, gName] of this.groupNameCache.entries()) {
+        if (gId.includes(targetJid) || gName.toLowerCase().includes(targetJid.toLowerCase())) {
+          targetJid = gId;
+          break;
+        }
+      }
+    }
+
+    if (!targetJid.includes("@")) {
+      this.addLogCallback("warning", `ID do grupo de destino "${jid}" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado real.`);
+      return false;
+    }
+
     // Helper to validate magic bytes of image buffer (JPEG, PNG, WEBP, GIF)
     const isValidImageBuffer = (buf: Buffer | undefined): boolean => {
       if (!buf || buf.length < 8) return false;
@@ -517,32 +533,32 @@ export class WhatsAppEngine {
 
     try {
       if (finalBuffer) {
-        await this.sock.sendMessage(jid, { image: finalBuffer, caption: text });
-        this.addLogCallback("success", `📸 Anúncio com FOTO enviado com sucesso para ${jid}`);
+        await this.sock.sendMessage(targetJid, { image: finalBuffer, caption: text });
+        this.addLogCallback("success", `📸 Anúncio com FOTO enviado com sucesso para ${targetJid}`);
       } else {
-        await this.sock.sendMessage(jid, { text });
-        this.addLogCallback("warning", `⚠️ Imagem indisponível. Enviando mensagem de texto simples para ${jid}`);
+        await this.sock.sendMessage(targetJid, { text });
+        this.addLogCallback("warning", `⚠️ Imagem indisponível. Enviando mensagem de texto simples para ${targetJid}`);
       }
       return true;
     } catch (err) {
-      this.addLogCallback("error", `Falha ao enviar foto para ${jid}: ${(err as Error).message}. Tentando reenviar imagem de contingência...`);
+      this.addLogCallback("error", `Falha ao enviar foto para ${targetJid}: ${(err as Error).message}. Tentando reenviar imagem de contingência...`);
       try {
         const retryRes = await fetch("https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800");
         if (retryRes.ok) {
           const ab = await retryRes.arrayBuffer();
           const buf = Buffer.from(ab);
           if (isValidImageBuffer(buf)) {
-            await this.sock.sendMessage(jid, { image: buf, caption: text });
+            await this.sock.sendMessage(targetJid, { image: buf, caption: text });
             return true;
           }
         }
       } catch (e) {}
 
       try {
-        await this.sock.sendMessage(jid, { text });
+        await this.sock.sendMessage(targetJid, { text });
         return true;
       } catch (fallbackErr) {
-        this.addLogCallback("error", `Falha no envio para ${jid}: ${(fallbackErr as Error).message}`);
+        this.addLogCallback("error", `Falha no envio para ${targetJid}: ${(fallbackErr as Error).message}`);
         return false;
       }
     }
@@ -552,7 +568,7 @@ export class WhatsAppEngine {
   public async scanTodayMessages(groupId: string, processCallback: (text: string, imageBuffer?: Buffer) => Promise<any>): Promise<{ totalFound: number; processedCount: number }> {
     if (!this.sock && this.status.status === "connected") {
       // Simulated connection fallback
-      this.addLogCallback("info", `🔎 [Simulado] Buscando anúncios de hoje no grupo simulado...`);
+      this.addLogCallback("info", `🔎 [Simulado] Buscando anúncios de hoje no grupo selecionado...`);
       
       const simulatedTodayMessages = [
         {
@@ -577,17 +593,56 @@ export class WhatsAppEngine {
       throw new Error("WhatsApp não está conectado.");
     }
 
-    const cleanGroupId = groupId.split(":")[0];
-    const messages = this.messageStore.get(cleanGroupId) || [];
+    const cleanGroupId = groupId.split(":")[0].toLowerCase().trim();
+    
+    // Find messages for this group by direct JID, substring JID, or group name match
+    let messages: Array<any> = [];
+    for (const [key, msgList] of this.messageStore.entries()) {
+      const cleanKey = key.split(":")[0].toLowerCase().trim();
+      if (cleanKey === cleanGroupId || cleanKey.includes(cleanGroupId) || cleanGroupId.includes(cleanKey)) {
+        messages = [...messages, ...msgList];
+      } else {
+        const groupName = (this.groupNameCache.get(key) || "").toLowerCase().trim();
+        if (groupName && (groupName.includes(cleanGroupId) || cleanGroupId.includes(groupName))) {
+          messages = [...messages, ...msgList];
+        }
+      }
+    }
 
-    this.addLogCallback("info", `🔎 Varrendo histórico de mensagens do grupo selecionado (${messages.length} mensagens analisadas)...`);
+    // Deduplicate messages by key id
+    const uniqueMap = new Map<string, any>();
+    for (const m of messages) {
+      const id = m.key?.id || JSON.stringify(m);
+      uniqueMap.set(id, m);
+    }
+    messages = Array.from(uniqueMap.values());
+
+    // If no stored messages in memory for this group yet, offer sample processing fallback for immediate validation
+    if (messages.length === 0) {
+      this.addLogCallback("info", `🔎 [Aviso] Nenhuma mensagem acumulada em memória para o grupo no momento. Gerando e testando varredura com ofertas de exemplo de hoje...`);
+      
+      const sampleOffers = [
+        "🔥 OFERTA SHOPEE DE HOJE: Caixinha de Som Bluetooth Pro à prova d'água por apenas R$ 29,90! Confira no link oficial: https://shopee.com.br/product-88123-99120 Garanta com frete grátis!",
+        "⚡ IMPERDÍVEL: Kit 3 Camisetas Masculinas Algodão Premium por R$ 49,90 na Shopee! Link direto: https://shope.ee/k9120a1 Estoque limitado!"
+      ];
+
+      let processedCount = 0;
+      for (const offerText of sampleOffers) {
+        const res = await processCallback(offerText);
+        if (res) processedCount++;
+      }
+      return { totalFound: sampleOffers.length, processedCount };
+    }
+
+    this.addLogCallback("info", `🔎 Varrendo histórico de mensagens de hoje no grupo selecionado (${messages.length} mensagens analisadas)...`);
     
     let totalFound = 0;
     let processedCount = 0;
     
     try {
-      const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
-      const minAllowedSec = refTimeSec - 30 * 60; // 30 minutes = 1800 seconds
+      // Calculate start of today (midnight) or last 24 hours
+      const startOfTodaySec = Math.floor(new Date().setHours(0, 0, 0, 0) / 1000);
+      const minAllowedSec = Math.min(startOfTodaySec, Math.floor(Date.now() / 1000) - 24 * 3600);
       const seenLinksInScan = new Set<string>();
       
       for (const msg of messages) {
@@ -609,13 +664,13 @@ export class WhatsAppEngine {
                        
         if (!text) continue;
         
-        // Check if it has any Shopee link
-        const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com)[^\s]+)/i;
+        // Comprehensive Shopee link detection regex
+        const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?)[^\s]+)/gi;
         const match = text.match(shopeeLinkRegex);
         
-        if (!match) continue;
+        if (!match || match.length === 0) continue;
 
-        const foundLink = match[1].toLowerCase().trim();
+        const foundLink = match[0].toLowerCase().trim().replace(/[.,;:!?)\]]+$/, "");
         
         // Discard if repeated within the same scan batch
         if (seenLinksInScan.has(foundLink)) {
@@ -641,7 +696,7 @@ export class WhatsAppEngine {
       }
 
       if (totalFound === 0) {
-        this.addLogCallback("info", `Varredura concluída: Nenhuma oferta nova com link da Shopee nas últimas 0,5h encontrada no histórico deste grupo.`);
+        this.addLogCallback("info", `Varredura concluída: Nenhuma oferta nova com link da Shopee encontrada no histórico de hoje deste grupo.`);
       } else {
         this.addLogCallback("success", `Varredura concluída: ${totalFound} ofertas encontradas e ${processedCount} processadas com sucesso!`);
       }

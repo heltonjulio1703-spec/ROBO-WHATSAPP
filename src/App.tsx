@@ -285,6 +285,11 @@ export default function App() {
       const data = await response.json();
       if (data.success) {
         setConfig(prev => ({ ...prev, isTransmissionEnabled: data.isTransmissionEnabled }));
+        if (data.historyCleared || !data.isTransmissionEnabled) {
+          setHistory([]);
+        } else if (data.history) {
+          setHistory(data.history);
+        }
       }
     } catch (err) {
       console.error(err);
