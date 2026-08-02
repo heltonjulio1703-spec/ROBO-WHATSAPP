@@ -20,6 +20,34 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
   const displayedSources = groups.sources.filter((g) => g.id.endsWith("@g.us"));
   const displayedTargets = groups.targets.filter((g) => g.id.endsWith("@g.us"));
 
+  // Automatic group synchronization routine
+  React.useEffect(() => {
+    let isMounted = true;
+
+    const performAutoSync = async () => {
+      try {
+        const response = await fetch("/api/whatsapp/sync-groups", { method: "POST" });
+        const data = await response.json();
+        if (isMounted && data.success && data.groups) {
+          await saveGroups(data.groups);
+        }
+      } catch (err) {
+        // Silent catch for background auto-sync
+      }
+    };
+
+    // Initial sync on component mount
+    performAutoSync();
+
+    // Periodic auto-sync every 15 seconds
+    const interval = setInterval(performAutoSync, 15000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
   const handleToggleActive = async (id: string, type: "sources" | "targets") => {
     const listToUpdate = [...groups[type]];
     const updatedList = listToUpdate.map((g) => {
@@ -46,10 +74,10 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
       const data = await response.json();
       if (data.success) {
         await saveGroups(data.groups);
-        setSyncMessage("Grupos atualizados!");
+        setSyncMessage("Lista atualizada!");
         setTimeout(() => setSyncMessage(null), 4000);
       } else {
-        setSyncMessage("Erro na sincronização.");
+        setSyncMessage("Erro ao atualizar.");
       }
     } catch (err) {
       console.error("Erro ao sincronizar:", err);
@@ -115,9 +143,15 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
             <Smartphone className="w-6 h-6" />
           </div>
           <div>
-            <h4 className="font-bold text-slate-800 text-sm">Integração com Grupos do WhatsApp</h4>
+            <div className="flex items-center gap-2">
+              <h4 className="font-bold text-slate-800 text-sm">Integração com Grupos do WhatsApp</h4>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Sincronização Automática Ativa
+              </span>
+            </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Sincronize automaticamente os grupos que você participa do WhatsApp. Marque-os para monitorar ofertas de origem ou replicar anúncios de destino.
+              Os grupos do seu WhatsApp são detectados e sincronizados automaticamente em segundo plano. Utilize o botão ao lado caso queira forçar a atualização imediata.
             </p>
           </div>
         </div>
@@ -140,7 +174,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
             }`}
           >
             <RefreshCw className={`w-4 h-4 ${isSyncing ? "animate-spin" : ""}`} />
-            {isSyncing ? "Buscando Grupos..." : "Sincronizar Grupos do WhatsApp"}
+            {isSyncing ? "Atualizando..." : "Atualizar Grupos"}
           </button>
         </div>
       </div>
