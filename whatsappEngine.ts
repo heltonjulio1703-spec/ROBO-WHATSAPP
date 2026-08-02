@@ -3,7 +3,8 @@ import makeWASocket, {
   DisconnectReason,
   WASocket,
   fetchLatestBaileysVersion,
-  downloadMediaMessage
+  downloadMediaMessage,
+  downloadContentFromMessage
 } from "@whiskeysockets/baileys";
 import pino from "pino";
 import QRCode from "qrcode";
@@ -26,6 +27,35 @@ export interface GroupItem {
   id: string;
   name: string;
   active: boolean;
+}
+
+// Helper to safely extract image buffer from a message object using stream or media download
+async function downloadWhatsAppImageBuffer(msg: any, imageMsg: any): Promise<Buffer | null> {
+  if (!imageMsg) return null;
+  try {
+    const stream = await downloadContentFromMessage(imageMsg, 'image');
+    let buffer = Buffer.alloc(0);
+    for await (const chunk of stream) {
+      buffer = Buffer.concat([buffer, chunk]);
+    }
+    if (buffer && buffer.length > 100) {
+      return buffer;
+    }
+  } catch (err1) {
+    console.warn("downloadContentFromMessage warn:", (err1 as Error).message);
+  }
+
+  try {
+    const cleanMsg = { ...msg, message: { imageMessage: imageMsg } };
+    const buf = await downloadMediaMessage(cleanMsg, 'buffer', {});
+    if (buf && buf.length > 100) {
+      return Buffer.from(buf);
+    }
+  } catch (err2) {
+    console.warn("downloadMediaMessage warn:", (err2 as Error).message);
+  }
+
+  return null;
 }
 
 export class WhatsAppEngine {
@@ -297,8 +327,12 @@ export class WhatsAppEngine {
             const isStreamError = statusCode === DisconnectReason.restartRequired || statusCode === 515 || statusCode === 408 || statusCode === 503;
             const shouldReconnect = isStreamError || wasConnected || wasConnecting || !lastDisconnect;
             if (shouldReconnect) {
-              this.addLogCallback("warning", "Conexão reiniciada ou instável (Código 515). Reconectando automaticamente em 2s...");
-              setTimeout(() => this.connect(), 2000);
+              if (isStreamError) {
+                this.addLogCallback("info", "🔄 Atualizando canal de dados do WhatsApp (Código 515). Reconectando em 1s...");
+              } else {
+                this.addLogCallback("info", "Reconectando em 2s...");
+              }
+              setTimeout(() => this.connect(), 1000);
             } else {
               this.addLogCallback("warning", "Conexão perdida. Clique em Conectar para tentar novamente.");
               this.status.status = "disconnected";
@@ -338,9 +372,13 @@ export class WhatsAppEngine {
                      m.extendedTextMessage?.text || 
                      m.imageMessage?.caption || 
                      m.videoMessage?.caption || 
+                     m.documentMessage?.caption ||
                      "";
 
-        return { text, imageMsg: m.imageMessage || null };
+        const imageMsg = m.imageMessage || 
+                         (m.documentMessage?.mimetype?.startsWith("image/") ? m.documentMessage : null);
+
+        return { text, imageMsg };
       };
 
       // Incoming messages listener
@@ -400,10 +438,12 @@ export class WhatsAppEngine {
           if (imageMsg) {
             try {
               this.addLogCallback("info", `Baixando imagem recebida de "${groupName}"...`);
-              const buffer = await downloadMediaMessage(msg, 'buffer', {});
+              const buffer = await downloadWhatsAppImageBuffer(msg, imageMsg);
               if (buffer) {
-                imageBuffer = buffer as Buffer;
-                this.addLogCallback("success", `Imagem baixada com sucesso da mensagem de "${groupName}"!`);
+                imageBuffer = buffer;
+                this.addLogCallback("success", `📸 Imagem baixada com sucesso da mensagem de "${groupName}"!`);
+              } else {
+                this.addLogCallback("warning", `Não foi possível extrair diretamente o buffer da foto de "${groupName}". O sistema buscará a foto original do produto.`);
               }
             } catch (err) {
               this.addLogCallback("warning", `Falha ao carregar imagem da mensagem de "${groupName}": ${(err as Error).message}`);
@@ -477,43 +517,58 @@ export class WhatsAppEngine {
       return false;
     }
 
-    // Helper to validate magic bytes of image buffer (JPEG, PNG, WEBP, GIF)
-    const isValidImageBuffer = (buf: Buffer | undefined): boolean => {
-      if (!buf || buf.length < 8) return false;
-      // JPEG: FF D8 FF
-      if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return true;
+    // Helper to validate magic bytes of image buffer (JPEG, PNG, WEBP, GIF, BMP)
+    const isValidImageBuffer = (buf: any): boolean => {
+      if (!buf) return false;
+      const b = Buffer.isBuffer(buf) ? buf : Buffer.from(buf);
+      if (b.length < 50) return false;
+
+      // JPEG SOI: FF D8
+      if (b[0] === 0xff && b[1] === 0xd8) return true;
       // PNG: 89 50 4E 47
-      if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) return true;
-      // WEBP: RIFF...WEBP
-      if (buf[0] === 0x52 && buf[1] === 0x49 && buf[2] === 0x46 && buf[3] === 0x46 &&
-          buf[8] === 0x57 && buf[9] === 0x45 && buf[10] === 0x42 && buf[11] === 0x50) return true;
+      if (b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47) return true;
+      // WEBP: RIFF
+      if (b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46) return true;
       // GIF: 47 49 46
-      if (buf[0] === 0x47 && buf[1] === 0x49 && buf[2] === 0x46) return true;
-      return false;
+      if (b[0] === 0x47 && b[1] === 0x49 && b[2] === 0x46) return true;
+      // BMP: 42 4D
+      if (b[0] === 0x42 && b[1] === 0x4d) return true;
+      // ftyp
+      if (b.length >= 8 && b[4] === 0x66 && b[5] === 0x74 && b[6] === 0x79 && b[7] === 0x70) return true;
+
+      return b.length > 300;
     };
 
-    let finalBuffer: Buffer | undefined = isValidImageBuffer(imageBuffer) ? imageBuffer : undefined;
+    let finalBuffer: Buffer | undefined = isValidImageBuffer(imageBuffer) ? Buffer.from(imageBuffer!) : undefined;
 
-    if (!finalBuffer && imageUrl && imageUrl.startsWith("http")) {
-      try {
-        this.addLogCallback("info", `Baixando imagem da oferta para envio no WhatsApp...`);
-        const imgRes = await fetch(imageUrl, {
-          headers: {
+    if (!finalBuffer && imageUrl && typeof imageUrl === "string") {
+      let fetchUrl = imageUrl.trim();
+      if (fetchUrl.startsWith("//")) {
+        fetchUrl = "https:" + fetchUrl;
+      }
+      if (fetchUrl.startsWith("http")) {
+        try {
+          this.addLogCallback("info", `Baixando foto do produto (${fetchUrl.substring(0, 50)}...) para envio no WhatsApp...`);
+          const headers: Record<string, string> = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
-          },
-        });
-        if (imgRes.ok) {
-          const ab = await imgRes.arrayBuffer();
-          const downloadedBuf = Buffer.from(ab);
-          if (isValidImageBuffer(downloadedBuf)) {
-            finalBuffer = downloadedBuf;
-          } else {
-            console.warn("Buffer baixado do URL de imagem não possui cabeçalho válido de imagem.");
+          };
+          if (fetchUrl.includes("shopee") || fetchUrl.includes("susercontent")) {
+            headers["Referer"] = "https://shopee.com.br/";
           }
+          const imgRes = await fetch(fetchUrl, { headers });
+          if (imgRes.ok) {
+            const ab = await imgRes.arrayBuffer();
+            const downloadedBuf = Buffer.from(ab);
+            if (isValidImageBuffer(downloadedBuf)) {
+              finalBuffer = downloadedBuf;
+            } else {
+              console.warn("Buffer baixado do URL de imagem não possui cabeçalho válido de imagem.");
+            }
+          }
+        } catch (e) {
+          console.warn("Não foi possível carregar buffer da imagem original:", e);
         }
-      } catch (e) {
-        console.warn("Não foi possível carregar buffer da imagem original:", e);
       }
     }
 
@@ -540,7 +595,8 @@ export class WhatsAppEngine {
 
     try {
       if (finalBuffer) {
-        await this.sock.sendMessage(targetJid, { image: finalBuffer, caption: text });
+        const sendBuf = Buffer.isBuffer(finalBuffer) ? finalBuffer : Buffer.from(finalBuffer);
+        await this.sock.sendMessage(targetJid, { image: sendBuf, caption: text });
         this.addLogCallback("success", `📸 Anúncio com FOTO enviado com sucesso para ${targetJid}`);
       } else {
         await this.sock.sendMessage(targetJid, { text });
@@ -696,9 +752,13 @@ export class WhatsAppEngine {
         totalFound++;
         
         let imageBuffer: Buffer | undefined = undefined;
-        if (m.imageMessage) {
+        const imgObj = m.imageMessage || (m.documentMessage?.mimetype?.startsWith("image/") ? m.documentMessage : null);
+        if (imgObj) {
           try {
-            imageBuffer = await downloadMediaMessage(msg, 'buffer', {}) as Buffer;
+            const downloaded = await downloadWhatsAppImageBuffer(msg, imgObj);
+            if (downloaded) {
+              imageBuffer = downloaded;
+            }
           } catch (err) {
             this.addLogCallback("warning", `Não foi possível carregar a imagem do histórico da mensagem.`);
           }

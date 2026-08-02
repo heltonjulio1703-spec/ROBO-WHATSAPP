@@ -900,16 +900,22 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
       ];
       for (const r of metaMatches) {
         const m = html.match(r);
-        if (m && m[1] && m[1].trim().startsWith("http")) {
-          const cleanUrl = m[1].trim().replace(/\\u002F/g, "/");
-          addLog("success", `📸 Foto original encontrada (Meta tag): ${cleanUrl.substring(0, 60)}...`);
-          return cleanUrl;
+        if (m && m[1] && m[1].trim().length > 5) {
+          let cleanUrl = m[1].trim().replace(/\\u002F/g, "/");
+          if (cleanUrl.startsWith("//")) cleanUrl = "https:" + cleanUrl;
+          if (cleanUrl.startsWith("/")) cleanUrl = "https://shopee.com.br" + cleanUrl;
+          if (cleanUrl.startsWith("http")) {
+            addLog("success", `📸 Foto original encontrada (Meta tag): ${cleanUrl.substring(0, 60)}...`);
+            return cleanUrl;
+          }
         }
       }
 
       const jsonImgMatch = html.match(/"image":\s*"([^"]+)"/i) || html.match(/"images":\s*\["([^"]+)"/i);
       if (jsonImgMatch && jsonImgMatch[1]) {
         let imgStr = jsonImgMatch[1].trim().replace(/\\u002F/g, "/");
+        if (imgStr.startsWith("//")) imgStr = "https:" + imgStr;
+        if (imgStr.startsWith("/")) imgStr = "https://shopee.com.br" + imgStr;
         if (imgStr.startsWith("http")) {
           addLog("success", `📸 Foto original encontrada (JSON): ${imgStr.substring(0, 60)}...`);
           return imgStr;
