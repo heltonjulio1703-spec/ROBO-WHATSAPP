@@ -1,6 +1,20 @@
 import React from "react";
 import { GroupConfig } from "../types";
-import { Trash2, RefreshCw, Smartphone, Search, Send } from "lucide-react";
+import { 
+  Trash2, 
+  RefreshCw, 
+  Smartphone, 
+  Search, 
+  Send, 
+  CheckCircle2, 
+  AlertTriangle, 
+  Info, 
+  Activity, 
+  Play, 
+  Sparkles, 
+  Clock, 
+  ShieldCheck 
+} from "lucide-react";
 
 interface GroupsViewProps {
   groups: GroupConfig;
@@ -10,11 +24,37 @@ interface GroupsViewProps {
 }
 
 export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, whatsappConnected = false, onRefreshHistory }) => {
-  const [activeTab, setActiveTab] = React.useState<"sources" | "targets">("sources");
+  const [activeTab, setActiveTab] = React.useState<"sources" | "targets" | "scan">("sources");
   const [isSyncing, setIsSyncing] = React.useState(false);
   const [syncMessage, setSyncMessage] = React.useState<string | null>(null);
   const [scanningGroupId, setScanningGroupId] = React.useState<string | null>(null);
-  const [scanResult, setScanResult] = React.useState<{ groupId: string; message: string; success: boolean } | null>(null);
+  
+  // Dynamic scanning progress state
+  const [scanProgress, setScanProgress] = React.useState<number>(0);
+  const [scanStage, setScanStage] = React.useState<string>("");
+  const [currentScanningName, setCurrentScanningName] = React.useState<string>("");
+
+  const [scanResult, setScanResult] = React.useState<{ 
+    groupId: string; 
+    groupName: string;
+    message: string; 
+    success: boolean;
+    totalFound?: number;
+    processedCount?: number;
+    messageCount?: number;
+    timestamp?: string;
+  } | null>(null);
+
+  const [lastScanInfo, setLastScanInfo] = React.useState<{
+    groupId?: string;
+    groupName: string;
+    timestamp: string;
+    success: boolean;
+    message: string;
+    totalFound?: number;
+    processedCount?: number;
+    messageCount?: number;
+  } | null>(null);
 
   // Show synchronized WhatsApp groups (@g.us) or all available groups
   const displayedSources = groups.sources.some((g) => g.id.endsWith("@g.us"))
@@ -101,9 +141,33 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
     await saveGroups(newGroups);
   };
 
+  // Perform single group scan with realistic progression steps
   const handleScanToday = async (groupId: string) => {
+    const targetGroup = groups.sources.find((g) => g.id === groupId);
+    const groupName = targetGroup ? targetGroup.name : "Grupo de Origem";
+
     setScanningGroupId(groupId);
+    setCurrentScanningName(groupName);
     setScanResult(null);
+    setScanProgress(15);
+    setScanStage("Iniciando conexão com o chat do WhatsApp...");
+
+    // Simulated smooth progress updates while server processes
+    const p1 = setTimeout(() => {
+      setScanProgress(40);
+      setScanStage("Lendo mensagens postadas hoje a partir das 06:00 AM...");
+    }, 350);
+
+    const p2 = setTimeout(() => {
+      setScanProgress(70);
+      setScanStage("Identificando links da Shopee e capturando dados...");
+    }, 850);
+
+    const p3 = setTimeout(() => {
+      setScanProgress(90);
+      setScanStage("Reescrevendo texto com IA e verificando duplicações...");
+    }, 1450);
+
     try {
       const response = await fetch("/api/whatsapp/scan-today", {
         method: "POST",
@@ -111,31 +175,87 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
         body: JSON.stringify({ groupId }),
       });
       const data = await response.json();
+
+      clearTimeout(p1);
+      clearTimeout(p2);
+      clearTimeout(p3);
+
+      setScanProgress(100);
+      setScanStage("Varredura concluída!");
+
+      const scanData = {
+        groupId,
+        groupName,
+        message: data.message || (data.processedCount > 0 
+          ? `Sucesso! ${data.processedCount} oferta(s) encaminhada(s).`
+          : `Nenhuma oferta nova encontrada.`),
+        success: !!data.success,
+        totalFound: data.totalFound ?? 0,
+        processedCount: data.processedCount ?? 0,
+        messageCount: data.messageCount ?? 0,
+        timestamp: new Date().toLocaleTimeString("pt-BR"),
+      };
+
       if (data.success) {
-        setScanResult({
-          groupId,
-          message: `Busca finalizada! Foram encontradas e reescritas ${data.processedCount} ofertas de hoje.`,
-          success: true,
-        });
+        setScanResult(scanData);
+        setLastScanInfo(scanData);
         if (onRefreshHistory) {
           await onRefreshHistory();
         }
       } else {
-        setScanResult({
+        const errorData = {
           groupId,
+          groupName,
           message: data.error || "Erro ao buscar mensagens do grupo.",
           success: false,
-        });
+          timestamp: new Date().toLocaleTimeString("pt-BR"),
+        };
+        setScanResult(errorData);
+        setLastScanInfo(errorData);
       }
     } catch (err) {
+      clearTimeout(p1);
+      clearTimeout(p2);
+      clearTimeout(p3);
       console.error(err);
-      setScanResult({
+      const errData = {
         groupId,
-        message: "Erro de conexão com o servidor.",
+        groupName,
+        message: "Erro de conexão com o servidor ao realizar varredura.",
         success: false,
-      });
+        timestamp: new Date().toLocaleTimeString("pt-BR"),
+      };
+      setScanResult(errData);
+      setLastScanInfo(errData);
+      setScanProgress(100);
+      setScanStage("Falha na varredura");
     } finally {
-      setScanningGroupId(null);
+      setTimeout(() => {
+        setScanningGroupId(null);
+      }, 400);
+    }
+  };
+
+  // Perform bulk scan on all active source groups sequentially
+  const handleScanAllSources = async () => {
+    const activeSources = displayedSources.filter((s) => s.active);
+    if (activeSources.length === 0) {
+      setLastScanInfo({
+        groupName: "Todos os Grupos Ativos",
+        timestamp: new Date().toLocaleTimeString("pt-BR"),
+        success: false,
+        message: "Nenhum grupo de origem está marcado como ativo. Ative ao menos um grupo para realizar a varredura.",
+      });
+      setActiveTab("scan");
+      return;
+    }
+
+    setActiveTab("scan");
+    setScanResult(null);
+
+    for (let i = 0; i < activeSources.length; i++) {
+      const g = activeSources[i];
+      await handleScanToday(g.id);
     }
   };
 
@@ -184,7 +304,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
         </div>
       </div>
 
-      {/* Tabs navigation for searching and sending */}
+      {/* Tabs navigation for searching, sending, and dedicated scan monitor */}
       <div id="groups-subtabs-navigation" className="flex border-b border-gray-200 bg-white rounded-t-2xl overflow-hidden shadow-xs border-x border-t">
         <button
           id="tab-search-announcements"
@@ -223,21 +343,57 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
             </span>
           </div>
         </button>
+
+        <button
+          id="tab-scan-status-monitor"
+          type="button"
+          onClick={() => setActiveTab("scan")}
+          className={`flex-1 py-4 px-4 text-center border-b-2 font-bold transition-all cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-2 ${
+            activeTab === "scan"
+              ? "border-amber-600 text-amber-700 bg-amber-50/40"
+              : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-50/50"
+          }`}
+        >
+          <Activity className={`w-4 h-4 ${scanningGroupId ? "text-amber-600 animate-spin" : activeTab === "scan" ? "text-amber-600" : "text-gray-400"}`} />
+          <div className="flex flex-col items-start sm:items-center">
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs sm:text-sm">3. Painel de Varredura</span>
+              {scanningGroupId && (
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+              )}
+            </div>
+            <span className="text-[10px] text-amber-600 font-medium">
+              {scanningGroupId ? "Em andamento..." : lastScanInfo ? "Resultado disponível" : "Status & Progresso"}
+            </span>
+          </div>
+        </button>
       </div>
 
       {/* Tab Panels */}
       <div id="groups-panels-container" className="bg-white rounded-b-2xl border-x border-b border-gray-150 p-6 min-h-[420px] flex flex-col">
-        {activeTab === "sources" ? (
+        {activeTab === "sources" && (
           /* Source Groups Panel */
           <div id="source-groups-panel" className="flex flex-col flex-1">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-100 pb-4 mb-4 gap-3">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse" />
                 <h3 className="text-lg font-bold text-gray-800">Grupos de Origem para Buscar Anúncios</h3>
               </div>
-              <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-bold">
-                {displayedSources.filter(g => g.active).length} grupos ativos
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  id="scan-all-active-btn"
+                  type="button"
+                  onClick={handleScanAllSources}
+                  disabled={!whatsappConnected || !!scanningGroupId}
+                  className="px-3.5 py-2 rounded-xl text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  <Play className="w-3.5 h-3.5 fill-amber-700 text-amber-700" />
+                  <span>Varrer Todos os Grupos Ativos</span>
+                </button>
+                <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-full font-bold">
+                  {displayedSources.filter(g => g.active).length} ativos
+                </span>
+              </div>
             </div>
 
             <p className="text-xs text-gray-400 mb-4 leading-relaxed">
@@ -245,7 +401,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
             </p>
 
             {/* List */}
-            <div className="flex-1 overflow-y-auto space-y-3 mb-2 pr-1 max-h-[340px]">
+            <div className="flex-1 overflow-y-auto space-y-3 mb-2 pr-1 max-h-[420px]">
               {displayedSources.length === 0 ? (
                 <div className="text-center py-12 text-gray-400 text-sm flex flex-col items-center justify-center gap-3 bg-slate-50 rounded-xl border border-dashed border-gray-200">
                   <Search className="w-8 h-8 text-slate-300" />
@@ -298,14 +454,14 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
                           title={!whatsappConnected ? "Conecte o WhatsApp para buscar ofertas a partir das 06h" : "Buscar e encaminhar ofertas a partir das 06h00 sem repetição"}
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
                             scanningGroupId === group.id
-                              ? "bg-amber-100 text-amber-700 cursor-wait"
+                              ? "bg-amber-100 text-amber-800 cursor-wait border border-amber-200"
                               : !whatsappConnected
                                 ? "bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
                                 : "bg-indigo-50 text-indigo-700 hover:bg-indigo-100"
                           }`}
                         >
-                          <RefreshCw className={`w-3.5 h-3.5 ${scanningGroupId === group.id ? "animate-spin" : ""}`} />
-                          <span>{scanningGroupId === group.id ? "Buscando..." : "Buscar Ofertas (a partir das 06h)"}</span>
+                          <RefreshCw className={`w-3.5 h-3.5 ${scanningGroupId === group.id ? "animate-spin text-amber-600" : ""}`} />
+                          <span>{scanningGroupId === group.id ? "Varrendo..." : "Buscar Ofertas (a partir das 06h)"}</span>
                         </button>
 
                         <button
@@ -318,13 +474,86 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
                         </button>
                       </div>
                     </div>
-                    {scanResult && scanResult.groupId === group.id && (
-                      <div className={`text-xs px-4 py-2 rounded-lg mt-1 border ${
-                        scanResult.success 
-                          ? "bg-emerald-50 text-emerald-800 border-emerald-100 animate-fade-in" 
-                          : "bg-red-50 text-red-800 border-red-100 animate-fade-in"
+
+                    {/* Active Progress Bar Container for this specific item */}
+                    {scanningGroupId === group.id && (
+                      <div className="mt-2.5 p-4 bg-amber-50/95 border border-amber-200/90 rounded-2xl space-y-2.5 shadow-xs">
+                        <div className="flex items-center justify-between text-xs font-bold text-amber-900">
+                          <span className="flex items-center gap-2">
+                            <RefreshCw className="w-4 h-4 text-amber-700 animate-spin" />
+                            <span>Buscando ofertas em "{group.name}"...</span>
+                          </span>
+                          <span className="bg-amber-200/80 px-2 py-0.5 rounded-md text-[11px] font-mono text-amber-900">
+                            {scanProgress}%
+                          </span>
+                        </div>
+
+                        {/* Animated Progress Bar */}
+                        <div className="w-full bg-amber-200/60 rounded-full h-3.5 overflow-hidden border border-amber-300/60 shadow-inner">
+                          <div 
+                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-600 h-full transition-all duration-300 ease-out shadow-sm flex items-center justify-end pr-1.5"
+                            style={{ width: `${scanProgress}%` }}
+                          >
+                            <span className="text-[9px] font-black text-white">{scanProgress}%</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between text-[11px] text-amber-800 font-medium pt-0.5">
+                          <span>{scanStage}</span>
+                          <span className="text-[10px] text-amber-700 opacity-80">Filtro: a partir das 06:00 AM</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Scan Result Response Box printed on screen */}
+                    {scanResult && scanResult.groupId === group.id && scanningGroupId !== group.id && (
+                      <div className={`text-xs p-4 rounded-2xl mt-2.5 border flex items-start gap-3 transition-all animate-fade-in shadow-xs ${
+                        scanResult.processedCount && scanResult.processedCount > 0
+                          ? "bg-emerald-50 text-emerald-950 border-emerald-200"
+                          : scanResult.success
+                            ? "bg-amber-50/95 text-amber-950 border-amber-200"
+                            : "bg-red-50 text-red-950 border-red-200"
                       }`}>
-                        {scanResult.message}
+                        {scanResult.processedCount && scanResult.processedCount > 0 ? (
+                          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                        ) : scanResult.success ? (
+                          <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                        ) : (
+                          <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                        )}
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-xs uppercase tracking-wider opacity-90">
+                              {scanResult.processedCount && scanResult.processedCount > 0
+                                ? "Ofertas Encaminhadas com Sucesso!"
+                                : scanResult.success
+                                  ? "Resultado da Varredura no Grupo"
+                                  : "Falha na Varredura"}
+                            </span>
+                            {scanResult.timestamp && (
+                              <span className="text-[10px] font-mono text-slate-500 bg-white/70 px-2 py-0.5 rounded border border-slate-200/60">
+                                {scanResult.timestamp}
+                              </span>
+                            )}
+                          </div>
+                          
+                          {/* Printed Message Text */}
+                          <div className="p-3 bg-white/80 rounded-xl border border-slate-200/70 text-slate-700 leading-relaxed font-medium text-xs mt-1">
+                            {scanResult.message}
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-2 pt-1">
+                            <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 font-bold text-[10px] border border-slate-200">
+                              Mensagens lidas: {scanResult.messageCount || 0}
+                            </span>
+                            <span className="px-2.5 py-1 rounded-md bg-amber-100 text-amber-900 font-bold text-[10px] border border-amber-200">
+                              Ofertas achadas: {scanResult.totalFound || 0}
+                            </span>
+                            <span className="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-900 font-bold text-[10px] border border-emerald-200">
+                              Enviadas: {scanResult.processedCount || 0}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -332,7 +561,9 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
               )}
             </div>
           </div>
-        ) : (
+        )}
+
+        {activeTab === "targets" && (
           /* Target Groups Panel */
           <div id="target-groups-panel" className="flex flex-col flex-1">
             <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
@@ -408,8 +639,159 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
             </div>
           </div>
         )}
+
+        {activeTab === "scan" && (
+          /* Dedicated Scan Progress & Screen Response Panel */
+          <div id="scan-status-panel" className="flex flex-col flex-1 space-y-5">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-gray-100 pb-4 gap-3">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+                <h3 className="text-lg font-bold text-gray-800">Painel de Varredura de Ofertas</h3>
+              </div>
+              <button
+                id="run-full-scan-now-btn"
+                type="button"
+                onClick={handleScanAllSources}
+                disabled={!whatsappConnected || !!scanningGroupId}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 shadow-md shadow-amber-600/10 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              >
+                <Play className="w-3.5 h-3.5 fill-white text-white" />
+                <span>{scanningGroupId ? "Varredura Em Andamento..." : "Executar Varredura Geral Agora"}</span>
+              </button>
+            </div>
+
+            {/* Live Scanning Progress Bar Card */}
+            {scanningGroupId ? (
+              <div className="p-6 bg-gradient-to-br from-amber-50/90 via-orange-50/60 to-indigo-50/40 border border-amber-200 rounded-2xl shadow-sm space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-amber-500 text-white rounded-xl shadow-xs">
+                      <RefreshCw className="w-5 h-5 animate-spin" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-amber-950 text-sm">Varredura em Andamento</h4>
+                      <p className="text-xs text-amber-800 font-medium">
+                        Analisando grupo de origem: <span className="font-bold underline">{currentScanningName}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-lg font-black font-mono text-amber-900 bg-amber-200/90 px-3 py-1 rounded-xl border border-amber-300">
+                    {scanProgress}%
+                  </span>
+                </div>
+
+                {/* Progress Bar Track */}
+                <div className="space-y-1.5">
+                  <div className="w-full bg-amber-200/70 rounded-full h-4 overflow-hidden border border-amber-300/80 shadow-inner">
+                    <div 
+                      className="bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-600 h-full transition-all duration-300 ease-out shadow-sm flex items-center justify-end pr-2"
+                      style={{ width: `${scanProgress}%` }}
+                    >
+                      <span className="text-[10px] font-black text-white">{scanProgress}%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-semibold text-amber-900">
+                    <span>Etapa: {scanStage}</span>
+                    <span className="text-[11px] text-amber-700 font-normal">Filtro: a partir das 06:00 AM</span>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-white/80 rounded-xl border border-amber-200/80 text-xs text-amber-900 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>
+                    O sistema busca ofertas recentes nos grupos ativos, passa pela Inteligência Artificial e encaminha para os grupos de destino.
+                  </span>
+                </div>
+              </div>
+            ) : (
+              /* Display Printed Screen Response Card when completed or idle */
+              <div className="space-y-4">
+                {lastScanInfo ? (
+                  <div className={`p-6 rounded-2xl border transition-all shadow-xs space-y-4 ${
+                    lastScanInfo.processedCount && lastScanInfo.processedCount > 0
+                      ? "bg-emerald-50/90 border-emerald-200 text-emerald-950"
+                      : lastScanInfo.success
+                        ? "bg-amber-50/90 border-amber-200 text-amber-950"
+                        : "bg-red-50/90 border-red-200 text-red-950"
+                  }`}>
+                    <div className="flex items-start justify-between gap-3 border-b pb-3.5 border-slate-200/60">
+                      <div className="flex items-center gap-3">
+                        {lastScanInfo.processedCount && lastScanInfo.processedCount > 0 ? (
+                          <div className="p-2.5 bg-emerald-600 text-white rounded-xl shadow-xs">
+                            <CheckCircle2 className="w-6 h-6" />
+                          </div>
+                        ) : lastScanInfo.success ? (
+                          <div className="p-2.5 bg-amber-500 text-white rounded-xl shadow-xs">
+                            <Info className="w-6 h-6" />
+                          </div>
+                        ) : (
+                          <div className="p-2.5 bg-red-500 text-white rounded-xl shadow-xs">
+                            <AlertTriangle className="w-6 h-6" />
+                          </div>
+                        )}
+                        <div>
+                          <h4 className="font-bold text-base">
+                            {lastScanInfo.processedCount && lastScanInfo.processedCount > 0
+                              ? "✨ Varredura Concluída: Ofertas Enviadas!"
+                              : lastScanInfo.success
+                                ? "🔎 Resultado da Varredura: Nenhuma Oferta para Enviar"
+                                : "⚠️ Falha ao Realizar Varredura"}
+                          </h4>
+                          <p className="text-xs opacity-80 mt-0.5">
+                            Grupo analisado: <span className="font-bold">{lastScanInfo.groupName}</span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <span className="text-xs font-mono font-bold bg-white/80 px-3 py-1 rounded-lg border border-slate-200 shrink-0">
+                        {lastScanInfo.timestamp}
+                      </span>
+                    </div>
+
+                    {/* Primary Print Output Screen */}
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold uppercase tracking-wider opacity-75">
+                        Resposta Impressa na Tela:
+                      </span>
+                      <div className="p-4 bg-white/95 rounded-xl border border-slate-200/80 text-slate-800 leading-relaxed font-semibold text-sm shadow-2xs">
+                        {lastScanInfo.message}
+                      </div>
+                    </div>
+
+                    {/* Stat Badges */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                      <div className="p-3 bg-white/80 rounded-xl border border-slate-200 text-center">
+                        <span className="text-[10px] uppercase font-bold text-slate-400 block">Mensagens no Grupo</span>
+                        <span className="text-lg font-black text-slate-700">{lastScanInfo.messageCount || 0}</span>
+                      </div>
+                      <div className="p-3 bg-white/80 rounded-xl border border-amber-200 text-center">
+                        <span className="text-[10px] uppercase font-bold text-amber-600 block">Ofertas Shopee Achadas</span>
+                        <span className="text-lg font-black text-amber-800">{lastScanInfo.totalFound || 0}</span>
+                      </div>
+                      <div className="p-3 bg-white/80 rounded-xl border border-emerald-200 text-center">
+                        <span className="text-[10px] uppercase font-bold text-emerald-600 block">Encaminhadas p/ Destino</span>
+                        <span className="text-lg font-black text-emerald-800">{lastScanInfo.processedCount || 0}</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-16 text-gray-400 text-sm flex flex-col items-center justify-center gap-3 bg-slate-50 rounded-2xl border border-dashed border-gray-200">
+                    <Activity className="w-10 h-10 text-slate-300" />
+                    <div className="flex flex-col">
+                      <span className="font-bold text-slate-700 text-base">Nenhuma varredura recente executada</span>
+                      <span className="text-xs text-slate-400 max-w-md mt-1 mx-auto leading-relaxed">
+                        Clique em "Executar Varredura Geral Agora" acima ou acione o botão "Buscar Ofertas" em um grupo de origem especifico para acompanhar o progresso em tempo real nesta aba.
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
 

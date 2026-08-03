@@ -145,6 +145,7 @@ const state = {
     customFooter: "",
     quietStart: "08:00",
     quietEnd: "23:00",
+    automaticScanInterval: 60, // minutes
   },
   whatsapp: {
     status: "disconnected", // "disconnected", "connecting", "qr_code", "connected"
@@ -1186,8 +1187,49 @@ const whatsappEngine = new WhatsAppEngine(
 
     // Process the message and convert links (this will also send to active targets automatically inside processIncomingMessage)
     await processIncomingMessage(groupName, text, imageBuffer, imageUrl);
+  },
+  () => {
+    // On WhatsApp Connection Open
+    if (state.config.isTransmissionEnabled) {
+      scanActiveSourceGroups("Conexão WhatsApp Estabelecida");
+    }
   }
 );
+
+// Automatic scanning helper for all active source groups when the bot is turned on or reconnected
+async function scanActiveSourceGroups(triggerReason: string = "Robô Ligado") {
+  setTimeout(async () => {
+    if (!state.config.isTransmissionEnabled) {
+      return;
+    }
+
+    const activeSources = state.groups.sources.filter(s => s.active);
+    if (activeSources.length === 0) {
+      addLog("warning", `⚡ [${triggerReason}] Nenhum grupo de origem está marcado como ativo. Ative ao menos um grupo de origem na aba 'Grupos e Canais'.`);
+      return;
+    }
+
+    addLog("info", `🚀 [${triggerReason}] Iniciando varredura automática em ${activeSources.length} grupo(s) de origem ativo(s)...`);
+
+    for (const group of activeSources) {
+      try {
+        addLog("info", `🔎 Varrendo automaticamente grupo: "${group.name}"...`);
+        const result = await whatsappEngine.scanTodayMessages(group.id, async (text, imageBuffer) => {
+          return await processIncomingMessage(group.name, text, imageBuffer);
+        });
+
+        const detail = result.detailMessage || (result.processedCount > 0 
+          ? `Sucesso: ${result.processedCount} oferta(s) encaminhada(s).` 
+          : `Nenhuma oferta nova enviada.`);
+
+        addLog("info", `📊 Varredura automática em "${group.name}": ${detail}`);
+      } catch (err) {
+        addLog("error", `Erro na varredura automática do grupo "${group.name}": ${(err as Error).message}`);
+      }
+    }
+    saveStateToFile();
+  }, 400);
+}
 
 // Simulated auto-pilot background deal stream
 const SIMULATED_PRODUCTS = [
@@ -1223,7 +1265,17 @@ const SIMULATED_PRODUCTS = [
   }
 ];
 
-let autoPilotTimer: NodeJS.Timeout | null = null;
+let autoScanTimer: NodeJS.Timeout | null = null;
+
+const startAutoScanTimer = () => {
+  if (autoScanTimer) clearInterval(autoScanTimer);
+  
+  autoScanTimer = setInterval(() => {
+    if (state.config.isTransmissionEnabled && whatsappEngine.status.status === "connected") {
+      scanActiveSourceGroups("Varredura Automática Periódica");
+    }
+  }, (state.config.automaticScanInterval || 60) * 60 * 1000); // interval is in minutes
+};
 
 const startAutoPilotSimulator = () => {
   if (autoPilotTimer) clearInterval(autoPilotTimer);
@@ -1275,6 +1327,7 @@ app.post("/api/config", (req, res) => {
   addLog("info", "Configurações atualizadas com sucesso!");
   // Restart autopilot timer to apply new intervals
   startAutoPilotSimulator();
+  startAutoScanTimer();
   res.json({ success: true, config: state.config });
 });
 
@@ -1309,7 +1362,9 @@ app.post("/api/transmission/toggle", (req, res) => {
     state.history = [];
     addLog("info", "🧹 Histórico de envios limpo automaticamente ao desligar o robô.");
   } else {
-    addLog("info", "▶️ Robô de transmissão de anúncios reativado pelo usuário.");
+    addLog("info", "▶️ Robô de transmissão ativado! Iniciando varredura automática nos grupos de origem ativos...");
+    scanActiveSourceGroups("Robô Ativado");
+    startAutoScanTimer();
   }
   saveStateToFile();
   res.json({
@@ -1326,9 +1381,17 @@ app.get("/api/groups", (req, res) => {
 });
 
 app.post("/api/groups", (req, res) => {
+  const prevActive = (state.groups.sources || []).filter(s => s.active).map(s => s.id);
   if (req.body.sources) state.groups.sources = req.body.sources;
   if (req.body.targets) state.groups.targets = req.body.targets;
   addLog("info", "Lista de grupos atualizada.");
+  saveStateToFile();
+
+  const newlyActivated = (state.groups.sources || []).filter(s => s.active && !prevActive.includes(s.id));
+  if (state.config.isTransmissionEnabled && newlyActivated.length > 0) {
+    scanActiveSourceGroups("Grupo Origem Ativado");
+  }
+
   res.json({ success: true, groups: state.groups });
 });
 
@@ -1432,6 +1495,8 @@ app.post("/api/whatsapp/scan-today", async (req, res) => {
   const group = state.groups.sources.find(s => s.id === groupId);
   const groupName = group ? group.name : "Grupo Monitorado";
 
+  addLog("info", `🔍 [Varredura Solicitada] Iniciando varredura no grupo de origem "${groupName}"...`);
+
   try {
     const result = await whatsappEngine.scanTodayMessages(groupId, async (text, imageBuffer) => {
       return await processIncomingMessage(groupName, text, imageBuffer);
@@ -1440,8 +1505,13 @@ app.post("/api/whatsapp/scan-today", async (req, res) => {
     // Save updated state since history/logs may have changed
     saveStateToFile();
     
-    res.json({ success: true, ...result });
+    const finalMsg = result.detailMessage || (result.processedCount > 0 
+      ? `Sucesso! ${result.processedCount} oferta(s) encaminhada(s).`
+      : `Nenhuma oferta nova enviada.`);
+
+    res.json({ success: true, message: finalMsg, ...result });
   } catch (err) {
+    addLog("error", `Falha na varredura do grupo "${groupName}": ${(err as Error).message}`);
     res.status(500).json({ error: (err as Error).message });
   }
 });

@@ -125,6 +125,7 @@ export class WhatsAppEngine {
     imageBuffer?: Buffer,
     imageUrl?: string
   ) => Promise<void>;
+  private onConnectedCallback?: () => void;
 
   constructor(
     addLog: (type: "info" | "success" | "warning" | "error", message: string) => void,
@@ -135,11 +136,13 @@ export class WhatsAppEngine {
       text: string, 
       imageBuffer?: Buffer,
       imageUrl?: string
-    ) => Promise<void>
+    ) => Promise<void>,
+    onConnected?: () => void
   ) {
     this.addLogCallback = addLog;
     this.onGroupsDiscoveredCallback = onGroupsDiscovered;
     this.onMessageReceivedCallback = onMessageReceived;
+    this.onConnectedCallback = onConnected;
 
     // Check if session directory already exists and try to auto-reconnect
     if (fs.existsSync(this.authStatePath)) {
@@ -304,18 +307,28 @@ export class WhatsAppEngine {
           };
           this.addLogCallback("success", `🟢 Conectado com sucesso como ${userName}`);
           this.fetchAndRegisterGroups();
+          if (this.onConnectedCallback) {
+            this.onConnectedCallback();
+          }
         }
 
         if (connection === "close") {
           this.isConnecting = false;
           const err = lastDisconnect?.error as any;
           const statusCode = err?.output?.statusCode || err?.statusCode || err?.error?.output?.statusCode || Number(err?.error?.attrs?.code) || err?.output?.payload?.statusCode;
-          console.log("📡 Conexão fechada. Código:", statusCode, "Erro:", err?.message || err);
+          
+          const isStreamError = statusCode === DisconnectReason.restartRequired || statusCode === 515 || statusCode === 408 || statusCode === 503;
+          
+          if (!isStreamError) {
+            console.log("📡 Conexão fechada. Código:", statusCode, "Erro:", err?.message || err);
+          } else {
+            console.log("📡 Stream WhatsApp reiniciando (Código 515/RestartRequired)...");
+          }
           
           const wasConnected = this.status.status === "connected";
           const wasConnecting = this.status.status === "connecting" || this.status.status === "qr_code";
 
-          if (this.status.status !== "connected") {
+          if (!isStreamError && this.status.status !== "connected") {
             this.status.status = "disconnected";
           }
           this.sock = null;
@@ -324,15 +337,14 @@ export class WhatsAppEngine {
             this.addLogCallback("error", "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code.");
             this.logout();
           } else {
-            const isStreamError = statusCode === DisconnectReason.restartRequired || statusCode === 515 || statusCode === 408 || statusCode === 503;
             const shouldReconnect = isStreamError || wasConnected || wasConnecting || !lastDisconnect;
             if (shouldReconnect) {
               if (isStreamError) {
-                this.addLogCallback("info", "🔄 Atualizando canal de dados do WhatsApp (Código 515). Reconectando em 1s...");
+                this.addLogCallback("info", "🔄 Sincronizando conexão com os servidores do WhatsApp...");
               } else {
                 this.addLogCallback("info", "Reconectando em 2s...");
               }
-              setTimeout(() => this.connect(), 1000);
+              setTimeout(() => this.connect(), isStreamError ? 500 : 2000);
             } else {
               this.addLogCallback("warning", "Conexão perdida. Clique em Conectar para tentar novamente.");
               this.status.status = "disconnected";
@@ -628,7 +640,10 @@ export class WhatsAppEngine {
   }
 
   // Fetch today's messages from a specific group and process them
-  public async scanTodayMessages(groupId: string, processCallback: (text: string, imageBuffer?: Buffer) => Promise<any>): Promise<{ totalFound: number; processedCount: number }> {
+  public async scanTodayMessages(
+    groupId: string, 
+    processCallback: (text: string, imageBuffer?: Buffer) => Promise<any>
+  ): Promise<{ totalFound: number; processedCount: number; messageCount: number; detailMessage: string }> {
     if (!this.sock && this.status.status === "connected") {
       // Simulated connection fallback
       this.addLogCallback("info", `🔎 [Simulado] Buscando anúncios de hoje no grupo selecionado...`);
@@ -649,7 +664,12 @@ export class WhatsAppEngine {
         await processCallback(msg.text);
         processed++;
       }
-      return { totalFound: simulatedTodayMessages.length, processedCount: processed };
+      return { 
+        totalFound: simulatedTodayMessages.length, 
+        processedCount: processed,
+        messageCount: simulatedTodayMessages.length,
+        detailMessage: `Simulação: ${processed} oferta(s) processada(s) com sucesso.`
+      };
     }
 
     if (!this.sock) {
@@ -680,21 +700,16 @@ export class WhatsAppEngine {
     }
     messages = Array.from(uniqueMap.values());
 
-    // If no stored messages in memory for this group yet, offer sample processing fallback for immediate validation
+    // If no stored messages in memory for this group yet
     if (messages.length === 0) {
-      this.addLogCallback("info", `🔎 [Aviso] Nenhuma mensagem acumulada em memória para o grupo no momento. Gerando e testando varredura com ofertas de exemplo de hoje...`);
-      
-      const sampleOffers = [
-        "🔥 OFERTA SHOPEE DE HOJE: Caixinha de Som Bluetooth Pro à prova d'água por apenas R$ 29,90! Confira no link oficial: https://shopee.com.br/product-88123-99120 Garanta com frete grátis!",
-        "⚡ IMPERDÍVEL: Kit 3 Camisetas Masculinas Algodão Premium por R$ 49,90 na Shopee! Link direto: https://shope.ee/k9120a1 Estoque limitado!"
-      ];
-
-      let processedCount = 0;
-      for (const offerText of sampleOffers) {
-        const res = await processCallback(offerText);
-        if (res) processedCount++;
-      }
-      return { totalFound: sampleOffers.length, processedCount };
+      const noMsgDetail = "Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas.";
+      this.addLogCallback("info", `🔎 Varredura concluída: ${noMsgDetail}`);
+      return { 
+        totalFound: 0, 
+        processedCount: 0, 
+        messageCount: 0, 
+        detailMessage: noMsgDetail 
+      };
     }
 
     // Calculate boundary from 06:00 AM today (or 06:00 AM yesterday if scanning before 6 AM today)
@@ -708,10 +723,11 @@ export class WhatsAppEngine {
       minAllowedSec = Math.floor(sixAMYesterday.getTime() / 1000);
     }
 
-    this.addLogCallback("info", `🔎 Varrendo histórico do grupo a partir das 06:00 AM (${messages.length} mensagens analisadas)...`);
+    this.addLogCallback("info", `🔎 Iniciando varredura no grupo (${messages.length} mensagens analisadas a partir das 06:00 AM)...`);
     
     let totalFound = 0;
     let processedCount = 0;
+    let detailMessage = "";
     
     try {
       const seenLinksInScan = new Set<string>();
@@ -732,7 +748,7 @@ export class WhatsAppEngine {
                      m.imageMessage?.caption || 
                      m.videoMessage?.caption || 
                      "";
-                       
+                        
         if (!text) continue;
         
         // Comprehensive Shopee link detection regex
@@ -771,16 +787,21 @@ export class WhatsAppEngine {
       }
 
       if (totalFound === 0) {
-        this.addLogCallback("info", `Varredura concluída: Nenhuma oferta nova com link da Shopee encontrada a partir das 06:00 AM neste grupo.`);
+        detailMessage = `Nenhuma oferta com link da Shopee foi encontrada nas ${messages.length} mensagens analisadas de hoje (a partir das 06:00 AM).`;
+        this.addLogCallback("info", `🔎 Varredura concluída: ${detailMessage}`);
+      } else if (processedCount === 0) {
+        detailMessage = `Foram identificadas ${totalFound} oferta(s) com link da Shopee, porém todas já haviam sido enviadas anteriormente ou descartadas por repetição.`;
+        this.addLogCallback("info", `🔎 Varredura concluída: ${detailMessage}`);
       } else {
-        this.addLogCallback("success", `Varredura concluída: ${totalFound} ofertas encontradas (a partir das 06:00 AM) e ${processedCount} encaminhadas com sucesso aos grupos de destino sem repetição!`);
+        detailMessage = `Sucesso! ${totalFound} oferta(s) encontrada(s) a partir das 06:00 AM e ${processedCount} nova(s) oferta(s) reescrita(s) e encaminhada(s) para os grupos de destino!`;
+        this.addLogCallback("success", `✨ Varredura concluída: ${detailMessage}`);
       }
     } catch (err) {
       this.addLogCallback("error", `Erro ao varrer histórico do grupo: ${(err as Error).message}`);
       throw err;
     }
     
-    return { totalFound, processedCount };
+    return { totalFound, processedCount, messageCount: messages.length, detailMessage };
   }
 
   // Clear credentials and disconnect
