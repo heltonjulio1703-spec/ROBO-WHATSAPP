@@ -603,6 +603,7 @@ export default function App() {
                 onConnect={handleConnectWhatsApp}
                 onConfirmScan={handleConfirmScan}
                 onDisconnect={handleDisconnectWhatsApp}
+                isOffline={isOffline}
               />
             </motion.div>
           )}

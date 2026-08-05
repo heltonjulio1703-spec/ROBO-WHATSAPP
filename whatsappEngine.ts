@@ -344,7 +344,7 @@ export class WhatsAppEngine {
         }) as any,
         auth: state,
         printQRInTerminal: false,
-        browser: ["Ubuntu", "Chrome", "20.0.04"],
+        browser: ["Chrome (Linux)", "", ""],
         connectTimeoutMs: 60000,
         keepAliveIntervalMs: 30000,
         emitOwnEvents: true,

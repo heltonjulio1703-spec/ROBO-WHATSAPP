@@ -158,9 +158,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     }
   };
 
-  const handleAutoPilotToggle = () => {
-    setAp(!ap);
-    setSaveStatus("unsaved");
+  const handleAutoPilotToggle = async () => {
+    const nextAp = !ap;
+    setAp(nextAp);
+    setSaveStatus("saving");
+    try {
+      const updatedConfig = {
+        ...config,
+        autoPilot: nextAp,
+      };
+      setConfig(updatedConfig);
+      await saveConfig(updatedConfig);
+      setSaveStatus("saved");
+    } catch (err) {
+      console.error("Erro ao salvar piloto automático:", err);
+      setSaveStatus("unsaved");
+    }
   };
 
   return (
@@ -191,13 +204,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             <button
               id="autopilot-toggle-btn"
               onClick={handleAutoPilotToggle}
-              disabled={!whatsappConnected}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                !whatsappConnected 
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : ap 
-                    ? "bg-green-100 text-green-700 hover:bg-green-200" 
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ap 
+                  ? "bg-green-100 text-green-700 hover:bg-green-200" 
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
               {ap ? (

@@ -165,52 +165,41 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
     if (pathname === "/api/whatsapp/connect" && method === "POST") {
       const phoneNumber = bodyObj.phoneNumber;
 
-      whatsappState = {
-        status: "connecting",
-        phone: "",
-        userName: "",
-        qrCodeProgress: 15,
-        connectedAt: null,
-      };
-      setLocalStorage("shopee_bot_whatsapp", whatsappState);
       addSimulatedLog("info", "Iniciando conexão simulada do WhatsApp com servidores do WhatsApp Web...");
 
-      // Generate the code in the next tick to allow the connecting status to render
-      setTimeout(() => {
-        if (phoneNumber) {
-          const cleanPhone = phoneNumber.replace(/\D/g, "");
-          const codeChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ23456789";
-          let code1 = "";
-          let code2 = "";
-          for (let i = 0; i < 4; i++) {
-            code1 += codeChars.charAt(Math.floor(Math.random() * codeChars.length));
-            code2 += codeChars.charAt(Math.floor(Math.random() * codeChars.length));
-          }
-          const simCode = `${code1}-${code2}`;
-          whatsappState = {
-            status: "qr_code",
-            phone: "",
-            userName: "",
-            qrCodeProgress: 95,
-            connectedAt: null,
-            pairingPhone: cleanPhone,
-            pairingCode: simCode,
-          };
-          addSimulatedLog("success", `🔑 [Vercel] Código de Emparelhamento oficial gerado com sucesso: ${simCode}`);
-          addSimulatedLog("info", `Digite o código de pareamento no seu celular WhatsApp para o número +${cleanPhone}.`);
-        } else {
-          whatsappState = {
-            status: "qr_code",
-            phone: "",
-            userName: "",
-            qrCodeProgress: 95,
-            connectedAt: null,
-            qrDataUrl: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://shopee.com.br/m/afiliados-shopee?utm_source=vercel_sim_${Date.now()}`,
-          };
-          addSimulatedLog("info", "QR Code simulado gerado com sucesso! Escaneie com o WhatsApp ou clique em 'Confirmar Leitura'.");
+      if (phoneNumber) {
+        const cleanPhone = phoneNumber.replace(/\D/g, "");
+        const codeChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ23456789";
+        let code1 = "";
+        let code2 = "";
+        for (let i = 0; i < 4; i++) {
+          code1 += codeChars.charAt(Math.floor(Math.random() * codeChars.length));
+          code2 += codeChars.charAt(Math.floor(Math.random() * codeChars.length));
         }
-        setLocalStorage("shopee_bot_whatsapp", whatsappState);
-      }, 800);
+        const simCode = `${code1}-${code2}`;
+        whatsappState = {
+          status: "qr_code",
+          phone: "",
+          userName: "",
+          qrCodeProgress: 95,
+          connectedAt: null,
+          pairingPhone: cleanPhone,
+          pairingCode: simCode,
+        };
+        addSimulatedLog("success", `🔑 [Vercel] Código de Emparelhamento oficial gerado com sucesso: ${simCode}`);
+        addSimulatedLog("info", `Digite o código de pareamento no seu celular WhatsApp para o número +${cleanPhone}.`);
+      } else {
+        whatsappState = {
+          status: "qr_code",
+          phone: "",
+          userName: "",
+          qrCodeProgress: 95,
+          connectedAt: null,
+          qrDataUrl: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://shopee.com.br/m/afiliados-shopee?utm_source=vercel_sim_${Date.now()}`,
+        };
+        addSimulatedLog("info", "QR Code simulado gerado com sucesso! Escaneie com o WhatsApp ou clique em 'Confirmar Leitura'.");
+      }
+      setLocalStorage("shopee_bot_whatsapp", whatsappState);
 
       return createMockResponse(whatsappState);
     }

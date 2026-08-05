@@ -8,6 +8,7 @@ interface WhatsAppViewProps {
   onConnect: (phoneNumber?: string) => Promise<void>;
   onConfirmScan?: () => Promise<void>;
   onDisconnect: () => Promise<void>;
+  isOffline?: boolean;
 }
 
 export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
@@ -15,6 +16,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   onConnect,
   onConfirmScan,
   onDisconnect,
+  isOffline = false,
 }) => {
   const [loading, setLoading] = React.useState(false);
   const [countdown, setCountdown] = React.useState(30);
@@ -295,40 +297,70 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               
               {status.pairingCode ? (
                 /* Pairing Code Graphic Representation */
-                <div className="p-6 bg-indigo-50/50 rounded-2xl border border-indigo-100 text-center space-y-4 w-full max-w-xs">
-                  <span className="text-xs font-semibold uppercase text-indigo-600 tracking-wider">Código de Conexão</span>
-                  <div className="text-3xl md:text-4xl font-extrabold tracking-widest font-mono bg-white text-indigo-700 border border-indigo-200 rounded-2xl px-6 py-4 shadow-sm select-all">
-                    {status.pairingCode}
+                <div className="flex flex-col items-center">
+                  <div className="p-6 bg-indigo-50/50 rounded-2xl border border-indigo-100 text-center space-y-4 w-full max-w-xs">
+                    <span className="text-xs font-semibold uppercase text-indigo-600 tracking-wider">Código de Conexão</span>
+                    <div className="text-3xl md:text-4xl font-extrabold tracking-widest font-mono bg-white text-indigo-700 border border-indigo-200 rounded-2xl px-6 py-4 shadow-sm select-all">
+                      {status.pairingCode}
+                    </div>
+                    <div className="text-[11px] text-gray-400">
+                      Gerado para: <strong className="text-gray-600">+{status.pairingPhone}</strong>
+                    </div>
                   </div>
-                  <div className="text-[11px] text-gray-400">
-                    Gerado para: <strong className="text-gray-600">+{status.pairingPhone}</strong>
-                  </div>
+                  {isOffline && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 mt-4 max-w-xs text-left shadow-xs">
+                      <p className="font-bold mb-1 flex items-center gap-1 text-amber-800">
+                        ⚠️ Código de Teste (Simulado)
+                      </p>
+                      <p className="leading-relaxed text-slate-600">
+                        Este site está rodando em modo de demonstração (Vercel sem servidor). O código gerado é <strong>apenas fictício</strong> e não funcionará se digitado no seu celular real.
+                      </p>
+                      <p className="leading-relaxed mt-2 text-slate-600 font-medium">
+                        Para ativar e testar todas as funcionalidades, use o botão verde abaixo: <strong>"Confirmar Leitura / Simular Conexão"</strong>!
+                      </p>
+                    </div>
+                  )}
                 </div>
               ) : (
                 /* QR Code Graphic Representation */
-                <div className="relative p-6 bg-slate-50 rounded-2xl border border-gray-200">
-                  <div className="w-52 h-52 flex flex-col items-center justify-center gap-1 bg-white p-4 rounded-xl border border-gray-100 shadow-inner">
-                    {status.qrDataUrl ? (
-                      <img
-                        src={status.qrDataUrl}
-                        alt="WhatsApp QR Code"
-                        className="w-44 h-44 object-contain"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <div className="flex flex-col items-center justify-center h-full text-center p-2">
-                        <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mb-2" />
-                        <p className="text-xs text-gray-500 font-medium">Gerando QR Code oficial do WhatsApp...</p>
-                      </div>
-                    )}
-                  </div>
+                <div className="flex flex-col items-center">
+                  <div className="relative p-6 bg-slate-50 rounded-2xl border border-gray-200">
+                    <div className="w-52 h-52 flex flex-col items-center justify-center gap-1 bg-white p-4 rounded-xl border border-gray-100 shadow-inner">
+                      {status.qrDataUrl ? (
+                        <img
+                          src={status.qrDataUrl}
+                          alt="WhatsApp QR Code"
+                          className="w-44 h-44 object-contain"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-center p-2">
+                          <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mb-2" />
+                          <p className="text-xs text-gray-500 font-medium">Gerando QR Code oficial do WhatsApp...</p>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Expiration warning block */}
-                  <div className="absolute inset-0 bg-white/95 backdrop-blur-xs flex flex-col items-center justify-center rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-350 cursor-pointer p-4 text-center">
-                    <QrCode className="w-8 h-8 text-indigo-600 mb-2 animate-bounce" />
-                    <p className="text-xs font-bold text-gray-700">QR Code Oficial</p>
-                    <p className="text-[10px] text-gray-400 mt-1">Atualiza a cada 30 segundos para segurança.</p>
+                    {/* Expiration warning block */}
+                    <div className="absolute inset-0 bg-white/95 backdrop-blur-xs flex flex-col items-center justify-center rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-350 cursor-pointer p-4 text-center">
+                      <QrCode className="w-8 h-8 text-indigo-600 mb-2 animate-bounce" />
+                      <p className="text-xs font-bold text-gray-700">QR Code Oficial</p>
+                      <p className="text-[10px] text-gray-400 mt-1">Atualiza a cada 30 segundos para segurança.</p>
+                    </div>
                   </div>
+                  {isOffline && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 mt-4 max-w-xs text-left shadow-xs">
+                      <p className="font-bold mb-1 flex items-center gap-1 text-amber-800">
+                        ⚠️ QR Code de Teste (Simulado)
+                      </p>
+                      <p className="leading-relaxed text-slate-600">
+                        Este site está rodando em modo de demonstração (Vercel sem servidor). O QR Code é <strong>apenas fictício</strong> e não funcionará no celular real.
+                      </p>
+                      <p className="leading-relaxed mt-2 text-slate-600 font-medium">
+                        Para ativar e testar todas as funcionalidades, use o botão verde abaixo: <strong>"Confirmar Leitura / Simular Conexão"</strong>!
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
