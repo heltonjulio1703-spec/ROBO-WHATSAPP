@@ -76,8 +76,8 @@ declare global {
     isOfflineMode: boolean;
   }
 }
-// Default to true synchronously so that first render/fetches are intercepted immediately with mock data
-window.isOfflineMode = true;
+// Default to false so that real server endpoints are accessed by default.
+window.isOfflineMode = false;
 
 // Helper to append a simulated log entry
 const addSimulatedLog = (type: "info" | "success" | "warning" | "error", message: string) => {
@@ -98,14 +98,14 @@ const checkBackendAvailability = async () => {
     if (res.ok && contentType && contentType.includes("application/json")) {
       console.log("🟢 API real detectada e conectada. Usando backend de produção.");
       window.isOfflineMode = false;
-      // Dispatch custom event so App.tsx can update its state and fetch real data
-      window.dispatchEvent(new CustomEvent("backend-detected"));
     } else {
-      console.warn("⚠️ API real não encontrada ou retornou 404 (provavelmente rodando no Vercel estático). Mantendo Modo de Demonstração 100% Client-Side.");
+      console.warn("⚠️ API real não encontrada ou retornou 404. Ativando Modo de Demonstração 100% Client-Side.");
+      window.isOfflineMode = true;
       addSimulatedLog("warning", "⚠️ [Vercel] Executando em ambiente estático. Modo de Conexão Simulada ativo.");
     }
   } catch (err) {
-    console.warn("⚠️ Falha de rede para API local. Mantendo Modo de Demonstração.", err);
+    console.warn("⚠️ Falha de rede para API local. Ativando Modo de Demonstração.", err);
+    window.isOfflineMode = true;
   }
 };
 
