@@ -15,13 +15,40 @@ import {
   AlertCircle,
   HelpCircle,
   ExternalLink,
-  DollarSign
+  DollarSign,
+  Laptop,
+  Monitor
 } from "lucide-react";
 import { motion } from "motion/react";
 
 export default function App() {
   const [activeTab, setActiveTab] = React.useState<"dashboard" | "whatsapp" | "groups" | "history">("dashboard");
   
+  // Platform Detection & Layout Customization
+  const [detectedPlatform, setDetectedPlatform] = React.useState<"mobile" | "desktop">("desktop");
+  const [layoutMode, setLayoutMode] = React.useState<"auto" | "mobile" | "desktop">("auto");
+
+  React.useEffect(() => {
+    const detect = () => {
+      const ua = navigator.userAgent;
+      const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+      const isSmallScreen = window.innerWidth < 768;
+      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+      
+      if (isSmallScreen || isMobileUA || (isTouch && isSmallScreen)) {
+        setDetectedPlatform("mobile");
+      } else {
+        setDetectedPlatform("desktop");
+      }
+    };
+
+    detect();
+    window.addEventListener("resize", detect);
+    return () => window.removeEventListener("resize", detect);
+  }, []);
+
+  const isMobileLayout = layoutMode === "mobile" || (layoutMode === "auto" && detectedPlatform === "mobile");
+
   // App States
   const [config, setConfig] = React.useState<AppConfig>({
     affiliateId: "heltonjulio1703",
@@ -320,100 +347,200 @@ export default function App() {
       
       {/* Top Professional Header Bar */}
       <header id="app-workspace-header" className="bg-white border-b border-gray-100 sticky top-0 z-40 shrink-0">
-        <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-indigo-600 text-white p-2.5 rounded-xl flex items-center justify-center shadow-md shadow-indigo-600/10">
-              <Bot className="w-5.5 h-5.5" />
+        <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="bg-indigo-600 text-white p-2 rounded-xl flex items-center justify-center shadow-md shadow-indigo-600/10 shrink-0">
+              <Bot className="w-5 h-5" />
             </div>
-            <div>
-              <span className="text-xs font-bold text-indigo-600 tracking-wider uppercase block">Soluções Afiliados</span>
-              <h1 className="text-base font-black text-gray-800 tracking-tight">Auto-Post Afiliados</h1>
+            <div className="min-w-0">
+              {!isMobileLayout && (
+                <span className="text-[10px] font-bold text-indigo-600 tracking-wider uppercase block truncate">Soluções Afiliados</span>
+              )}
+              <h1 className="text-sm sm:text-base font-black text-gray-800 tracking-tight truncate">Auto-Post Afiliados</h1>
             </div>
           </div>
 
           {/* Right quick connection badge */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             
             {/* Transmission Toggle Button */}
             <button
               onClick={handleToggleTransmission}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                 config.isTransmissionEnabled 
-                  ? "bg-green-100 text-green-700 hover:bg-green-200 border border-green-200" 
-                  : "bg-red-100 text-red-700 hover:bg-red-200 border border-red-200"
+                  ? "bg-green-50 text-green-700 hover:bg-green-100 border border-green-200" 
+                  : "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
               }`}
             >
-              <div className={`w-2 h-2 rounded-full ${config.isTransmissionEnabled ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
-              {config.isTransmissionEnabled ? "ROBÔ LIGADO" : "ROBÔ DESLIGADO"}
+              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${config.isTransmissionEnabled ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+              <span>{config.isTransmissionEnabled ? (isMobileLayout ? "LIGADO" : "ROBÔ LIGADO") : (isMobileLayout ? "DESLIGADO" : "ROBÔ DESLIGADO")}</span>
             </button>
 
-
-
             {/* Simulated Session Status Badges */}
-            <div className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 select-none ${
+            <div className={`px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 select-none ${
               whatsapp.status === "connected"
                 ? "bg-green-50 text-green-700 border-green-150"
                 : "bg-gray-50 text-gray-500 border-gray-200"
             }`}>
-              <span className={`w-2 h-2 rounded-full ${
+              <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${
                 whatsapp.status === "connected" ? "bg-green-500 animate-pulse" : "bg-gray-400"
               }`} />
-              {whatsapp.status === "connected" ? "WhatsApp Conectado" : "WhatsApp Inativo"}
+              <span className={isMobileLayout ? "hidden xs:inline" : ""}>
+                {whatsapp.status === "connected" ? "WhatsApp Conectado" : "WhatsApp Inativo"}
+              </span>
+              {isMobileLayout && whatsapp.status !== "connected" && <span className="xs:hidden">Off</span>}
+              {isMobileLayout && whatsapp.status === "connected" && <span className="xs:hidden">On</span>}
             </div>
 
-            <div className="w-px h-6 bg-gray-200" />
-
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold text-xs">
-                HJ
-              </div>
-              <span className="hidden md:inline text-xs font-semibold text-gray-600">Helton Julio</span>
-            </div>
+            {!isMobileLayout && (
+              <>
+                <div className="w-px h-6 bg-gray-200" />
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-bold text-xs">
+                    HJ
+                  </div>
+                  <span className="hidden md:inline text-xs font-semibold text-gray-600">Helton Julio</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </header>
 
       {/* Main Workspace Layout */}
-      <div id="app-workspace-body" className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-6 py-6 flex flex-col gap-6">
-        
-        {/* Navigation Tabs Bar */}
-        <nav id="app-navigation-tabs" className="bg-white p-1 rounded-xl border border-gray-150 flex flex-wrap gap-1 sticky top-18 z-30 shadow-xs">
-          {[
-            { id: "dashboard", label: "Painel de Controle", icon: Bot },
-            { id: "whatsapp", label: "Conexão WhatsApp", icon: Smartphone, badge: whatsapp.status !== "connected" ? "!" : undefined },
-            { id: "groups", label: "Grupos e Canais", icon: Layers, badge: `${groups.sources.filter(s => s.active).length}»${groups.targets.filter(t => t.active).length}` },
-            { id: "history", label: "Histórico de Envios", icon: History, badge: history.length > 0 ? String(history.length) : undefined },
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                id={`nav-tab-${tab.id}`}
-                onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  isActive
-                    ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/10"
-                    : "text-gray-500 hover:text-gray-800 hover:bg-slate-50"
-                }`}
-              >
-                <Icon className="w-4 h-4 shrink-0" />
-                <span>{tab.label}</span>
-                {tab.badge && (
-                  <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-extrabold tracking-wide ${
-                    isActive 
-                      ? "bg-indigo-800 text-indigo-100" 
-                      : tab.badge === "!"
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-gray-100 text-gray-600"
-                  }`}>
-                    {tab.badge}
+      <div 
+        id="app-workspace-body" 
+        className={`flex-1 max-w-7xl w-full mx-auto flex flex-col gap-5 ${
+          isMobileLayout ? "px-2 py-4 pb-28" : "px-4 lg:px-6 py-6"
+        }`}
+      >
+        {/* Platform Control Panel */}
+        <div className="bg-white border border-slate-100 rounded-xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-xs">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 font-semibold">
+              {detectedPlatform === "mobile" ? <Smartphone className="w-4 h-4" /> : <Laptop className="w-4 h-4" />}
+            </div>
+            <div>
+              <span className="font-semibold text-slate-700">Plataforma: </span>
+              <span className="font-bold text-indigo-600 bg-indigo-50/50 px-2.5 py-0.5 rounded-full capitalize">
+                {detectedPlatform === "mobile" ? "📱 Celular Detectado" : "💻 Computador Detectado"}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg shrink-0">
+            <button
+              onClick={() => setLayoutMode("auto")}
+              className={`px-2.5 py-1.5 rounded-md font-bold text-[11px] transition-all cursor-pointer ${
+                layoutMode === "auto"
+                  ? "bg-white text-slate-800 shadow-xs"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              Auto
+            </button>
+            <button
+              onClick={() => setLayoutMode("desktop")}
+              className={`px-2.5 py-1.5 rounded-md font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer ${
+                layoutMode === "desktop"
+                  ? "bg-white text-indigo-600 shadow-xs"
+                  : "text-slate-500 hover:text-indigo-600"
+              }`}
+            >
+              <Laptop className="w-3 h-3" />
+              Desktop
+            </button>
+            <button
+              onClick={() => setLayoutMode("mobile")}
+              className={`px-2.5 py-1.5 rounded-md font-bold text-[11px] flex items-center gap-1 transition-all cursor-pointer ${
+                layoutMode === "mobile"
+                  ? "bg-white text-indigo-600 shadow-xs"
+                  : "text-slate-500 hover:text-indigo-600"
+              }`}
+            >
+              <Smartphone className="w-3 h-3" />
+              Mobile
+            </button>
+          </div>
+        </div>
+
+        {/* Navigation Tabs Bar - Top for Desktop, Bottom Fixed for Mobile */}
+        {!isMobileLayout ? (
+          <nav id="app-navigation-tabs" className="bg-white p-1 rounded-xl border border-gray-150 flex flex-wrap gap-1 sticky top-18 z-30 shadow-xs">
+            {[
+              { id: "dashboard", label: "Painel de Controle", icon: Bot },
+              { id: "whatsapp", label: "Conexão WhatsApp", icon: Smartphone, badge: whatsapp.status !== "connected" ? "!" : undefined },
+              { id: "groups", label: "Grupos e Canais", icon: Layers, badge: `${groups.sources.filter(s => s.active).length}»${groups.targets.filter(t => t.active).length}` },
+              { id: "history", label: "Histórico de Envios", icon: History, badge: history.length > 0 ? String(history.length) : undefined },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  id={`nav-tab-${tab.id}`}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    isActive
+                      ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/10"
+                      : "text-gray-500 hover:text-gray-800 hover:bg-slate-50"
+                  }`}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{tab.label}</span>
+                  {tab.badge && (
+                    <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-extrabold tracking-wide ${
+                      isActive 
+                        ? "bg-indigo-800 text-indigo-100" 
+                        : tab.badge === "!"
+                          ? "bg-amber-100 text-amber-700"
+                          : "bg-gray-100 text-gray-600"
+                    }`}>
+                      {tab.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        ) : (
+          /* High-Fidelity Fixed Mobile Bottom Navigation Tab bar */
+          <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-150 py-2.5 px-3 z-50 flex items-center justify-around shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+            {[
+              { id: "dashboard", label: "Controle", icon: Bot },
+              { id: "whatsapp", label: "WhatsApp", icon: Smartphone, badge: whatsapp.status !== "connected" ? "!" : undefined },
+              { id: "groups", label: "Grupos", icon: Layers, badge: `${groups.sources.filter(s => s.active).length}»${groups.targets.filter(t => t.active).length}` },
+              { id: "history", label: "Histórico", icon: History, badge: history.length > 0 ? String(history.length) : undefined },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as typeof activeTab)}
+                  className="flex flex-col items-center justify-center gap-1 flex-1 relative py-1 cursor-pointer"
+                >
+                  <div className="relative">
+                    <Icon className={`w-5 h-5 transition-transform ${isActive ? "text-indigo-600 scale-110" : "text-gray-400"}`} />
+                    {tab.badge && (
+                      <span className={`absolute -top-1.5 -right-2 px-1 rounded-full text-[8px] font-black leading-none ${
+                        isActive 
+                          ? "bg-indigo-600 text-white" 
+                          : tab.badge === "!"
+                            ? "bg-amber-500 text-white"
+                            : "bg-indigo-100 text-indigo-700"
+                      }`}>
+                        {tab.badge}
+                      </span>
+                    )}
+                  </div>
+                  <span className={`text-[10px] font-bold ${isActive ? "text-indigo-600" : "text-gray-400"}`}>
+                    {tab.label}
                   </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
+                </button>
+              );
+            })}
+          </nav>
+        )}
 
         {/* Tab View Switcher with animations */}
         <main id="app-view-viewport" className="flex-1 min-h-[500px]">
