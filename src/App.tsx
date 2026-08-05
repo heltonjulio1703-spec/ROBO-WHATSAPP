@@ -75,6 +75,7 @@ export default function App() {
   const [logs, setLogs] = React.useState<LogItem[]>([]);
   const [history, setHistory] = React.useState<HistoryItem[]>([]);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [isOffline, setIsOffline] = React.useState(window.isOfflineMode);
 
   // Toast State for iframe-safe external link guidance
   const [showToast, setShowToast] = React.useState(false);
@@ -174,6 +175,18 @@ export default function App() {
   React.useEffect(() => {
     fetchAllData();
 
+    // Check for offline/Vercel simulation mode
+    const offlineTimer = setInterval(() => {
+      setIsOffline(window.isOfflineMode);
+    }, 500);
+
+    // If actual backend is subsequently detected, disable offline/simulation and reload real data
+    const handleBackendDetected = () => {
+      setIsOffline(false);
+      fetchAllData();
+    };
+    window.addEventListener("backend-detected", handleBackendDetected);
+
     // Set polling for logs, history and WhatsApp status so UI stays fully in sync
     const interval = setInterval(() => {
       fetch("/api/whatsapp/status")
@@ -192,7 +205,11 @@ export default function App() {
         .catch(() => {});
     }, 1500);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      clearInterval(offlineTimer);
+      window.removeEventListener("backend-detected", handleBackendDetected);
+    };
   }, []);
 
   const handleSaveConfig = async (newConfig: AppConfig) => {
@@ -420,16 +437,24 @@ export default function App() {
       >
         {/* Platform Control Panel */}
         <div className="bg-white border border-slate-100 rounded-xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs shadow-xs">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 font-semibold">
-              {detectedPlatform === "mobile" ? <Smartphone className="w-4 h-4" /> : <Laptop className="w-4 h-4" />}
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 font-semibold">
+                {detectedPlatform === "mobile" ? <Smartphone className="w-4 h-4" /> : <Laptop className="w-4 h-4" />}
+              </div>
+              <div>
+                <span className="font-semibold text-slate-700">Plataforma: </span>
+                <span className="font-bold text-indigo-600 bg-indigo-50/50 px-2.5 py-0.5 rounded-full capitalize">
+                  {detectedPlatform === "mobile" ? "📱 Celular Detectado" : "💻 Computador Detectado"}
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="font-semibold text-slate-700">Plataforma: </span>
-              <span className="font-bold text-indigo-600 bg-indigo-50/50 px-2.5 py-0.5 rounded-full capitalize">
-                {detectedPlatform === "mobile" ? "📱 Celular Detectado" : "💻 Computador Detectado"}
-              </span>
-            </div>
+            {isOffline && (
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-amber-800 bg-amber-50 border border-amber-200">
+                <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0 animate-pulse" />
+                <span className="font-bold">Modo de Demonstração (Vercel) Ativo</span>
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg shrink-0">
             <button
