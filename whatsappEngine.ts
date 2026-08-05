@@ -344,7 +344,7 @@ export class WhatsAppEngine {
         }) as any,
         auth: state,
         printQRInTerminal: false,
-        browser: ["Chrome (Linux)", "Chrome", "110.0.0"],
+        browser: ["Ubuntu", "Chrome", "20.0.04"],
         connectTimeoutMs: 60000,
         keepAliveIntervalMs: 30000,
         emitOwnEvents: true,
@@ -362,22 +362,54 @@ export class WhatsAppEngine {
           this.status.qrCodeProgress = 40;
           this.addLogCallback("info", `Aguardando registro inicial para solicitar código de emparelhamento para +${cleanPhone}...`);
           
-          setTimeout(async () => {
+          let pairingCodeRequested = false;
+          let retryCount = 0;
+          const maxRetries = 15;
+          
+          const requestPairing = async () => {
+            if (pairingCodeRequested) {
+              clearInterval(pairingInterval);
+              return;
+            }
+            if (!this.sock) {
+              clearInterval(pairingInterval);
+              return;
+            }
+            
             try {
-              if (this.sock && !this.sock.authState.creds.registered) {
-                this.addLogCallback("info", `Enviando solicitação de código de emparelhamento oficial para +${cleanPhone}...`);
+              if (!this.sock.authState.creds.registered) {
+                this.addLogCallback("info", `Enviando solicitação de código de emparelhamento oficial para +${cleanPhone} (Tentativa ${retryCount + 1}/${maxRetries})...`);
                 const code = await this.sock.requestPairingCode(cleanPhone);
                 this.status.pairingCode = code;
                 this.status.qrCodeProgress = 95;
+                pairingCodeRequested = true;
                 this.addLogCallback("success", `🔑 Código de Emparelhamento oficial gerado com sucesso: ${code}`);
+                clearInterval(pairingInterval);
               } else {
-                this.addLogCallback("error", "Não foi possível gerar o código de emparelhamento. Verifique se o WhatsApp já está registrado.");
+                this.addLogCallback("warning", "O WhatsApp já consta como registrado nesta sessão.");
+                clearInterval(pairingInterval);
               }
             } catch (err) {
-              console.error("Erro ao gerar pairing code:", err);
-              this.addLogCallback("error", `Falha ao solicitar código de emparelhamento: ${(err as Error).message}`);
+              const errMsg = (err as Error).message || "";
+              console.warn(`Tentativa ${retryCount + 1} de gerar pairing code falhou:`, errMsg);
+              
+              if (errMsg.includes("registered")) {
+                this.addLogCallback("warning", "Aparelho já registrado. Não foi possível solicitar código de emparelhamento.");
+                clearInterval(pairingInterval);
+                return;
+              }
+              
+              retryCount++;
+              if (retryCount >= maxRetries) {
+                this.addLogCallback("error", `Falha ao solicitar código de emparelhamento após ${maxRetries} tentativas: ${errMsg}`);
+                clearInterval(pairingInterval);
+              }
             }
-          }, 3000);
+          };
+          
+          const pairingInterval = setInterval(requestPairing, 3500);
+          // Run first attempt after 2 seconds to allow WebSocket to hand-shake
+          setTimeout(requestPairing, 2000);
         }
       }
 
