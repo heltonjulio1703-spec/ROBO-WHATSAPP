@@ -13,6 +13,7 @@ interface WhatsAppViewProps {
 export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   status,
   onConnect,
+  onConfirmScan,
   onDisconnect,
 }) => {
   const [loading, setLoading] = React.useState(false);
@@ -208,6 +209,22 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
                 <p className="text-xs text-gray-400 mt-2">
                   O código expira e renova em <strong className="text-gray-600 font-semibold">{countdown}s</strong>
                 </p>
+
+                {/* Simulated scan confirmation button for easy testing / Vercel compatibility */}
+                {onConfirmScan && (
+                  <button
+                    onClick={async () => {
+                      setLoading(true);
+                      await onConfirmScan();
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+                  >
+                    <ShieldCheck className="w-4 h-4" />
+                    Confirmar Leitura / Simular Conexão
+                  </button>
+                )}
               </div>
 
             </div>

@@ -1439,6 +1439,9 @@ app.post("/api/whatsapp/connect", async (req, res) => {
 
 // Endpoint for status check
 app.post("/api/whatsapp/confirm-scan", (req, res) => {
+  if (whatsappEngine.status.status === "qr_code") {
+    whatsappEngine.simulateSuccessfulConnection();
+  }
   res.json(whatsappEngine.status);
 });
 
