@@ -9,7 +9,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
-    title: "Robô de Afiliados Shopee",
+    title: "Auto-Post Afiliados",
     icon: path.join(__dirname, 'public', 'favicon.ico'),
     webPreferences: {
       nodeIntegration: false,

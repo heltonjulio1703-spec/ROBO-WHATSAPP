@@ -1,5 +1,5 @@
 {
-  "name": "Robô de Afiliados Shopee para WhatsApp",
+  "name": "Auto-Post Afiliados",
   "description": "Robô inteligente de afiliados que monitora grupos do WhatsApp, extrai anúncios da Shopee, converte para seu ID de afiliado e encaminha automaticamente para seus grupos selecionados.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

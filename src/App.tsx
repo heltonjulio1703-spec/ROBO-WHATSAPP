@@ -327,7 +327,7 @@ export default function App() {
             </div>
             <div>
               <span className="text-xs font-bold text-indigo-600 tracking-wider uppercase block">Soluções Afiliados</span>
-              <h1 className="text-base font-black text-gray-800 tracking-tight">Robô Shopee Auto-Post</h1>
+              <h1 className="text-base font-black text-gray-800 tracking-tight">Auto-Post Afiliados</h1>
             </div>
           </div>
 
@@ -347,20 +347,7 @@ export default function App() {
               {config.isTransmissionEnabled ? "ROBÔ LIGADO" : "ROBÔ DESLIGADO"}
             </button>
 
-            {/* Shopee Program Helper */}
-            <a 
-              href="https://afiliados.shopee.com.br/"
-              onClick={handleOpenShopeePanel}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
-              title="Acessar painel ou copiar link"
-            >
-              <DollarSign className="w-3.5 h-3.5 text-orange-600" />
-              <span className="hidden md:inline">Painel Shopee Afiliados</span>
-              <span className="inline md:hidden">Painel Shopee</span>
-              <ExternalLink className="w-3 h-3 ml-0.5 opacity-70" />
-            </a>
+
 
             {/* Simulated Session Status Badges */}
             <div className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 select-none ${
