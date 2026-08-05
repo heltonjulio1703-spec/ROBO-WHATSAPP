@@ -642,11 +642,15 @@ export class WhatsAppEngine {
   // Fetch today's messages from a specific group and process them
   public async scanTodayMessages(
     groupId: string, 
-    processCallback: (text: string, imageBuffer?: Buffer) => Promise<any>
+    processCallback: (text: string, imageBuffer?: Buffer) => Promise<any>,
+    sinceTimestampMs?: number
   ): Promise<{ totalFound: number; processedCount: number; messageCount: number; detailMessage: string }> {
     if (!this.sock && this.status.status === "connected") {
       // Simulated connection fallback
-      this.addLogCallback("info", `🔎 [Simulado] Buscando anúncios de hoje no grupo selecionado...`);
+      const timeString = sinceTimestampMs 
+        ? new Date(sinceTimestampMs).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+        : "ativação";
+      this.addLogCallback("info", `🔎 [Simulado] Buscando anúncios no grupo selecionado a partir das ${timeString}...`);
       
       const simulatedTodayMessages = [
         {
@@ -712,18 +716,16 @@ export class WhatsAppEngine {
       };
     }
 
-    // Calculate boundary from 06:00 AM today (or 06:00 AM yesterday if scanning before 6 AM today)
-    const sixAMToday = new Date();
-    sixAMToday.setHours(6, 0, 0, 0);
-    let minAllowedSec = Math.floor(sixAMToday.getTime() / 1000);
-    if (Date.now() < sixAMToday.getTime()) {
-      const sixAMYesterday = new Date();
-      sixAMYesterday.setDate(sixAMYesterday.getDate() - 1);
-      sixAMYesterday.setHours(6, 0, 0, 0);
-      minAllowedSec = Math.floor(sixAMYesterday.getTime() / 1000);
-    }
+    // Calculate boundary from sinceTimestampMs or fallback to 24h ago
+    let minAllowedSec = sinceTimestampMs 
+      ? Math.floor(sinceTimestampMs / 1000) 
+      : Math.floor((Date.now() - 24 * 60 * 60 * 1000) / 1000);
 
-    this.addLogCallback("info", `🔎 Iniciando varredura no grupo (${messages.length} mensagens analisadas a partir das 06:00 AM)...`);
+    const timeString = sinceTimestampMs 
+      ? new Date(sinceTimestampMs).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+      : "ativação";
+
+    this.addLogCallback("info", `🔎 Iniciando varredura no grupo (${messages.length} mensagens analisadas a partir do horário de ativação do robô às ${timeString})...`);
     
     let totalFound = 0;
     let processedCount = 0;
@@ -787,13 +789,13 @@ export class WhatsAppEngine {
       }
 
       if (totalFound === 0) {
-        detailMessage = `Nenhuma oferta com link da Shopee foi encontrada nas ${messages.length} mensagens analisadas de hoje (a partir das 06:00 AM).`;
+        detailMessage = `Nenhuma oferta com link da Shopee foi encontrada nas ${messages.length} mensagens analisadas (a partir das ${timeString}).`;
         this.addLogCallback("info", `🔎 Varredura concluída: ${detailMessage}`);
       } else if (processedCount === 0) {
         detailMessage = `Foram identificadas ${totalFound} oferta(s) com link da Shopee, porém todas já haviam sido enviadas anteriormente ou descartadas por repetição.`;
         this.addLogCallback("info", `🔎 Varredura concluída: ${detailMessage}`);
       } else {
-        detailMessage = `Sucesso! ${totalFound} oferta(s) encontrada(s) a partir das 06:00 AM e ${processedCount} nova(s) oferta(s) reescrita(s) e encaminhada(s) para os grupos de destino!`;
+        detailMessage = `Sucesso! ${totalFound} oferta(s) encontrada(s) a partir das ${timeString} e ${processedCount} nova(s) oferta(s) reescrita(s) e encaminhada(s) para os grupos de destino!`;
         this.addLogCallback("success", `✨ Varredura concluída: ${detailMessage}`);
       }
     } catch (err) {

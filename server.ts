@@ -146,6 +146,7 @@ const state = {
     quietStart: "08:00",
     quietEnd: "23:00",
     automaticScanInterval: 60, // minutes
+    robotActivationTime: Date.now(), // timestamp of robot activation
   },
   whatsapp: {
     status: "disconnected", // "disconnected", "connecting", "qr_code", "connected"
@@ -1214,9 +1215,13 @@ async function scanActiveSourceGroups(triggerReason: string = "Robô Ligado") {
     for (const group of activeSources) {
       try {
         addLog("info", `🔎 Varrendo automaticamente grupo: "${group.name}"...`);
-        const result = await whatsappEngine.scanTodayMessages(group.id, async (text, imageBuffer) => {
-          return await processIncomingMessage(group.name, text, imageBuffer);
-        });
+        const result = await whatsappEngine.scanTodayMessages(
+          group.id, 
+          async (text, imageBuffer) => {
+            return await processIncomingMessage(group.name, text, imageBuffer);
+          },
+          state.config.robotActivationTime
+        );
 
         const detail = result.detailMessage || (result.processedCount > 0 
           ? `Sucesso: ${result.processedCount} oferta(s) encaminhada(s).` 
@@ -1266,6 +1271,7 @@ const SIMULATED_PRODUCTS = [
 ];
 
 let autoScanTimer: NodeJS.Timeout | null = null;
+let autoPilotTimer: NodeJS.Timeout | null = null;
 
 const startAutoScanTimer = () => {
   if (autoScanTimer) clearInterval(autoScanTimer);
@@ -1315,6 +1321,10 @@ const startAutoPilotSimulator = () => {
   }, state.config.autoPilotInterval * 1000);
 };
 
+// Initialize background tasks on server boot
+startAutoPilotSimulator();
+startAutoScanTimer();
+
 // API Routes
 
 // Configs
@@ -1359,9 +1369,9 @@ app.post("/api/shopee/test", async (req, res) => {
 app.post("/api/transmission/toggle", (req, res) => {
   state.config.isTransmissionEnabled = !state.config.isTransmissionEnabled;
   if (!state.config.isTransmissionEnabled) {
-    state.history = [];
-    addLog("info", "🧹 Histórico de envios limpo automaticamente ao desligar o robô.");
+    addLog("info", "⏸️ Robô de transmissão desativado.");
   } else {
+    state.config.robotActivationTime = Date.now();
     addLog("info", "▶️ Robô de transmissão ativado! Iniciando varredura automática nos grupos de origem ativos...");
     scanActiveSourceGroups("Robô Ativado");
     startAutoScanTimer();
@@ -1370,7 +1380,7 @@ app.post("/api/transmission/toggle", (req, res) => {
   res.json({
     success: true,
     isTransmissionEnabled: state.config.isTransmissionEnabled,
-    historyCleared: !state.config.isTransmissionEnabled,
+    historyCleared: false,
     history: state.history,
   });
 });
@@ -1498,9 +1508,13 @@ app.post("/api/whatsapp/scan-today", async (req, res) => {
   addLog("info", `🔍 [Varredura Solicitada] Iniciando varredura no grupo de origem "${groupName}"...`);
 
   try {
-    const result = await whatsappEngine.scanTodayMessages(groupId, async (text, imageBuffer) => {
-      return await processIncomingMessage(groupName, text, imageBuffer);
-    });
+    const result = await whatsappEngine.scanTodayMessages(
+      groupId, 
+      async (text, imageBuffer) => {
+        return await processIncomingMessage(groupName, text, imageBuffer);
+      },
+      state.config.robotActivationTime
+    );
     
     // Save updated state since history/logs may have changed
     saveStateToFile();

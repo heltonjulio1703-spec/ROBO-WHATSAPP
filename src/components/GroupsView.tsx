@@ -155,7 +155,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
     // Simulated smooth progress updates while server processes
     const p1 = setTimeout(() => {
       setScanProgress(40);
-      setScanStage("Lendo mensagens postadas hoje a partir das 06:00 AM...");
+      setScanStage("Lendo mensagens a partir do horário de ativação do robô...");
     }, 350);
 
     const p2 = setTimeout(() => {
@@ -451,7 +451,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
                           type="button"
                           onClick={() => handleScanToday(group.id)}
                           disabled={!whatsappConnected || scanningGroupId === group.id}
-                          title={!whatsappConnected ? "Conecte o WhatsApp para buscar ofertas a partir das 06h" : "Buscar e encaminhar ofertas a partir das 06h00 sem repetição"}
+                          title={!whatsappConnected ? "Conecte o WhatsApp para buscar ofertas" : "Buscar e encaminhar ofertas a partir da ativação do robô sem repetição"}
                           className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
                             scanningGroupId === group.id
                               ? "bg-amber-100 text-amber-800 cursor-wait border border-amber-200"
@@ -461,7 +461,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
                           }`}
                         >
                           <RefreshCw className={`w-3.5 h-3.5 ${scanningGroupId === group.id ? "animate-spin text-amber-600" : ""}`} />
-                          <span>{scanningGroupId === group.id ? "Varrendo..." : "Buscar Ofertas (a partir das 06h)"}</span>
+                          <span>{scanningGroupId === group.id ? "Varrendo..." : "Buscar Ofertas (Ativação)"}</span>
                         </button>
 
                         <button
@@ -500,7 +500,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
 
                         <div className="flex items-center justify-between text-[11px] text-amber-800 font-medium pt-0.5">
                           <span>{scanStage}</span>
-                          <span className="text-[10px] text-amber-700 opacity-80">Filtro: a partir das 06:00 AM</span>
+                          <span className="text-[10px] text-amber-700 opacity-80">Filtro: Ativação do Robô</span>
                         </div>
                       </div>
                     )}
@@ -692,7 +692,7 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
                   </div>
                   <div className="flex items-center justify-between text-xs font-semibold text-amber-900">
                     <span>Etapa: {scanStage}</span>
-                    <span className="text-[11px] text-amber-700 font-normal">Filtro: a partir das 06:00 AM</span>
+                    <span className="text-[11px] text-amber-700 font-normal">Filtro: Ativação do Robô</span>
                   </div>
                 </div>
 
