@@ -1433,7 +1433,8 @@ app.get("/api/whatsapp/status", (req, res) => {
 });
 
 app.post("/api/whatsapp/connect", async (req, res) => {
-  await whatsappEngine.connect(true);
+  const { phoneNumber } = req.body || {};
+  await whatsappEngine.connect(true, phoneNumber);
   res.json(whatsappEngine.status);
 });
 

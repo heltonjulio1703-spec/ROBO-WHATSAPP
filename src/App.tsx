@@ -227,9 +227,13 @@ export default function App() {
     }
   };
 
-  const handleConnectWhatsApp = async () => {
+  const handleConnectWhatsApp = async (phoneNumber?: string) => {
     try {
-      const response = await fetch("/api/whatsapp/connect", { method: "POST" });
+      const response = await fetch("/api/whatsapp/connect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber }),
+      });
       const data = await response.json();
       setWhatsapp(data);
     } catch (err) {

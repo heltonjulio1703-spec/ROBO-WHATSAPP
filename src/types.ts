@@ -21,6 +21,8 @@ export interface WhatsAppStatus {
   qrCodeProgress: number;
   connectedAt: string | null;
   qrDataUrl?: string;
+  pairingCode?: string;
+  pairingPhone?: string;
 }
 
 export interface GroupItem {

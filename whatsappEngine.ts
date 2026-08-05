@@ -21,6 +21,8 @@ export interface WhatsAppStatus {
   qrCodeProgress: number;
   connectedAt: string | null;
   qrDataUrl?: string; // Base64 QR code image
+  pairingCode?: string; // The generated pairing code if pairing method is used
+  pairingPhone?: string; // Phone used for pairing code
 }
 
 export interface GroupItem {
@@ -190,8 +192,8 @@ export class WhatsAppEngine {
     }
   }
 
-  public async connect(force = false) {
-    console.log(`📡 WhatsAppEngine: Chamada de connect(force=${force}). Status atual: ${this.status.status}, isConnecting: ${this.isConnecting}`);
+  public async connect(force = false, phoneNumber?: string) {
+    console.log(`📡 WhatsAppEngine: Chamada de connect(force=${force}, phone=${phoneNumber}). Status atual: ${this.status.status}, isConnecting: ${this.isConnecting}`);
     
     if (this.isConnecting && !force) {
       this.addLogCallback("info", "Já existe uma tentativa de conexão em andamento...");
@@ -209,6 +211,8 @@ export class WhatsAppEngine {
     this.status.status = "connecting";
     this.status.qrCodeProgress = 10;
     this.status.qrDataUrl = undefined;
+    this.status.pairingCode = undefined;
+    this.status.pairingPhone = undefined;
 
     // Vercel / Serverless Environment Detection
     const isVercel = typeof process !== 'undefined' && (
@@ -222,21 +226,47 @@ export class WhatsAppEngine {
       this.addLogCallback("warning", "⚠️ [Vercel] Executando em ambiente serverless. Iniciando em Modo de Conexão Simulada de demonstração...");
       this.status.status = "qr_code";
       this.status.qrCodeProgress = 50;
-      try {
-        // Generates a mock QR code image pointing to Shopee affiliate page
-        this.status.qrDataUrl = await QRCode.toDataURL("https://shopee.com.br/m/afiliados-shopee?utm_source=vercel_demo_autopost");
+      
+      if (phoneNumber) {
+        const cleanPhone = phoneNumber.replace(/\D/g, "");
+        this.status.pairingPhone = cleanPhone;
+        // Generate a random-like pairing code
+        const codeChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ23456789";
+        let code1 = "";
+        let code2 = "";
+        for (let i = 0; i < 4; i++) {
+          code1 += codeChars.charAt(Math.floor(Math.random() * codeChars.length));
+          code2 += codeChars.charAt(Math.floor(Math.random() * codeChars.length));
+        }
+        const simCode = `${code1}-${code2}`;
+        this.status.pairingCode = simCode;
         this.status.qrCodeProgress = 95;
-        this.addLogCallback("info", "QR Code simulado gerado! Clique em 'Confirmar Leitura' ou aguarde 5 segundos para simular a leitura do código.");
+        this.addLogCallback("success", `🔑 [Vercel] Código de Emparelhamento simulado gerado para +${cleanPhone}: ${simCode}`);
+        this.addLogCallback("info", "Clique em 'Confirmar Leitura' ou aguarde 5 segundos para simular a conexão bem-sucedida.");
         
         // Auto-connect after 5 seconds
         setTimeout(() => {
-          if (this.status.status === "qr_code") {
+          if (this.status.status === "qr_code" && this.status.pairingCode === simCode) {
             this.simulateSuccessfulConnection();
           }
         }, 5000);
-      } catch (err) {
-        console.error("Erro ao gerar QR Code simulado:", err);
-        this.addLogCallback("error", "Falha ao gerar imagem do QR Code simulado.");
+      } else {
+        try {
+          // Generates a mock QR code image pointing to Shopee affiliate page
+          this.status.qrDataUrl = await QRCode.toDataURL("https://shopee.com.br/m/afiliados-shopee?utm_source=vercel_demo_autopost");
+          this.status.qrCodeProgress = 95;
+          this.addLogCallback("info", "QR Code simulado gerado! Clique em 'Confirmar Leitura' ou aguarde 5 segundos para simular a leitura do código.");
+          
+          // Auto-connect after 5 seconds
+          setTimeout(() => {
+            if (this.status.status === "qr_code" && !this.status.pairingCode) {
+              this.simulateSuccessfulConnection();
+            }
+          }, 5000);
+        } catch (err) {
+          console.error("Erro ao gerar QR Code simulado:", err);
+          this.addLogCallback("error", "Falha ao gerar imagem do QR Code simulado.");
+        }
       }
       this.isConnecting = false;
       return;
@@ -324,11 +354,38 @@ export class WhatsAppEngine {
 
       this.sock.ev.on("creds.update", saveCreds);
 
+      if (phoneNumber) {
+        const cleanPhone = phoneNumber.replace(/\D/g, "");
+        if (cleanPhone) {
+          this.status.pairingPhone = cleanPhone;
+          this.status.status = "qr_code";
+          this.status.qrCodeProgress = 40;
+          this.addLogCallback("info", `Aguardando registro inicial para solicitar código de emparelhamento para +${cleanPhone}...`);
+          
+          setTimeout(async () => {
+            try {
+              if (this.sock && !this.sock.authState.creds.registered) {
+                this.addLogCallback("info", `Enviando solicitação de código de emparelhamento oficial para +${cleanPhone}...`);
+                const code = await this.sock.requestPairingCode(cleanPhone);
+                this.status.pairingCode = code;
+                this.status.qrCodeProgress = 95;
+                this.addLogCallback("success", `🔑 Código de Emparelhamento oficial gerado com sucesso: ${code}`);
+              } else {
+                this.addLogCallback("error", "Não foi possível gerar o código de emparelhamento. Verifique se o WhatsApp já está registrado.");
+              }
+            } catch (err) {
+              console.error("Erro ao gerar pairing code:", err);
+              this.addLogCallback("error", `Falha ao solicitar código de emparelhamento: ${(err as Error).message}`);
+            }
+          }, 3000);
+        }
+      }
+
       this.sock.ev.on("connection.update", async (update) => {
         const { connection, lastDisconnect, qr } = update;
         console.log("📡 Baileys Update:", { connection, qr: !!qr });
 
-        if (qr) {
+        if (qr && !phoneNumber) {
           this.status.status = "qr_code";
           this.status.qrCodeProgress = 50;
           try {
