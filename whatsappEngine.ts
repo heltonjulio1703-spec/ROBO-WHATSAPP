@@ -219,7 +219,7 @@ export class WhatsAppEngine {
       process.env.VERCEL === '1' || 
       process.env.NOW_BUILDER === '1' || 
       process.env.VERCEL_ENV !== undefined ||
-      process.env.PORT === undefined
+      process.env.IS_MOCK === 'true'
     );
 
     if (isVercel) {
