@@ -1190,6 +1190,8 @@ const whatsappEngine = new WhatsAppEngine(
       return;
     }
 
+    addLog("info", `📥 Novo anúncio detectado no grupo de origem "${groupName}". Processando e encaminhando instantaneamente...`);
+
     // Process the message and convert links (this will also send to active targets automatically inside processIncomingMessage)
     await processIncomingMessage(groupName, text, imageBuffer, imageUrl);
   },
