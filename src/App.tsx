@@ -4,6 +4,7 @@ import { DashboardView } from "./components/DashboardView";
 import { WhatsAppView } from "./components/WhatsAppView";
 import { GroupsView } from "./components/GroupsView";
 import { HistoryView } from "./components/HistoryView";
+import { WhatsAppIcon } from "./components/WhatsAppIcon";
 import { 
   Bot, 
   Smartphone, 
@@ -17,7 +18,12 @@ import {
   ExternalLink,
   DollarSign,
   Laptop,
-  Monitor
+  Monitor,
+  Wifi,
+  Signal,
+  Battery,
+  Menu,
+  Download
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -26,7 +32,41 @@ export default function App() {
   
   // Platform Detection & Layout Customization
   const [detectedPlatform, setDetectedPlatform] = React.useState<"mobile" | "desktop">("desktop");
-  const [layoutMode, setLayoutMode] = React.useState<"auto" | "mobile" | "desktop">("auto");
+  const [layoutMode, setLayoutMode] = React.useState<"auto" | "mobile" | "desktop">("mobile");
+
+  // Android Simulated Status Bar clock and PWA install states
+  const [statusBarTime, setStatusBarTime] = React.useState("21:00");
+  const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null);
+  const [showInstallBtn, setShowInstallBtn] = React.useState(false);
+
+  React.useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setStatusBarTime(now.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  React.useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallBtn(true);
+    };
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`PWA installation response: ${outcome}`);
+    setDeferredPrompt(null);
+    setShowInstallBtn(false);
+  };
 
   React.useEffect(() => {
     const detect = () => {
@@ -366,45 +406,82 @@ export default function App() {
   return (
     <div id="app-root-workspace" className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col font-sans selection:bg-indigo-600/10 selection:text-indigo-600">
       
+      {/* Android Simulated Status Bar */}
+      {isMobileLayout && (
+        <div className="bg-indigo-700 text-white px-4 py-1.5 flex items-center justify-between text-[10px] font-bold tracking-wide select-none z-50 shrink-0">
+          <div className="flex items-center gap-1.5">
+            <span>{statusBarTime}</span>
+            <div className={`w-1 h-1 rounded-full ${whatsapp.status === "connected" ? "bg-emerald-400" : "bg-amber-400 animate-pulse"}`} />
+            <span className="text-[9px] font-black opacity-90">Robô Ativo</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Signal className="w-3 h-3 opacity-90" />
+            <Wifi className="w-3 h-3 opacity-90" />
+            <div className="flex items-center gap-0.5">
+              <span className="text-[9px] font-bold opacity-90">100%</span>
+              <Battery className="w-3.5 h-3.5 rotate-90 origin-center scale-90 opacity-90" />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Top Professional Header Bar */}
-      <header id="app-workspace-header" className="bg-white border-b border-gray-100 sticky top-0 z-40 shrink-0">
+      <header id="app-workspace-header" className={`${isMobileLayout ? "bg-indigo-600 text-white shadow-md border-none" : "bg-white border-b border-gray-100"} sticky top-0 z-40 shrink-0 transition-all`}>
         <div className="max-w-7xl mx-auto px-4 lg:px-6 h-16 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2.5">
-            <div className="bg-indigo-600 text-white p-2 rounded-xl flex items-center justify-center shadow-md shadow-indigo-600/10 shrink-0">
+            <div className={`${isMobileLayout ? "bg-white/15 text-white" : "bg-indigo-600 text-white"} p-2 rounded-xl flex items-center justify-center shadow-md shrink-0`}>
               <Bot className="w-5 h-5" />
             </div>
             <div className="min-w-0">
               {!isMobileLayout && (
                 <span className="text-[10px] font-bold text-indigo-600 tracking-wider uppercase block truncate">Soluções Afiliados</span>
               )}
-              <h1 className="text-sm sm:text-base font-black text-gray-800 tracking-tight truncate">Auto-Post Afiliados</h1>
+              <h1 className={`text-sm sm:text-base font-black tracking-tight truncate ${isMobileLayout ? "text-white" : "text-gray-800"}`}>Auto-Post Afiliados</h1>
             </div>
           </div>
 
           {/* Right quick connection badge */}
           <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-            
+            {/* Install Button for PWA on Android */}
+            {showInstallBtn && isMobileLayout && (
+              <button
+                onClick={handleInstallApp}
+                className="bg-emerald-500 text-white px-2.5 py-1.5 rounded-lg text-[11px] font-bold flex items-center gap-1 hover:bg-emerald-600 active:scale-95 transition-all shadow-sm shrink-0"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Instalar</span>
+              </button>
+            )}
+
             {/* Transmission Toggle Button */}
             <button
               onClick={handleToggleTransmission}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                config.isTransmissionEnabled 
-                  ? "bg-green-50 text-green-700 hover:bg-green-100 border border-green-200" 
-                  : "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
+                isMobileLayout 
+                  ? config.isTransmissionEnabled 
+                    ? "bg-white/15 text-white hover:bg-white/25 border border-white/10"
+                    : "bg-red-500/80 text-white hover:bg-red-600/80 border border-red-400/20"
+                  : config.isTransmissionEnabled 
+                    ? "bg-green-50 text-green-700 hover:bg-green-100 border border-green-200" 
+                    : "bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
               }`}
             >
-              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${config.isTransmissionEnabled ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+              <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${config.isTransmissionEnabled ? "bg-green-400 animate-pulse" : "bg-red-400"}`} />
               <span>{config.isTransmissionEnabled ? (isMobileLayout ? "LIGADO" : "ROBÔ LIGADO") : (isMobileLayout ? "DESLIGADO" : "ROBÔ DESLIGADO")}</span>
             </button>
 
             {/* Simulated Session Status Badges */}
             <div className={`px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 select-none ${
-              whatsapp.status === "connected"
-                ? "bg-green-50 text-green-700 border-green-150"
-                : "bg-gray-50 text-gray-500 border-gray-200"
+              isMobileLayout 
+                ? whatsapp.status === "connected"
+                  ? "bg-white/10 text-white border-white/10"
+                  : "bg-white/5 text-white/70 border-white/5"
+                : whatsapp.status === "connected"
+                  ? "bg-green-50 text-green-700 border-green-150"
+                  : "bg-gray-50 text-gray-500 border-gray-200"
             }`}>
               <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${
-                whatsapp.status === "connected" ? "bg-green-500 animate-pulse" : "bg-gray-400"
+                whatsapp.status === "connected" ? "bg-green-400 animate-pulse" : "bg-gray-400"
               }`} />
               <span className={isMobileLayout ? "hidden xs:inline" : ""}>
                 {whatsapp.status === "connected" ? "WhatsApp Conectado" : "WhatsApp Inativo"}
@@ -497,7 +574,7 @@ export default function App() {
           <nav id="app-navigation-tabs" className="bg-white p-1 rounded-xl border border-gray-150 flex flex-wrap gap-1 sticky top-18 z-30 shadow-xs">
             {[
               { id: "dashboard", label: "Painel de Controle", icon: Bot },
-              { id: "whatsapp", label: "Conexão WhatsApp", icon: Smartphone, badge: whatsapp.status !== "connected" ? "!" : undefined },
+              { id: "whatsapp", label: "Conexão WhatsApp", customIcon: <WhatsAppIcon className="w-4 h-4 shrink-0" />, badge: whatsapp.status !== "connected" ? "!" : undefined },
               { id: "groups", label: "Grupos e Canais", icon: Layers, badge: `${groups.sources.filter(s => s.active).length}»${groups.targets.filter(t => t.active).length}` },
               { id: "history", label: "Histórico de Envios", icon: History, badge: history.length > 0 ? String(history.length) : undefined },
             ].map((tab) => {
@@ -514,7 +591,7 @@ export default function App() {
                       : "text-gray-500 hover:text-gray-800 hover:bg-slate-50"
                   }`}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
+                  {tab.customIcon ? tab.customIcon : Icon && <Icon className="w-4 h-4 shrink-0" />}
                   <span>{tab.label}</span>
                   {tab.badge && (
                     <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-extrabold tracking-wide ${
@@ -532,11 +609,11 @@ export default function App() {
             })}
           </nav>
         ) : (
-          /* High-Fidelity Fixed Mobile Bottom Navigation Tab bar */
-          <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-150 py-2.5 px-3 z-50 flex items-center justify-around shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+          /* High-Fidelity Fixed Mobile Bottom Navigation Tab bar - Material Design 3 Android compliant */
+          <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-150 py-3 pb-safe-bottom px-3 z-50 flex items-center justify-around shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
             {[
-              { id: "dashboard", label: "Controle", icon: Bot },
-              { id: "whatsapp", label: "WhatsApp", icon: Smartphone, badge: whatsapp.status !== "connected" ? "!" : undefined },
+              { id: "dashboard", label: "Painel", icon: Bot },
+              { id: "whatsapp", label: "WhatsApp", customIcon: <WhatsAppIcon className="w-5 h-5 transition-transform group-active:scale-95" />, badge: whatsapp.status !== "connected" ? "!" : undefined },
               { id: "groups", label: "Grupos", icon: Layers, badge: `${groups.sources.filter(s => s.active).length}»${groups.targets.filter(t => t.active).length}` },
               { id: "history", label: "Histórico", icon: History, badge: history.length > 0 ? String(history.length) : undefined },
             ].map((tab) => {
@@ -546,23 +623,27 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                  className="flex flex-col items-center justify-center gap-1 flex-1 relative py-1 cursor-pointer"
+                  className="flex flex-col items-center justify-center flex-1 relative cursor-pointer group"
                 >
-                  <div className="relative">
-                    <Icon className={`w-5 h-5 transition-transform ${isActive ? "text-indigo-600 scale-110" : "text-gray-400"}`} />
+                  <div className={`px-5 py-1 rounded-full transition-all duration-200 flex items-center justify-center relative ${
+                    isActive ? "bg-indigo-100 text-indigo-700" : "text-slate-500 hover:text-slate-800"
+                  }`}>
+                    {tab.customIcon ? tab.customIcon : Icon && <Icon className="w-5 h-5 transition-transform group-active:scale-95" />}
                     {tab.badge && (
-                      <span className={`absolute -top-1.5 -right-2 px-1 rounded-full text-[8px] font-black leading-none ${
+                      <span className={`absolute -top-1 -right-1.5 px-1.5 py-0.5 rounded-full text-[8px] font-extrabold leading-none ${
                         isActive 
                           ? "bg-indigo-600 text-white" 
                           : tab.badge === "!"
-                            ? "bg-amber-500 text-white"
-                            : "bg-indigo-100 text-indigo-700"
+                            ? "bg-amber-500 text-white animate-pulse"
+                            : "bg-indigo-600 text-white"
                       }`}>
                         {tab.badge}
                       </span>
                     )}
                   </div>
-                  <span className={`text-[10px] font-bold ${isActive ? "text-indigo-600" : "text-gray-400"}`}>
+                  <span className={`text-[10px] font-bold mt-1 tracking-tight transition-colors duration-200 ${
+                    isActive ? "text-indigo-700 font-extrabold" : "text-slate-500"
+                  }`}>
                     {tab.label}
                   </span>
                 </button>

@@ -1,7 +1,8 @@
 import React from "react";
 import { WhatsAppStatus } from "../types";
-import { Wifi, WifiOff, Loader2, ShieldCheck, LogOut, QrCode, Smartphone } from "lucide-react";
+import { Wifi, WifiOff, Loader2, ShieldCheck, LogOut, QrCode, Smartphone, RefreshCw } from "lucide-react";
 import { motion } from "motion/react";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 interface WhatsAppViewProps {
   status: WhatsAppStatus;
@@ -25,7 +26,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
   const [pairingPhone, setPairingPhone] = React.useState("");
   const [pairingError, setPairingError] = React.useState("");
 
-  // Countdown for QR code expiration
+  // Countdown for QR code expiration & automatic refresh
   React.useEffect(() => {
     let timer: NodeJS.Timeout;
     if (status.status === "qr_code") {
@@ -33,6 +34,10 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
       timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
+            // Auto refresh QR code when countdown reaches 0
+            if (!status.pairingCode) {
+              onConnect().catch(console.error);
+            }
             return 30;
           }
           return prev - 1;
@@ -42,7 +47,7 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [status.status]);
+  }, [status.status, status.pairingCode, onConnect]);
 
   const handleGenerateQR = async () => {
     setLoading(true);
@@ -66,18 +71,14 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
             : "bg-gray-50 border-gray-200 text-gray-800"
       }`}>
         <div className="flex items-center gap-4 text-center md:text-left flex-col md:flex-row">
-          <div className={`p-4 rounded-full ${
+          <div className={`p-3 rounded-2xl flex items-center justify-center shrink-0 ${
             status.status === "connected"
-              ? "bg-green-100 text-green-600"
+              ? "bg-emerald-50 text-emerald-600 border border-emerald-200"
               : status.status === "connecting" || status.status === "qr_code"
-                ? "bg-indigo-100 text-indigo-600 animate-pulse"
-                : "bg-gray-100 text-gray-400"
+                ? "bg-indigo-50 text-indigo-600 animate-pulse border border-indigo-100"
+                : "bg-slate-50 text-slate-400 border border-slate-200"
           }`}>
-            {status.status === "connected" ? (
-              <Wifi className="w-8 h-8" />
-            ) : (
-              <WifiOff className="w-8 h-8" />
-            )}
+            <WhatsAppIcon className="w-9 h-9" />
           </div>
           <div>
             <h2 className="text-xl font-bold">
@@ -324,30 +325,42 @@ export const WhatsAppView: React.FC<WhatsAppViewProps> = ({
               ) : (
                 /* QR Code Graphic Representation */
                 <div className="flex flex-col items-center">
-                  <div className="relative p-6 bg-slate-50 rounded-2xl border border-gray-200">
-                    <div className="w-52 h-52 flex flex-col items-center justify-center gap-1 bg-white p-4 rounded-xl border border-gray-100 shadow-inner">
+                  <div className="relative p-5 bg-slate-50 rounded-2xl border border-gray-200 flex flex-col items-center">
+                    <div className="w-56 h-56 flex flex-col items-center justify-center bg-white p-3 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden">
                       {status.qrDataUrl ? (
-                        <img
-                          src={status.qrDataUrl}
-                          alt="WhatsApp QR Code"
-                          className="w-44 h-44 object-contain"
-                          referrerPolicy="no-referrer"
-                        />
+                        <>
+                          <img
+                            src={status.qrDataUrl}
+                            alt="WhatsApp QR Code"
+                            className="w-50 h-50 object-contain rounded-md"
+                            referrerPolicy="no-referrer"
+                          />
+                          {/* Corner guide markers for camera alignment */}
+                          <div className="absolute top-2 left-2 w-3 h-3 border-t-2 border-l-2 border-indigo-600 rounded-tl-xs pointer-events-none" />
+                          <div className="absolute top-2 right-2 w-3 h-3 border-t-2 border-r-2 border-indigo-600 rounded-tr-xs pointer-events-none" />
+                          <div className="absolute bottom-2 left-2 w-3 h-3 border-b-2 border-l-2 border-indigo-600 rounded-bl-xs pointer-events-none" />
+                          <div className="absolute bottom-2 right-2 w-3 h-3 border-b-2 border-r-2 border-indigo-600 rounded-br-xs pointer-events-none" />
+                        </>
                       ) : (
-                        <div className="flex flex-col items-center justify-center h-full text-center p-2">
-                          <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mb-2" />
-                          <p className="text-xs text-gray-500 font-medium">Gerando QR Code oficial do WhatsApp...</p>
+                        <div className="flex flex-col items-center justify-center h-full text-center p-3 space-y-2">
+                          <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+                          <p className="text-xs text-gray-600 font-medium">Gerando QR Code oficial...</p>
+                          <p className="text-[10px] text-gray-400">Aguardando resposta do WhatsApp</p>
                         </div>
                       )}
                     </div>
 
-                    {/* Expiration warning block */}
-                    <div className="absolute inset-0 bg-white/95 backdrop-blur-xs flex flex-col items-center justify-center rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-350 cursor-pointer p-4 text-center">
-                      <QrCode className="w-8 h-8 text-indigo-600 mb-2 animate-bounce" />
-                      <p className="text-xs font-bold text-gray-700">QR Code Oficial</p>
-                      <p className="text-[10px] text-gray-400 mt-1">Atualiza a cada 30 segundos para segurança.</p>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={handleGenerateQR}
+                      disabled={loading}
+                      className="mt-3 inline-flex items-center gap-1.5 text-xs text-indigo-600 hover:text-indigo-800 font-semibold cursor-pointer py-1 px-3 rounded-lg hover:bg-indigo-50 transition-colors"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+                      {loading ? "Atualizando..." : "Gerar Novo QR Code"}
+                    </button>
                   </div>
+
                   {isOffline && (
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-amber-900 mt-4 max-w-xs text-left shadow-xs">
                       <p className="font-bold mb-1 flex items-center gap-1 text-amber-800">

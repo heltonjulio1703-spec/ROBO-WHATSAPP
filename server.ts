@@ -1107,8 +1107,12 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   // Send rewritten message to target groups with image if connected
   for (const target of activeTargets) {
     if (typeof whatsappEngine !== "undefined" && whatsappEngine && whatsappEngine.status.status === "connected") {
-      await whatsappEngine.sendMessage(target.id, parsed.rewrittenMessage, imageBuffer, resolvedImageUrl);
-      addLog("success", `✨ [WhatsApp REAL] Anúncio enviado com IMAGEM para "${target.name}": ${parsed.productTitle}`);
+      const sent = await whatsappEngine.sendMessage(target.id, parsed.rewrittenMessage, imageBuffer, resolvedImageUrl, target.name);
+      if (sent) {
+        addLog("success", `✨ [WhatsApp REAL] Anúncio enviado para "${target.name}": ${parsed.productTitle}`);
+      } else {
+        addLog("warning", `⚠️ Não foi possível enviar para o destino "${target.name}". Verifique se o grupo está ativo e sincronizado.`);
+      }
     } else {
       addLog("success", `✨ Anúncio encaminhado para "${target.name}" (Simulado): ${parsed.productTitle}`);
     }
@@ -1150,25 +1154,25 @@ const whatsappEngine = new WhatsAppEngine(
     let updatedCount = 0;
 
     discoveredGroups.forEach(g => {
+      const cleanGName = g.name.toLowerCase().trim();
+
       // Sources
-      const existingSource = state.groups.sources.find(s => s.id === g.id);
+      const existingSource = state.groups.sources.find(s => s.id === g.id || s.name.toLowerCase().trim() === cleanGName);
       if (existingSource) {
-        if (existingSource.name !== g.name) {
-          existingSource.name = g.name;
-          updatedCount++;
-        }
+        existingSource.id = g.id;
+        existingSource.name = g.name;
+        updatedCount++;
       } else {
         state.groups.sources.push({ id: g.id, name: g.name, active: false });
         addedCount++;
       }
 
       // Targets
-      const existingTarget = state.groups.targets.find(t => t.id === g.id);
+      const existingTarget = state.groups.targets.find(t => t.id === g.id || t.name.toLowerCase().trim() === cleanGName);
       if (existingTarget) {
-        if (existingTarget.name !== g.name) {
-          existingTarget.name = g.name;
-          updatedCount++;
-        }
+        existingTarget.id = g.id;
+        existingTarget.name = g.name;
+        updatedCount++;
       } else {
         state.groups.targets.push({ id: g.id, name: g.name, active: false });
         addedCount++;
@@ -1286,6 +1290,8 @@ const startAutoScanTimer = () => {
 const startAutoPilotSimulator = () => {
   if (autoPilotTimer) clearInterval(autoPilotTimer);
 
+  const intervalSeconds = Math.max(10, Number(state.config.autoPilotInterval) || 30);
+
   const runSimulationTick = async () => {
     try {
       if (whatsappEngine.status.status !== "connected") {
@@ -1303,22 +1309,16 @@ const startAutoPilotSimulator = () => {
       // Pick random product
       const randomProduct = SIMULATED_PRODUCTS[Math.floor(Math.random() * SIMULATED_PRODUCTS.length)];
 
+      addLog("info", `🤖 [Piloto Automático] Executando simulação (Intervalo configurado: ${intervalSeconds}s)...`);
       await processIncomingMessage(randomSource.name, randomProduct.rawCopy);
     } catch (err) {
       console.error("Erro no ciclo do Piloto Automático:", err);
     }
   };
 
-  // Run initial simulation soon after connection
-  setTimeout(() => {
-    if (whatsappEngine.status.status === "connected" && state.config.autoPilot) {
-      runSimulationTick().catch(() => {});
-    }
-  }, 4000);
-
   autoPilotTimer = setInterval(() => {
     runSimulationTick().catch(() => {});
-  }, state.config.autoPilotInterval * 1000);
+  }, intervalSeconds * 1000);
 };
 
 // Initialize background tasks on server boot

@@ -252,8 +252,15 @@ export class WhatsAppEngine {
         }, 5000);
       } else {
         try {
-          // Generates a mock QR code image pointing to Shopee affiliate page
-          this.status.qrDataUrl = await QRCode.toDataURL("https://shopee.com.br/m/afiliados-shopee?utm_source=vercel_demo_autopost");
+          // Generates a mock QR code image pointing to Shopee affiliate page with high resolution
+          this.status.qrDataUrl = await QRCode.toDataURL("https://shopee.com.br/m/afiliados-shopee?utm_source=vercel_demo_autopost", {
+            margin: 1,
+            width: 360,
+            color: {
+              dark: "#0f172a",
+              light: "#ffffff"
+            }
+          });
           this.status.qrCodeProgress = 95;
           this.addLogCallback("info", "QR Code simulado gerado! Clique em 'Confirmar Leitura' ou aguarde 5 segundos para simular a leitura do código.");
           
@@ -355,7 +362,8 @@ export class WhatsAppEngine {
       this.sock.ev.on("creds.update", saveCreds);
 
       if (phoneNumber) {
-        const cleanPhone = phoneNumber.replace(/\D/g, "");
+        let cleanPhone = phoneNumber.replace(/\D/g, "");
+        // If cleanPhone starts with + or contains DDI, Baileys expects standard digits string e.g. 5511999998888
         if (cleanPhone) {
           this.status.pairingPhone = cleanPhone;
           this.status.status = "qr_code";
@@ -380,17 +388,19 @@ export class WhatsAppEngine {
               if (!this.sock.authState.creds.registered) {
                 this.addLogCallback("info", `Enviando solicitação de código de emparelhamento oficial para +${cleanPhone} (Tentativa ${retryCount + 1}/${maxRetries})...`);
                 const code = await this.sock.requestPairingCode(cleanPhone);
-                this.status.pairingCode = code;
+                // Format code as ABCD-EFGH for high readability if it's 8 characters
+                const formattedCode = code && code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
+                this.status.pairingCode = formattedCode || code;
                 this.status.qrCodeProgress = 95;
                 pairingCodeRequested = true;
-                this.addLogCallback("success", `🔑 Código de Emparelhamento oficial gerado com sucesso: ${code}`);
+                this.addLogCallback("success", `🔑 Código de Emparelhamento oficial gerado com sucesso: ${this.status.pairingCode}`);
                 clearInterval(pairingInterval);
               } else {
                 this.addLogCallback("warning", "O WhatsApp já consta como registrado nesta sessão.");
                 clearInterval(pairingInterval);
               }
             } catch (err) {
-              const errMsg = (err as Error).message || "";
+              const errMsg = (err as Error).message || String(err) || "";
               console.warn(`Tentativa ${retryCount + 1} de gerar pairing code falhou:`, errMsg);
               
               if (errMsg.includes("registered")) {
@@ -408,7 +418,7 @@ export class WhatsAppEngine {
           };
           
           const pairingInterval = setInterval(requestPairing, 3500);
-          // Run first attempt after 2 seconds to allow WebSocket to hand-shake
+          // Run first attempt after 2 seconds to allow WebSocket connection handshake
           setTimeout(requestPairing, 2000);
         }
       }
@@ -421,7 +431,14 @@ export class WhatsAppEngine {
           this.status.status = "qr_code";
           this.status.qrCodeProgress = 50;
           try {
-            this.status.qrDataUrl = await QRCode.toDataURL(qr);
+            this.status.qrDataUrl = await QRCode.toDataURL(qr, {
+              margin: 1,
+              width: 360,
+              color: {
+                dark: "#0f172a",
+                light: "#ffffff"
+              }
+            });
             this.status.qrCodeProgress = 95;
             this.addLogCallback("info", "QR Code oficial do WhatsApp gerado com sucesso! Escaneie com seu celular.");
           } catch (err) {
@@ -659,31 +676,59 @@ export class WhatsAppEngine {
     }
   }
 
-  // Send a message to a WhatsApp JID (Group or User) with optional image
-  public async sendMessage(jid: string, text: string, imageBuffer?: Buffer, imageUrl?: string) {
+  // Send a message to a WhatsApp JID (Group or User) with optional image and target group name
+  public async sendMessage(jid: string, text: string, imageBuffer?: Buffer, imageUrl?: string, targetName?: string) {
+    const displayName = targetName || jid;
+
     if (!this.sock || this.status.status !== "connected") {
       if (this.status.status === "connected") {
         // Simulated sending of the message
-        this.addLogCallback("success", `📢 [Vercel Demo] Enviado para ${jid} com sucesso!`);
+        this.addLogCallback("success", `📢 [Vercel Demo] Enviado para "${displayName}" com sucesso!`);
         return true;
       }
-      this.addLogCallback("error", `Erro: Tentativa de enviar mensagem para ${jid} mas o WhatsApp está desconectado.`);
+      this.addLogCallback("error", `Erro: Tentativa de enviar mensagem para "${displayName}" mas o WhatsApp está desconectado.`);
       return false;
     }
 
     // Resolve real target JID if passed ID is a placeholder or key name
     let targetJid = jid;
+
     if (!targetJid.includes("@")) {
+      const cleanJidQuery = targetJid.toLowerCase().trim();
+      const cleanNameQuery = (targetName || "").toLowerCase().trim();
+
       for (const [gId, gName] of this.groupNameCache.entries()) {
-        if (gId.includes(targetJid) || gName.toLowerCase().includes(targetJid.toLowerCase())) {
+        const cleanGName = gName.toLowerCase().trim();
+        const cleanGId = gId.toLowerCase().trim();
+
+        if (
+          cleanGId === cleanJidQuery ||
+          cleanGName === cleanJidQuery ||
+          (cleanNameQuery && (cleanGName === cleanNameQuery || cleanGName.includes(cleanNameQuery) || cleanNameQuery.includes(cleanGName)))
+        ) {
           targetJid = gId;
           break;
         }
       }
     }
 
+    // Secondary resolution: fuzzy or partial match
+    if (!targetJid.includes("@") && this.groupNameCache.size > 0) {
+      const searchTerms = [targetName, jid].filter(Boolean).map(s => s!.toLowerCase().replace(/[^\w\s]/gi, "").trim());
+      for (const [gId, gName] of this.groupNameCache.entries()) {
+        const cleanGName = gName.toLowerCase().replace(/[^\w\s]/gi, "").trim();
+        for (const term of searchTerms) {
+          if (term && (cleanGName.includes(term) || term.includes(cleanGName))) {
+            targetJid = gId;
+            break;
+          }
+        }
+        if (targetJid.includes("@")) break;
+      }
+    }
+
     if (!targetJid.includes("@")) {
-      this.addLogCallback("warning", `ID do grupo de destino "${jid}" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado real.`);
+      this.addLogCallback("warning", `ID do grupo de destino "${displayName}" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'.`);
       return false;
     }
 
@@ -718,7 +763,6 @@ export class WhatsAppEngine {
       }
       if (fetchUrl.startsWith("http")) {
         try {
-          this.addLogCallback("info", `Baixando foto do produto (${fetchUrl.substring(0, 50)}...) para envio no WhatsApp...`);
           const headers: Record<string, string> = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Accept": "image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8",
@@ -732,8 +776,6 @@ export class WhatsAppEngine {
             const downloadedBuf = Buffer.from(ab);
             if (isValidImageBuffer(downloadedBuf)) {
               finalBuffer = downloadedBuf;
-            } else {
-              console.warn("Buffer baixado do URL de imagem não possui cabeçalho válido de imagem.");
             }
           }
         } catch (e) {
@@ -742,56 +784,24 @@ export class WhatsAppEngine {
       }
     }
 
-    // If still no buffer, download high quality product photo into buffer
-    if (!finalBuffer) {
-      const fallbackUrls = [
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800",
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800",
-      ];
-      for (const fbUrl of fallbackUrls) {
-        try {
-          const fallbackRes = await fetch(fbUrl);
-          if (fallbackRes.ok) {
-            const ab = await fallbackRes.arrayBuffer();
-            const buf = Buffer.from(ab);
-            if (isValidImageBuffer(buf)) {
-              finalBuffer = buf;
-              break;
-            }
-          }
-        } catch (e) {}
-      }
-    }
-
     try {
       if (finalBuffer) {
         const sendBuf = Buffer.isBuffer(finalBuffer) ? finalBuffer : Buffer.from(finalBuffer);
         await this.sock.sendMessage(targetJid, { image: sendBuf, caption: text });
-        this.addLogCallback("success", `📸 Anúncio com FOTO enviado com sucesso para ${targetJid}`);
+        this.addLogCallback("success", `📸 Anúncio com FOTO enviado para "${displayName}"`);
       } else {
         await this.sock.sendMessage(targetJid, { text });
-        this.addLogCallback("warning", `⚠️ Imagem indisponível. Enviando mensagem de texto simples para ${targetJid}`);
+        this.addLogCallback("success", `💬 Anúncio enviado para "${displayName}"`);
       }
       return true;
     } catch (err) {
-      this.addLogCallback("error", `Falha ao enviar foto para ${targetJid}: ${(err as Error).message}. Tentando reenviar imagem de contingência...`);
-      try {
-        const retryRes = await fetch("https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800");
-        if (retryRes.ok) {
-          const ab = await retryRes.arrayBuffer();
-          const buf = Buffer.from(ab);
-          if (isValidImageBuffer(buf)) {
-            await this.sock.sendMessage(targetJid, { image: buf, caption: text });
-            return true;
-          }
-        }
-      } catch (e) {}
-
+      this.addLogCallback("warning", `Falha no envio com foto para "${displayName}": ${(err as Error).message}. Tentando envio somente texto...`);
       try {
         await this.sock.sendMessage(targetJid, { text });
+        this.addLogCallback("success", `💬 Anúncio enviado somente texto para "${displayName}"`);
         return true;
       } catch (fallbackErr) {
-        this.addLogCallback("error", `Falha no envio para ${targetJid}: ${(fallbackErr as Error).message}`);
+        this.addLogCallback("error", `Falha total no envio para "${displayName}": ${(fallbackErr as Error).message}`);
         return false;
       }
     }

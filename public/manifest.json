@@ -1,0 +1,24 @@
+{
+  "name": "Auto-Post Afiliados",
+  "short_name": "Robô Afiliados",
+  "description": "Robô inteligente de afiliados que monitora grupos do WhatsApp, extrai anúncios da Shopee, converte para seu ID de afiliado e encaminha automaticamente para seus grupos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
+    }
+  ]
+}
