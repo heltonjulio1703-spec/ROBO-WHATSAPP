@@ -32,6 +32,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [shopeeAppKey, setShopeeAppKey] = React.useState(config.shopeeAppKey || "");
   const [shopeeAppSecret, setShopeeAppSecret] = React.useState(config.shopeeAppSecret || "");
   const [shopeeAffId, setShopeeAffId] = React.useState(config.shopeeAffiliateId || "");
+  const [mlAffId, setMlAffId] = React.useState(config.mercadolivreAffiliateId || config.affiliateId || "heltonjulio1703");
+  const [shopeeEnabled, setShopeeEnabled] = React.useState(config.shopeeEnabled ?? true);
+  const [mercadolivreEnabled, setMercadolivreEnabled] = React.useState(config.mercadolivreEnabled ?? true);
   const [showAppKey, setShowAppKey] = React.useState(false);
   const [showAppSecret, setShowAppSecret] = React.useState(false);
   const [footer, setFooter] = React.useState(config.customFooter || "");
@@ -118,15 +121,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   React.useEffect(() => {
     if (saveStatus !== "unsaved") {
-      const initialAffId = config.affiliateId || config.shopeeAffiliateId || "";
-      const initialShopeeAffId = config.shopeeAffiliateId || config.affiliateId || "";
-      setAffId(initialAffId);
+      const initialShopeeAffId = config.shopeeAffiliateId || config.affiliateId || "heltonjulio1703";
+      const initialMlAffId = config.mercadolivreAffiliateId || "heltonjulio1703";
+      setShopeeAffId(initialShopeeAffId);
+      setMlAffId(initialMlAffId);
+      setShopeeEnabled(config.shopeeEnabled ?? true);
+      setMercadolivreEnabled(config.mercadolivreEnabled ?? true);
       setIntervalTime(config.autoPilotInterval);
       setKw(config.keywords);
       setAp(config.autoPilot);
       setShopeeAppKey(config.shopeeAppKey || "");
       setShopeeAppSecret(config.shopeeAppSecret || "");
-      setShopeeAffId(initialShopeeAffId);
       setFooter(config.customFooter || "");
     }
   }, [config, saveStatus]);
@@ -135,16 +140,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     e.preventDefault();
     setSaveStatus("saving");
     try {
-      const resolvedAffId = shopeeAffId || affId;
+      const cleanShopeeId = shopeeAffId.trim() || "heltonjulio1703";
+      const cleanMlId = mlAffId.trim() || "heltonjulio1703";
       const updatedConfig = {
         ...config,
-        affiliateId: resolvedAffId,
+        affiliateId: cleanShopeeId,
+        shopeeAffiliateId: cleanShopeeId,
+        mercadolivreAffiliateId: cleanMlId,
+        shopeeEnabled,
+        mercadolivreEnabled,
         autoPilotInterval: Number(intervalTime),
         keywords: kw,
         autoPilot: ap,
         shopeeAppKey,
         shopeeAppSecret,
-        shopeeAffiliateId: resolvedAffId,
         customFooter: footer,
         quietStart: quietStart,
         quietEnd: quietEnd,
@@ -225,32 +234,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <form id="config-form" onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Autopilot Interval */}
-              <div className="md:col-span-2 bg-slate-50 border border-slate-200 rounded-xl p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-semibold text-slate-700">
-                    Intervalo de Simulação (segundos)
-                  </label>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-200 text-slate-700 border border-slate-300">
-                    🔒 Desativado (Envio Instantâneo Ativo)
-                  </span>
-                </div>
-                <input
-                  id="autopilot-interval-input"
-                  type="number"
-                  value={intervalTime}
-                  disabled={true}
-                  readOnly={true}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-slate-100 text-slate-400 text-sm cursor-not-allowed select-none focus:outline-none"
-                />
-                <p className="text-xs text-indigo-700 font-semibold mt-2.5 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-green-500 animate-ping shrink-0" />
-                  ⚡ <strong>Envio Automático em Tempo Real:</strong> Os anúncios são capturados e encaminhados imediatamente conforme entram nos grupos de origem selecionados.
-                </p>
-              </div>
-            </div>
-
             {/* Custom Footer */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -272,55 +255,43 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               </p>
             </div>
 
-            {/* Silence Hours */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Início do Silêncio
-                </label>
-                <input
-                  type="time"
-                  value={quietStart}
-                  onChange={(e) => {
-                    setQuietStart(e.target.value);
-                    setSaveStatus("unsaved");
-                  }}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Fim do Silêncio
-                </label>
-                <input
-                  type="time"
-                  value={quietEnd}
-                  onChange={(e) => {
-                    setQuietEnd(e.target.value);
-                    setSaveStatus("unsaved");
-                  }}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                />
-              </div>
-              <p className="col-span-2 text-xs text-gray-400 -mt-2">
-                O robô não enviará mensagens entre o Início e o Fim configurados.
-              </p>
-            </div>
-
             {/* Shopee API Integration Section */}
             <div id="shopee-api-section" className="border-t border-gray-150 pt-5 mt-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 bg-orange-50/70 p-4 rounded-xl border border-orange-200">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-gray-900">Configuração de Afiliado e API Shopee</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-                      Conversão Inteligente
+                    <span className="text-sm font-bold text-gray-900">Plataforma Shopee 🧡</span>
+                    <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                      shopeeEnabled 
+                        ? "bg-orange-100 text-orange-900 border-orange-300" 
+                        : "bg-gray-100 text-gray-600 border-gray-300"
+                    }`}>
+                      {shopeeEnabled ? "Shopee Ativada" : "Shopee Desativada"}
                     </span>
                   </div>
-                  <span className="text-xs text-gray-500 mt-0.5 leading-relaxed">
-                    O sistema buscará a conexão com a API da Shopee caso o App Key e App Secret estejam preenchidos. Se não houver conexão, usará automaticamente a conversão direta pelo ID de Afiliado.
+                  <span className="text-xs text-gray-600 mt-0.5 leading-relaxed">
+                    Ative ou desative a captura e conversão de anúncios da Shopee.
                   </span>
                 </div>
+
+                {/* Toggle Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShopeeEnabled(!shopeeEnabled);
+                    setSaveStatus("unsaved");
+                  }}
+                  className={`flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border font-bold text-xs transition-all cursor-pointer shadow-sm shrink-0 ${
+                    shopeeEnabled
+                      ? "bg-orange-600 hover:bg-orange-700 text-white border-orange-700"
+                      : "bg-slate-200 hover:bg-slate-300 text-slate-700 border-slate-300"
+                  }`}
+                >
+                  <div className={`w-7 h-4 rounded-full p-0.5 flex items-center transition-all ${shopeeEnabled ? "justify-end bg-white/40" : "justify-start bg-slate-400"}`}>
+                    <div className="w-3 h-3 bg-white rounded-full shadow-md" />
+                  </div>
+                  <span>{shopeeEnabled ? "LIGADO (ON)" : "DESLIGADO (OFF)"}</span>
+                </button>
               </div>
 
               {/* Always visible inputs container */}
@@ -424,7 +395,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       value={shopeeAffId}
                       onChange={(e) => {
                         setShopeeAffId(e.target.value);
-                        setAffId(e.target.value);
                         setSaveStatus("unsaved");
                       }}
                       placeholder="Ex: heltonjulio1703"
@@ -555,6 +525,71 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </div>
                   </div>
                 </div>
+            </div>
+
+            {/* Mercado Livre Affiliate Section */}
+            <div id="mercadolivre-api-section" className="border-t border-gray-150 pt-5 mt-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-yellow-950">Plataforma Mercado Livre 💛</span>
+                    <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                      mercadolivreEnabled 
+                        ? "bg-yellow-200 text-yellow-900 border-yellow-300" 
+                        : "bg-gray-100 text-gray-600 border-gray-300"
+                    }`}>
+                      {mercadolivreEnabled ? "Mercado Livre Ativo" : "Mercado Livre Desativado"}
+                    </span>
+                  </div>
+                  <span className="text-xs text-yellow-900/80 mt-0.5 leading-relaxed">
+                    Ative ou desative a captura e conversão de anúncios do Mercado Livre (mercadolivre.com.br, meli.li).
+                  </span>
+                </div>
+
+                {/* Toggle Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMercadolivreEnabled(!mercadolivreEnabled);
+                    setSaveStatus("unsaved");
+                  }}
+                  className={`flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border font-bold text-xs transition-all cursor-pointer shadow-sm shrink-0 ${
+                    mercadolivreEnabled
+                      ? "bg-amber-500 hover:bg-amber-600 text-slate-950 border-amber-600"
+                      : "bg-slate-200 hover:bg-slate-300 text-slate-700 border-slate-300"
+                  }`}
+                >
+                  <div className={`w-7 h-4 rounded-full p-0.5 flex items-center transition-all ${mercadolivreEnabled ? "justify-end bg-slate-900/40" : "justify-start bg-slate-400"}`}>
+                    <div className="w-3 h-3 bg-white rounded-full shadow-md" />
+                  </div>
+                  <span>{mercadolivreEnabled ? "LIGADO (ON)" : "DESLIGADO (OFF)"}</span>
+                </button>
+              </div>
+
+              <div id="mercadolivre-api-inputs-container" className="p-4 bg-yellow-50/50 border border-yellow-200 rounded-xl space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-800 mb-1">
+                    Tag / ID de Afiliado Mercado Livre (obrigatório)
+                  </label>
+                  <div className="flex gap-1.5">
+                    <input
+                      id="mercadolivre-affiliate-id-input"
+                      type="text"
+                      value={mlAffId}
+                      onChange={(e) => {
+                        setMlAffId(e.target.value);
+                        setSaveStatus("unsaved");
+                      }}
+                      placeholder="Ex: heltonjulio1703 ou sua tag de afiliado"
+                      className="flex-1 px-3 py-1.5 border border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-xs text-slate-800 bg-white"
+                      required
+                    />
+                  </div>
+                  <p className="text-[10px] text-yellow-800/80 mt-1.5">
+                    Defina sua tag/ID de rastreamento do programa Mercado Livre Afiliados. Ela será aplicada aos links do Mercado Livre e links curtos meli.li.
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* Save Button */}

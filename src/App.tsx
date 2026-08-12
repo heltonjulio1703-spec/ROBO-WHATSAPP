@@ -92,11 +92,15 @@ export default function App() {
   // App States
   const [config, setConfig] = React.useState<AppConfig>({
     affiliateId: "heltonjulio1703",
+    shopeeAffiliateId: "heltonjulio1703",
+    mercadolivreAffiliateId: "heltonjulio1703",
     autoPilot: true,
     autoPilotInterval: 30,
     rewriteStyle: "excited",
     keywords: "promocao, cupom, desconto, oferta, achado, frete gratis, shopee, shp.ee",
     isTransmissionEnabled: true,
+    shopeeEnabled: true,
+    mercadolivreEnabled: true,
   });
 
   const [whatsapp, setWhatsapp] = React.useState<WhatsAppStatus>({
@@ -262,6 +266,9 @@ export default function App() {
       const data = await response.json();
       if (data.success) {
         setConfig(data.config);
+        if (data.historyCleared || data.history) {
+          setHistory(data.history || []);
+        }
       }
     } catch (err) {
       console.error("Erro ao salvar config:", err);

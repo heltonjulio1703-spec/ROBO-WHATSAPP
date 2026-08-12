@@ -342,7 +342,11 @@ export class WhatsAppEngine {
               msg.includes("stream errored out") ||
               msg.includes('"code":515') ||
               msg.includes('"code":"515"') ||
-              msg.includes("515")
+              msg.includes("515") ||
+              msg.includes("handling notification") ||
+              msg.includes("Unexpected non-whitespace character after JSON") ||
+              msg.includes("SyntaxError") ||
+              msg.includes("process-message.ts")
             ) {
               return;
             }
@@ -921,9 +925,9 @@ export class WhatsAppEngine {
                         
         if (!text) continue;
         
-        // Comprehensive Shopee link detection regex
-        const shopeeLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?)[^\s]+)/gi;
-        const match = text.match(shopeeLinkRegex);
+        // Comprehensive Shopee & Mercado Livre link detection regex
+        const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com|produto\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|social\.mercadolivre\.com\.br|p\.mercadolivre\.com\.br)[^\s]+)/gi;
+        const match = text.match(dealLinkRegex);
         
         if (!match || match.length === 0) continue;
 
@@ -957,10 +961,10 @@ export class WhatsAppEngine {
       }
 
       if (totalFound === 0) {
-        detailMessage = `Nenhuma oferta com link da Shopee foi encontrada nas ${messages.length} mensagens analisadas (a partir das ${timeString}).`;
+        detailMessage = `Nenhuma oferta com link promocional (Shopee ou Mercado Livre) foi encontrada nas ${messages.length} mensagens analisadas (a partir das ${timeString}).`;
         this.addLogCallback("info", `🔎 Varredura concluída: ${detailMessage}`);
       } else if (processedCount === 0) {
-        detailMessage = `Foram identificadas ${totalFound} oferta(s) com link da Shopee, porém todas já haviam sido enviadas anteriormente ou descartadas por repetição.`;
+        detailMessage = `Foram identificadas ${totalFound} oferta(s) com link promocional (Shopee / Mercado Livre), porém todas já haviam sido enviadas anteriormente ou descartadas por repetição.`;
         this.addLogCallback("info", `🔎 Varredura concluída: ${detailMessage}`);
       } else {
         detailMessage = `Sucesso! ${totalFound} oferta(s) encontrada(s) a partir das ${timeString} e ${processedCount} nova(s) oferta(s) reescrita(s) e encaminhada(s) para os grupos de destino!`;

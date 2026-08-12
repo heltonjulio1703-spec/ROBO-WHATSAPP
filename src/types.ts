@@ -5,9 +5,12 @@ export interface AppConfig {
   rewriteStyle: "excited" | "minimal" | "creative" | "direct";
   keywords: string;
   isTransmissionEnabled: boolean;
+  shopeeEnabled?: boolean;
+  mercadolivreEnabled?: boolean;
   shopeeAppKey?: string;
   shopeeAppSecret?: string;
   shopeeAffiliateId?: string;
+  mercadolivreAffiliateId?: string;
   useShopeeApi?: boolean;
   customFooter?: string;
   quietStart?: string;
@@ -54,10 +57,13 @@ export interface HistoryItem {
   rewrittenMessage: string;
   status: "success" | "failed";
   imageUrl?: string;
+  storeType?: "shopee" | "mercadolivre" | "other";
 }
 
 export interface SandboxResult {
   hasShopeeLink: boolean;
+  hasMercadoLivreLink?: boolean;
+  storeType?: "shopee" | "mercadolivre" | "other";
   originalLink: string;
   affiliateLink?: string;
   productTitle: string;

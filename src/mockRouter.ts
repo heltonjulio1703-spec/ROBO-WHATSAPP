@@ -150,10 +150,22 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
 
     // POST /api/config
     if (pathname === "/api/config" && method === "POST") {
+      const prevTransmission = configState.isTransmissionEnabled;
+      const prevAutoPilot = configState.autoPilot;
+
       configState = { ...configState, ...bodyObj };
       setLocalStorage("shopee_bot_config", configState);
-      addSimulatedLog("success", `Configurações de Afiliado salvas com sucesso (ID: ${configState.affiliateId}).`);
-      return createMockResponse({ success: true, config: configState });
+
+      let historyCleared = false;
+      if ((prevTransmission && !configState.isTransmissionEnabled) || (prevAutoPilot && !configState.autoPilot)) {
+        historyState = [];
+        setLocalStorage("shopee_bot_history", historyState);
+        historyCleared = true;
+        addSimulatedLog("info", "🧹 Histórico de envios limpo ao desligar o robô.");
+      }
+
+      addSimulatedLog("success", `Configurações salvas e preservadas com sucesso.`);
+      return createMockResponse({ success: true, config: configState, historyCleared, history: historyState });
     }
 
     // GET /api/whatsapp/status
@@ -301,11 +313,21 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
     if (pathname === "/api/transmission/toggle" && method === "POST") {
       configState.isTransmissionEnabled = !configState.isTransmissionEnabled;
       setLocalStorage("shopee_bot_config", configState);
-      addSimulatedLog("info", `Transmissão automática de ofertas ${configState.isTransmissionEnabled ? "ativada" : "desativada"}.`);
+
+      let historyCleared = false;
+      if (!configState.isTransmissionEnabled) {
+        historyState = [];
+        setLocalStorage("shopee_bot_history", historyState);
+        historyCleared = true;
+        addSimulatedLog("info", "⏸️ Robô de transmissão desativado. Histórico de envios limpo.");
+      } else {
+        addSimulatedLog("info", "▶️ Robô de transmissão ativado!");
+      }
+
       return createMockResponse({ 
         success: true, 
         isTransmissionEnabled: configState.isTransmissionEnabled,
-        historyCleared: false,
+        historyCleared,
         history: historyState
       });
     }
@@ -398,14 +420,28 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
         return createMockResponse({ success: false, error: "Robô desligado" }, 400);
       }
 
-      // Extract a mock title
-      const shopeeLinkMatch = messageText.match(/https?:\/\/(?:[a-zA-Z0-9-]+\.)?shopee\.com\.br\/\S+|https?:\/\/shp\.ee\/\S+/i);
-      const originalLink = shopeeLinkMatch ? shopeeLinkMatch[0] : "https://shopee.com.br/product-mock";
+      // Extract a mock link and determine storeType
+      const dealLinkMatch = messageText.match(/(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|sec\.mercadolivre\.com(?:\.br)?|produto\.mercadolivre\.com\.br)[^\s]+)/i);
+      const originalLink = dealLinkMatch ? dealLinkMatch[0] : "https://shopee.com.br/product-mock";
       
-      const affId = configState.affiliateId || "heltonjulio1703";
-      const affiliateLink = `https://shopee.com.br/m/afiliados-shopee?sub_id=${affId}`;
+      const isMl = /mercadolivre|mercadolibre|ml\.com\.br|meli\.li/i.test(originalLink);
 
-      let productTitle = "Super Oferta Relâmpago Shopee";
+      if (isMl && configState.mercadolivreEnabled === false) {
+        return createMockResponse({ success: false, error: "Plataforma Mercado Livre está desativada nas configurações" }, 400);
+      }
+      if (!isMl && configState.shopeeEnabled === false) {
+        return createMockResponse({ success: false, error: "Plataforma Shopee está desativada nas configurações" }, 400);
+      }
+
+      const storeType: "shopee" | "mercadolivre" = isMl ? "mercadolivre" : "shopee";
+      const storeLabel = isMl ? "Mercado Livre 💛" : "Shopee 🧡";
+
+      const affId = (isMl ? configState.mercadolivreAffiliateId : configState.shopeeAffiliateId) || configState.affiliateId || "heltonjulio1703";
+      const affiliateLink = isMl 
+        ? `https://www.mercadolivre.com.br/social/afiliados?matt_tool=123&matt_word=${affId}&url=${encodeURIComponent(originalLink)}`
+        : `https://shopee.com.br/m/afiliados-shopee?sub_id=${affId}`;
+
+      let productTitle = isMl ? "Super Oferta Mercado Livre" : "Super Oferta Relâmpago Shopee";
       if (messageText.toLowerCase().includes("fone")) {
         productTitle = "Fone de Ouvido Sem Fio TWS Air";
       } else if (messageText.toLowerCase().includes("relogio") || messageText.toLowerCase().includes("smartwatch")) {
@@ -416,13 +452,15 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
 
       let rewrittenText = `🔥 **${productTitle.toUpperCase()}** 🔥\n\n`;
       if (configState.rewriteStyle === "excited") {
-        rewrittenText += `😱 MENINAS, OLHA ESSA PROMOÇÃO INCRÍVEL! É sério, tá muito barato! Excelente qualidade de construção e entrega super rápida.\n\n👉 Aproveita o cupom e garante o seu aqui: ${affiliateLink}\n\n⚠️ Corre antes que o estoque acabe!`;
+        rewrittenText += isMl 
+          ? `😱 GALERA, OLHA ESSA OFERTA NO MERCADO LIVRE! Entrega super rápida e preço lá embaixo!\n\n👉 Garanta o seu no link seguro: ${affiliateLink}\n\n⚠️ Estoque limitado!`
+          : `😱 MENINAS, OLHA ESSA PROMOÇÃO INCRÍVEL! É sério, tá muito barato!\n\n👉 Aproveita o cupom e garante o seu aqui: ${affiliateLink}\n\n⚠️ Corre antes que o estoque acabe!`;
       } else if (configState.rewriteStyle === "minimal") {
-        rewrittenText += `${productTitle} em oferta exclusiva na Shopee!\n\n👉 Link seguro com menor preço: ${affiliateLink}`;
+        rewrittenText += `${productTitle} em oferta exclusiva!\n\n👉 Link seguro com menor preço: ${affiliateLink}`;
       } else if (configState.rewriteStyle === "direct") {
-        rewrittenText += `SUPER ACHADO SHOPEE!\n\n🛍️ ${productTitle}\n\n🛒 Acesse agora: ${affiliateLink}`;
+        rewrittenText += `ACHADO IMPERDÍVEL ${isMl ? "MERCADO LIVRE" : "SHOPEE"}!\n\n🛍️ ${productTitle}\n\n🛒 Acesse agora: ${affiliateLink}`;
       } else {
-        rewrittenText += `Separamos o melhor achado do dia para você:\n${productTitle}.\nEquipamento versátil com design moderno e grande durabilidade.\n\n👉 Link seguro para compra: ${affiliateLink}`;
+        rewrittenText += `Separamos o melhor achado do dia para você:\n${productTitle}.\n\n👉 Link seguro para compra: ${affiliateLink}`;
       }
 
       const activeTargets = groupsState.targets.filter(t => t.active);
@@ -446,14 +484,15 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
         rewrittenMessage: rewrittenText,
         status: activeTargets.length > 0 ? "success" : "failed",
         imageUrl: mockImage,
+        storeType,
       };
 
       if (activeTargets.length > 0) {
         historyState = [historyItem, ...historyState].slice(0, 200);
         setLocalStorage("shopee_bot_history", historyState);
-        addSimulatedLog("success", `✨ [Simulado] Anúncio convertido com sucesso para Afiliado: ${productTitle}`);
+        addSimulatedLog("success", `✨ [Simulado] Anúncio [${storeLabel}] convertido com sucesso: ${productTitle}`);
         targetNames.forEach(tName => {
-          addSimulatedLog("success", `✨ Anúncio encaminhado para "${tName}" (Simulado): ${productTitle}`);
+          addSimulatedLog("success", `✨ [${storeLabel}] Anúncio encaminhado para "${tName}" (Simulado): ${productTitle}`);
         });
       } else {
         addSimulatedLog("warning", "Anúncio convertido, mas nenhum grupo de destino está ativo para receber a postagem.");
