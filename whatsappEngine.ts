@@ -926,7 +926,7 @@ export class WhatsAppEngine {
         if (!text) continue;
         
         // Comprehensive Shopee & Mercado Livre link detection regex
-        const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com|produto\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|social\.mercadolivre\.com\.br|p\.mercadolivre\.com\.br)[^\s]+)/gi;
+        const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|a\.shopee\.[a-z]{2,3}|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com(?:\.[a-z]{2})?|produto\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|social\.mercadolivre\.com\.br|p\.mercadolivre\.com\.br|oferta\.mercadolivre\.com\.br)[^\s]+)/gi;
         const match = text.match(dealLinkRegex);
         
         if (!match || match.length === 0) continue;

@@ -156,6 +156,7 @@ const state = {
     shopeeAffiliateId: "",
     mercadolivreAffiliateId: "heltonjulio1703",
     useShopeeApi: false,
+    shortenAffiliateLinks: true,
     customFooter: "",
     quietStart: "08:00",
     quietEnd: "23:00",
@@ -258,7 +259,25 @@ const loadStateFromFile = () => {
         if (parsed.groups.sources) state.groups.sources = parsed.groups.sources;
         if (parsed.groups.targets) state.groups.targets = parsed.groups.targets;
       }
-      if (parsed.history) state.history = parsed.history;
+      if (parsed.history) {
+        state.history = parsed.history.map((item: any) => {
+          const orig = item.originalLink || "";
+          const isMl = /mercadolivre|mercadolibre|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre|produto\.mercadolivre|lista\.mercadolivre|social\.mercadolivre|p\.mercadolivre/i.test(orig);
+          if (isMl) {
+            item.storeType = "mercadolivre";
+            if (item.affiliateLink && item.affiliateLink.includes("shopee.com.br/universal-link")) {
+              const mlAffId = state.config.mercadolivreAffiliateId || "heltonjulio1703";
+              item.affiliateLink = orig.includes("?") 
+                ? `${orig}&matt_tool=${encodeURIComponent(mlAffId)}&matt_word=bot&utm_source=afiliados&utm_medium=referral` 
+                : `${orig}?matt_tool=${encodeURIComponent(mlAffId)}&matt_word=bot&utm_source=afiliados&utm_medium=referral`;
+              if (item.rewrittenMessage) {
+                item.rewrittenMessage = item.rewrittenMessage.replace(/https:\/\/shopee\.com\.br\/universal-link[^\s]+/g, item.affiliateLink);
+              }
+            }
+          }
+          return item;
+        });
+      }
       if (parsed.logs) state.logs = parsed.logs;
     }
   } catch (error) {
@@ -334,12 +353,12 @@ const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string,
   let cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
   
   // Resolve effective affiliate ID specifically for Shopee
-  const affIdToUse = (shopeeAffiliateId || state.config.shopeeAffiliateId || state.config.affiliateId || "heltonjulio1703").trim();
+  const affIdToUse = (shopeeAffiliateId || state.config.shopeeAffiliateId || state.config.affiliateId || "18399950350").trim();
 
   // If cleanUrl is already a universal-link, unwrap it to get the raw product URL and avoid nesting
   let targetUrl = cleanUrl;
   let iterations = 0;
-  while (targetUrl.includes("/universal-link/") && iterations < 5) {
+  while ((targetUrl.includes("/universal-link") || targetUrl.includes("universal-link")) && iterations < 5) {
     iterations++;
     try {
       const parsedUrl = new URL(targetUrl);
@@ -354,6 +373,20 @@ const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string,
     }
   }
 
+  // Strip existing tracking parameters from targetUrl so it doesn't preserve previous affiliate cookies
+  try {
+    const parsedTarget = new URL(targetUrl);
+    parsedTarget.searchParams.delete("utm_source");
+    parsedTarget.searchParams.delete("utm_medium");
+    parsedTarget.searchParams.delete("utm_campaign");
+    parsedTarget.searchParams.delete("utm_term");
+    parsedTarget.searchParams.delete("utm_content");
+    parsedTarget.searchParams.delete("af_siteid");
+    parsedTarget.searchParams.delete("af_sub_siteid");
+    parsedTarget.searchParams.delete("smtt");
+    targetUrl = parsedTarget.toString();
+  } catch (e) {}
+
   // Extract domain from original URL to support other regions
   let shopeeDomain = "shopee.com.br"; // Default
   try {
@@ -367,8 +400,8 @@ const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string,
     // Keep default domain if parsing fails
   }
 
-  // Shopee Universal Link structure for reliable tracking
-  const universalUrl = `https://${shopeeDomain}/universal-link/pc?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affIdToUse)}&url=${encodeURIComponent(targetUrl)}`;
+  // Shopee Universal Link structure (clean deep link compatible with both mobile app & desktop)
+  const universalUrl = `https://${shopeeDomain}/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affIdToUse)}&url=${encodeURIComponent(targetUrl)}`;
   
   return universalUrl;
 };
@@ -649,13 +682,13 @@ const convertToAffiliateLinkAsync = async (originalUrl: string, shopeeAffiliateI
 // Helper to check if a URL belongs to Mercado Livre
 const isMercadoLivreUrl = (url: string): boolean => {
   if (!url) return false;
-  return /mercadolivre|mercadolibre|ml\.com\.br|meli\.li|sec\.mercadolivre|produto\.mercadolivre|lista\.mercadolivre|social\.mercadolivre|p\.mercadolivre/i.test(url);
+  return /mercadolivre|mercadolibre|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre|sec\.mercadolibre|produto\.mercadolivre|lista\.mercadolivre|social\.mercadolivre|p\.mercadolivre|oferta\.mercadolivre|m\.mercadolivre/i.test(url);
 };
 
 // Helper to check if a URL belongs to Shopee
 const isShopeeUrl = (url: string): boolean => {
   if (!url) return false;
-  return /shopee|shp\.ee|shope\.ee|s\.shopee/i.test(url);
+  return /shopee|shp\.ee|shope\.ee|s\.shopee|a\.shopee/i.test(url);
 };
 
 // Helper to classify store type cleanly
@@ -666,18 +699,36 @@ const detectStoreType = (url: string): "shopee" | "mercadolivre" | "other" => {
   return "other";
 };
 
-// Helper to follow redirects of short or mobile Mercado Livre URLs (meli.li, /sec/, sec.mercadolivre.com.br, etc.)
+// Helper to follow redirects of short or mobile Mercado Livre URLs (meli.li, meli.la, /sec/, sec.mercadolivre.com.br, etc.)
 const expandMercadoLivreUrl = async (url: string): Promise<string> => {
   if (!url || !url.startsWith("http")) return url;
-  const cleanUrl = url.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
+  let cleanUrl = url.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
+
+  // Unwrap account-verification if present
+  if (cleanUrl.includes("account-verification") && cleanUrl.includes("go=")) {
+    try {
+      const u = new URL(cleanUrl);
+      const go = u.searchParams.get("go");
+      if (go) {
+        cleanUrl = decodeURIComponent(go).trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
+      }
+    } catch (e) {}
+  }
   
+  // If already a clean direct product URL, avoid unnecessary network roundtrips
+  if (/\/p\/MLB[0-9]+/i.test(cleanUrl) || /produto\.mercadolivre\.com\.br\/MLB-[0-9]+/i.test(cleanUrl) || /\/up\/MLBU[0-9]+/i.test(cleanUrl)) {
+    return cleanUrl.split("?")[0].split("#")[0];
+  }
+
   const isShort = cleanUrl.includes("meli.li") || 
+                  cleanUrl.includes("meli.la") || 
                   cleanUrl.includes("/sec/") || 
                   cleanUrl.includes("sec.mercadolivre") || 
                   cleanUrl.includes("sec.mercadolibre") ||
                   cleanUrl.includes("/social/") ||
                   cleanUrl.includes("ml.com.br") ||
-                  cleanUrl.includes("p.mercadolivre");
+                  cleanUrl.includes("p.mercadolivre") ||
+                  cleanUrl.includes("oferta.mercadolivre");
 
   if (!isShort) return cleanUrl;
 
@@ -687,42 +738,6 @@ const expandMercadoLivreUrl = async (url: string): Promise<string> => {
     let current = cleanUrl;
     if (current.startsWith("https://meli.li")) {
       current = current.replace("https://meli.li", "http://meli.li");
-    }
-
-    for (let hop = 0; hop < 5; hop++) {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 3500);
-
-        const response = await fetch(current, {
-          method: "GET",
-          headers: {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          },
-          redirect: "manual",
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
-
-        const loc = response.headers.get("location");
-        if (loc) {
-          try {
-            current = new URL(loc, current).toString();
-            if ((current.includes("mercadolivre") || current.includes("mercadolibre")) && !current.includes("/sec/") && !current.includes("meli.li")) {
-              addLog("success", `✅ Link do Mercado Livre expandido com sucesso para: ${current.substring(0, 80)}...`);
-              return current;
-            }
-          } catch (e) {
-            break;
-          }
-        } else {
-          break;
-        }
-      } catch (e) {
-        break;
-      }
     }
 
     const controller = new AbortController();
@@ -740,21 +755,67 @@ const expandMercadoLivreUrl = async (url: string): Promise<string> => {
     });
     clearTimeout(timeoutId);
 
-    if (response.ok && response.url && response.url !== cleanUrl && !response.url.includes("/sec/") && !response.url.includes("meli.li")) {
-      addLog("success", `✅ Link do Mercado Livre expandido com sucesso para: ${response.url.substring(0, 80)}...`);
-      return response.url;
-    }
-
     if (response.ok) {
+      let finalUrl = response.url;
+      if (finalUrl && (finalUrl.includes("/gz/account-verification") || finalUrl.includes("account-verification"))) {
+        try {
+          const u = new URL(finalUrl);
+          const go = u.searchParams.get("go");
+          if (go) finalUrl = decodeURIComponent(go);
+        } catch (e) {}
+      }
+
+      // If response.url is already a direct product link
+      if (finalUrl && (/\/p\/MLB[0-9]+/i.test(finalUrl) || /produto\.mercadolivre\.com\.br\/MLB-[0-9]+/i.test(finalUrl) || /\/up\/MLBU[0-9]+/i.test(finalUrl))) {
+        const prod = finalUrl.split("?")[0].split("#")[0];
+        addLog("success", `✅ Link do Mercado Livre resolvido para produto: ${prod}`);
+        return prod;
+      }
+
       const html = await response.text();
-      const metaUrlMatch = html.match(/<meta\s+property=["']og:url["']\s+content=["']([^"']+)["']/i) ||
-                           html.match(/<meta\s+content=["']([^"']+)["']\s+property=["']og:url["']/i) ||
-                           html.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i) ||
-                           html.match(/window\.location(?:\.href)?\s*=\s*["']([^"']+)["']/i);
-      if (metaUrlMatch && metaUrlMatch[1] && metaUrlMatch[1].startsWith("http")) {
-        const expandedFromMeta = metaUrlMatch[1].trim();
-        addLog("success", `✅ Link do Mercado Livre expandido via meta tag para: ${expandedFromMeta.substring(0, 80)}...`);
-        return expandedFromMeta;
+
+      // Priority 1: Card featured (the specific recommended product in creator landing pages)
+      const featuredMatch = html.match(/href=["'](https?:\/\/[^"']*(?:mercadolivre\.com\.br)[^"']*(?:\/p\/MLB[0-9]+|\/up\/MLBU[0-9]+|MLB-[0-9]+)[^"']*)["'][^>]*c_id=["']\/home\/card-featured/i) ||
+                            html.match(/href=["'](https?:\/\/[^"']*(?:mercadolivre\.com\.br)[^"']*(?:\/p\/MLB[0-9]+|\/up\/MLBU[0-9]+|MLB-[0-9]+)[^"']*)["']/i);
+      if (featuredMatch && featuredMatch[1]) {
+        const directProd = featuredMatch[1].split("?")[0].split("#")[0].replace(/&amp;/g, "&");
+        addLog("success", `✅ Link do Mercado Livre extraído do card principal: ${directProd}`);
+        return directProd;
+      }
+
+      // Priority 2: JSON-LD for canonical product URL
+      const ldRegex = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi;
+      let ldMatch;
+      while ((ldMatch = ldRegex.exec(html)) !== null) {
+        try {
+          const parsed = JSON.parse(ldMatch[1]);
+          if (parsed.url && (parsed.url.includes("/p/MLB") || parsed.url.includes("produto.mercadolivre.com.br/MLB-") || parsed.url.includes("/up/MLBU"))) {
+            const canonicalFromLd = parsed.url.split("?")[0].split("#")[0];
+            addLog("success", `✅ Link do Mercado Livre resolvido via JSON-LD para: ${canonicalFromLd}`);
+            return canonicalFromLd;
+          }
+        } catch (e) {}
+      }
+
+      // Priority 3: Check any direct /p/MLB link
+      const pMatch = html.match(/https?:\/\/[^\s"'<>\\]*mercadolivre\.com\.br[^\s"'<>\\]*\/p\/MLB[0-9]+/i);
+      if (pMatch && pMatch[0]) {
+        const directP = pMatch[0].split("?")[0].split("#")[0];
+        addLog("success", `✅ Link do Mercado Livre extraído do anúncio (/p/): ${directP}`);
+        return directP;
+      }
+
+      // Priority 4: Check direct product link inside HTML
+      const prodMatch = html.match(/https?:\/\/produto\.mercadolivre\.com\.br\/(MLB-[0-9]+[^\s"'\<\>\?#]+)/i);
+      if (prodMatch && prodMatch[0]) {
+        const directProd = prodMatch[0].split("?")[0].split("#")[0].replace(/&amp;/g, "&");
+        addLog("success", `✅ Link do Mercado Livre extraído do anúncio: ${directProd}`);
+        return directProd;
+      }
+
+      if (finalUrl && !finalUrl.includes("meli.la") && !finalUrl.includes("meli.li")) {
+        addLog("success", `✅ Link do Mercado Livre expandido para: ${finalUrl.substring(0, 80)}...`);
+        return finalUrl.split("?")[0].split("#")[0];
       }
     }
   } catch (err) {
@@ -768,39 +829,36 @@ const expandMercadoLivreUrl = async (url: string): Promise<string> => {
 const convertToMercadoLivreAffiliateLink = (originalUrl: string, mlAffiliateId?: string, subId: string = "bot") => {
   if (!originalUrl) return "";
   let cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
-  const effMlAffId = (mlAffiliateId || state.config.mercadolivreAffiliateId || "heltonjulio1703").trim();
+  const effMlAffId = (mlAffiliateId || state.config.mercadolivreAffiliateId || state.config.affiliateId || "is20251020221720").trim();
 
-  // If cleanUrl is a Mercado Livre social affiliate link containing an inner "url=" parameter, unwrap it
-  if (cleanUrl.includes("mercadolivre") && cleanUrl.includes("url=")) {
+  // If cleanUrl is an account-verification URL with an inner "go=" parameter, unwrap it
+  if (cleanUrl.includes("account-verification") && cleanUrl.includes("go=")) {
     try {
       const parsedUrl = new URL(cleanUrl);
-      const innerUrl = parsedUrl.searchParams.get("url");
+      const go = parsedUrl.searchParams.get("go");
+      if (go) {
+        cleanUrl = decodeURIComponent(go).trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
+      }
+    } catch (e) {}
+  }
+
+  // If cleanUrl has an inner "url=" or "go=" parameter in general
+  if (cleanUrl.includes("mercadolivre") && (cleanUrl.includes("url=") || cleanUrl.includes("go="))) {
+    try {
+      const parsedUrl = new URL(cleanUrl);
+      const innerUrl = parsedUrl.searchParams.get("url") || parsedUrl.searchParams.get("go");
       if (innerUrl) {
         cleanUrl = decodeURIComponent(innerUrl).trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
       }
     } catch (e) {}
   }
 
-  try {
-    const urlObj = new URL(cleanUrl);
-    urlObj.searchParams.delete("matt_tool");
-    urlObj.searchParams.delete("matt_word");
-    urlObj.searchParams.delete("utm_source");
-    urlObj.searchParams.delete("utm_medium");
-    urlObj.searchParams.delete("utm_campaign");
-
-    urlObj.searchParams.set("matt_tool", effMlAffId);
-    urlObj.searchParams.set("matt_word", subId);
-    urlObj.searchParams.set("utm_source", "afiliados");
-    urlObj.searchParams.set("utm_medium", "referral");
-    return urlObj.toString();
-  } catch (e) {
-    const hasQuery = cleanUrl.includes("?");
-    return `${cleanUrl}${hasQuery ? "&" : "?"}matt_tool=${encodeURIComponent(effMlAffId)}&matt_word=${encodeURIComponent(subId)}&utm_source=afiliados&utm_medium=referral`;
-  }
+  // Clean the base URL by stripping query and hash fragments
+  const cleanBase = cleanUrl.split("?")[0].split("#")[0];
+  return `${cleanBase}?matt_tool=${encodeURIComponent(effMlAffId)}&matt_word=${encodeURIComponent(subId)}`;
 };
 
-// Unified Async Link Converter supporting both Shopee and Mercado Livre
+// Unified Async Link Converter supporting both Shopee and Mercado Livre with clean, direct URLs
 const convertAnyToAffiliateLinkAsync = async (originalUrl: string, subId: string = "bot") => {
   if (!originalUrl) return "";
   const cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
@@ -811,13 +869,17 @@ const convertAnyToAffiliateLinkAsync = async (originalUrl: string, subId: string
       return cleanUrl;
     }
     const expandedUrl = await expandMercadoLivreUrl(cleanUrl);
-    return convertToMercadoLivreAffiliateLink(expandedUrl, state.config.mercadolivreAffiliateId, subId);
+    const convertedMl = convertToMercadoLivreAffiliateLink(expandedUrl, state.config.mercadolivreAffiliateId, subId);
+    addLog("success", `🔗 Link Mercado Livre gerado com sucesso: ${convertedMl}`);
+    return convertedMl;
   } else {
     if (state.config.shopeeEnabled === false) {
       addLog("warning", "⚠️ Plataforma Shopee está DESLIGADA nas configurações. Link mantido sem conversão.");
       return cleanUrl;
     }
-    return convertToAffiliateLinkAsync(cleanUrl, state.config.shopeeAffiliateId || state.config.affiliateId, subId);
+    const convertedShopee = await convertToAffiliateLinkAsync(cleanUrl, state.config.shopeeAffiliateId || state.config.affiliateId, subId);
+    addLog("success", `🔗 Link Shopee gerado com sucesso: ${convertedShopee}`);
+    return convertedShopee;
   }
 };
 
@@ -856,7 +918,7 @@ const parseMessageWithGemini = async (messageText: string, affiliateId: string, 
 
   const prompt = `Você é um assistente de marketing de afiliados especialista em promoções da Shopee e do Mercado Livre.
 Analise a mensagem em português e extraia as informações de promoção do produto.
-Se houver links de lojas como Shopee (shopee.com.br, shp.ee, shope.ee) ou Mercado Livre (mercadolivre.com.br, meli.li, sec.mercadolivre.com.br, produto.mercadolivre.com.br), identifique o link principal do produto e a loja correspondente.
+Se houver links de lojas como Shopee (shopee.com.br, shp.ee, shope.ee, s.shopee.com.br) ou Mercado Livre (mercadolivre.com.br, meli.li, meli.la, sec.mercadolivre.com.br, produto.mercadolivre.com.br, p.mercadolivre.com.br, social.mercadolivre.com.br), identifique o link principal do produto e a loja correspondente.
 
 Responda EXCLUSIVAMENTE em formato JSON com a seguinte estrutura:
 {
@@ -872,10 +934,10 @@ Responda EXCLUSIVAMENTE em formato JSON com a seguinte estrutura:
 }
 
 REGRA DE DISTINÇÃO DE PLATAFORMA (MANDATÓRIO):
-- Se o anúncio/link for da SHOPEE (shopee.com.br, shp.ee, shope.ee, s.shopee.com.br):
+- Se o anúncio/link for da SHOPEE (shopee.com.br, shp.ee, shope.ee, s.shopee.com.br, a.shopee.com):
   * "storeType": "shopee", "hasShopeeLink": true, "hasMercadoLivreLink": false
   * Use chamadas e emojis adequados da Shopee no rewrittenMessage (ex: 🧡 "Achado da Shopee", "Aproveite os cupons de frete grátis da Shopee").
-- Se o anúncio/link for do MERCADO LIVRE (mercadolivre.com.br, meli.li, sec.mercadolivre.com.br, produto.mercadolivre.com.br, p.mercadolivre.com.br, social.mercadolivre.com.br):
+- Se o anúncio/link for do MERCADO LIVRE (mercadolivre.com.br, meli.li, meli.la, sec.mercadolivre.com.br, produto.mercadolivre.com.br, p.mercadolivre.com.br, social.mercadolivre.com.br, oferta.mercadolivre.com.br):
   * "storeType": "mercadolivre", "hasShopeeLink": false, "hasMercadoLivreLink": true
   * Use chamadas e emojis adequados do Mercado Livre no rewrittenMessage (ex: 💛 "Oferta Imperdível no Mercado Livre", "Aproveite a entrega rápida do Mercado Livre").
 - NUNCA misture ou mencione a plataforma errada (ex: NÃO mencione Shopee em anúncios do Mercado Livre e NÃO mencione Mercado Livre em anúncios da Shopee).
@@ -900,55 +962,49 @@ Mensagem original a ser analisada:
 ${messageText}
 """`;
 
-  const modelsToTry = ["gemini-flash-latest", "gemini-3.1-flash-lite", "gemini-3.6-flash"];
+  // Prioritized list of compliant models: gemini-3.7-flash (default text), gemini-3.1-flash-lite (fast backup), gemini-flash-latest (fallback alias)
+  const modelsToTry = ["gemini-3.7-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"];
   let response = null;
 
   for (const modelName of modelsToTry) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        response = await ai.models.generateContent({
-          model: modelName,
-          contents: prompt,
-          config: {
-            responseMimeType: "application/json",
-            responseSchema: {
-              type: Type.OBJECT,
-              properties: {
-                hasAffiliateLink: { type: Type.BOOLEAN },
-                hasShopeeLink: { type: Type.BOOLEAN },
-                hasMercadoLivreLink: { type: Type.BOOLEAN },
-                storeType: { type: Type.STRING },
-                originalLink: { type: Type.STRING },
-                productTitle: { type: Type.STRING },
-                price: { type: Type.STRING },
-                coupon: { type: Type.STRING },
-                rewrittenMessage: { type: Type.STRING },
-              },
-              required: ["originalLink", "productTitle", "rewrittenMessage"],
+    try {
+      response = await ai.models.generateContent({
+        model: modelName,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              hasAffiliateLink: { type: Type.BOOLEAN },
+              hasShopeeLink: { type: Type.BOOLEAN },
+              hasMercadoLivreLink: { type: Type.BOOLEAN },
+              storeType: { type: Type.STRING },
+              originalLink: { type: Type.STRING },
+              productTitle: { type: Type.STRING },
+              price: { type: Type.STRING },
+              coupon: { type: Type.STRING },
+              rewrittenMessage: { type: Type.STRING },
             },
+            required: ["originalLink", "productTitle", "rewrittenMessage"],
           },
-        });
-        if (response && response.text) {
-          break;
-        }
-      } catch (modelError) {
-        const errMsg = (modelError as Error).message || String(modelError);
-        const isQuota = errMsg.includes("RESOURCE_EXHAUSTED") || errMsg.includes("429") || errMsg.includes("quota");
-        if (isQuota) {
-          console.info(`Modelo ${modelName} atingiu limite de cota (429). Tentando próximo modelo de contingência...`);
-          break;
-        } else {
-          console.info(`Modelo ${modelName} indisponível (${errMsg.substring(0, 100)}). Tentando próximo modelo...`);
-          if (errMsg.includes("503") || errMsg.includes("UNAVAILABLE")) {
-            await new Promise((r) => setTimeout(r, 500));
-          } else {
-            break;
-          }
-        }
+        },
+      });
+      if (response && response.text) {
+        break;
       }
-    }
-    if (response && response.text) {
-      break;
+    } catch (modelError) {
+      const errMsg = (modelError as Error).message || String(modelError);
+      const isHighDemand = errMsg.includes("503") || errMsg.includes("high demand") || errMsg.includes("UNAVAILABLE");
+      const isQuota = errMsg.includes("RESOURCE_EXHAUSTED") || errMsg.includes("429") || errMsg.includes("quota");
+      
+      if (isHighDemand) {
+        console.info(`Modelo ${modelName} sob alta demanda transitória (503). Alternando automaticamente para contingência...`);
+      } else if (isQuota) {
+        console.info(`Modelo ${modelName} com limite de cota atingido (429). Alternando para próximo modelo...`);
+      } else {
+        console.info(`Modelo ${modelName} não respondeu (${errMsg.substring(0, 80)}...). Alternando para contingência...`);
+      }
     }
   }
 
@@ -983,9 +1039,9 @@ ${messageText}
       }
 
       // Replace any remaining Shopee or Mercado Livre links in rewrittenMessage
-      const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|sec\.mercadolivre\.com(?:\.br)?|produto\.mercadolivre\.com\.br)[^\s]+)/gi;
+      const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|a\.shopee\.[a-z]{2,3}|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com(?:\.[a-z]{2})?|produto\.mercadolivre\.com\.br|social\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|oferta\.mercadolivre\.com\.br)[^\s]+)/gi;
       msg = msg.replace(dealLinkRegex, (foundUrl) => {
-        if (foundUrl.includes("universal-link") || foundUrl.includes("matt_tool=")) {
+        if (foundUrl === affiliateLink) {
           return foundUrl;
         }
         return affiliateLink;
@@ -1016,7 +1072,7 @@ ${messageText}
 // Regex Fallback parsing if Gemini is not available
 const parseMessageWithRegex = async (messageText: string, affiliateId: string) => {
   // Regex to detect all Shopee and Mercado Livre URL variants
-  const dealRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|sec\.mercadolivre\.com(?:\.br)?|produto\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br)[^\s]+)/gi;
+  const dealRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|a\.shopee\.[a-z]{2,3}|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com(?:\.[a-z]{2})?|produto\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|oferta\.mercadolivre\.com\.br)[^\s]+)/gi;
   const matches = messageText.match(dealRegex);
 
   if (!matches || matches.length === 0) {
@@ -1078,40 +1134,22 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
   if (!url || !url.startsWith("http")) return null;
   
   try {
-    let currentUrl = url.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
-    if (currentUrl.includes("universal-link") || currentUrl.includes("url=")) {
-      try {
-        const urlObj = new URL(currentUrl);
-        const nestedUrl = urlObj.searchParams.get("url");
-        if (nestedUrl && nestedUrl.startsWith("http")) {
-          currentUrl = decodeURIComponent(nestedUrl);
-        }
-      } catch (e) {}
-    }
+    const targetUrl = await expandShopeeUrl(url);
+    addLog("info", `Buscando foto original do produto no link: ${targetUrl}`);
 
-    const targetUrl = await expandShopeeUrl(currentUrl);
-    addLog("info", `Buscando foto original do produto na Shopee: ${targetUrl}`);
-
-    // Try Shopee API first if shopid and itemid can be extracted
+    // Try Shopee API first if shopid and itemid can be extracted from targetUrl or original url
     let shopid: string | null = null;
     let itemid: string | null = null;
 
-    const matchI = targetUrl.match(/i\.(\d+)\.(\d+)/i) || currentUrl.match(/i\.(\d+)\.(\d+)/i);
+    const matchI = targetUrl.match(/i\.(\d+)\.(\d+)/i) || url.match(/i\.(\d+)\.(\d+)/i);
     if (matchI) {
       shopid = matchI[1];
       itemid = matchI[2];
     } else {
-      const matchProd = targetUrl.match(/product\/(\d+)\/(\d+)/i) || currentUrl.match(/product\/(\d+)\/(\d+)/i);
+      const matchProd = targetUrl.match(/product\/(\d+)\/(\d+)/i) || url.match(/product\/(\d+)\/(\d+)/i);
       if (matchProd) {
         shopid = matchProd[1];
         itemid = matchProd[2];
-      } else {
-        const shopMatch = targetUrl.match(/(?:shopid|shop_id)=(\d+)/i) || currentUrl.match(/(?:shopid|shop_id)=(\d+)/i);
-        const itemMatch = targetUrl.match(/(?:itemid|item_id)=(\d+)/i) || currentUrl.match(/(?:itemid|item_id)=(\d+)/i);
-        if (shopMatch && itemMatch) {
-          shopid = shopMatch[1];
-          itemid = itemMatch[1];
-        }
       }
     }
 
@@ -1125,7 +1163,7 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
         for (const apiUrl of apiUrls) {
           const apiRes = await fetch(apiUrl, {
             headers: {
-              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
               "Accept": "application/json",
               "Referer": targetUrl,
             }
@@ -1149,7 +1187,7 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
     // HTML fallback
     const response = await fetch(targetUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
         "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
       },
@@ -1168,11 +1206,11 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
       for (const r of metaMatches) {
         const m = html.match(r);
         if (m && m[1] && m[1].trim().length > 5) {
-          let cleanUrl = m[1].trim().replace(/&amp;/g, "&").replace(/&quot;/g, "").replace(/\\u002F/g, "/");
+          let cleanUrl = m[1].trim().replace(/\\u002F/g, "/");
           if (cleanUrl.startsWith("//")) cleanUrl = "https:" + cleanUrl;
           if (cleanUrl.startsWith("/")) cleanUrl = "https://shopee.com.br" + cleanUrl;
           if (cleanUrl.startsWith("http")) {
-            addLog("success", `📸 Foto original encontrada (Meta tag Shopee): ${cleanUrl.substring(0, 60)}...`);
+            addLog("success", `📸 Foto original encontrada (Meta tag): ${cleanUrl.substring(0, 60)}...`);
             return cleanUrl;
           }
         }
@@ -1180,15 +1218,15 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
 
       const jsonImgMatch = html.match(/"image":\s*"([^"]+)"/i) || html.match(/"images":\s*\["([^"]+)"/i);
       if (jsonImgMatch && jsonImgMatch[1]) {
-        let imgStr = jsonImgMatch[1].trim().replace(/&amp;/g, "&").replace(/&quot;/g, "").replace(/\\u002F/g, "/");
+        let imgStr = jsonImgMatch[1].trim().replace(/\\u002F/g, "/");
         if (imgStr.startsWith("//")) imgStr = "https:" + imgStr;
         if (imgStr.startsWith("/")) imgStr = "https://shopee.com.br" + imgStr;
         if (imgStr.startsWith("http")) {
-          addLog("success", `📸 Foto original encontrada (JSON Shopee): ${imgStr.substring(0, 60)}...`);
+          addLog("success", `📸 Foto original encontrada (JSON): ${imgStr.substring(0, 60)}...`);
           return imgStr;
         } else if (imgStr.length > 10 && !imgStr.includes(" ")) {
           const fullUrl = `https://down-br.img.susercontent.com/file/${imgStr}`;
-          addLog("success", `📸 Foto original encontrada (Hash JSON Shopee): ${fullUrl.substring(0, 60)}...`);
+          addLog("success", `📸 Foto original encontrada (Hash JSON): ${fullUrl.substring(0, 60)}...`);
           return fullUrl;
         }
       }
@@ -1196,7 +1234,7 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
       const cdnMatch = html.match(/https?:\/\/down-[a-z0-9-]+\.img\.susercontent\.com\/file\/[a-zA-Z0-9_.-]+/i) ||
                        html.match(/https?:\/\/cf\.shopee\.com\.br\/file\/[a-zA-Z0-9_.-]+/i);
       if (cdnMatch && cdnMatch[0]) {
-        const cdnUrl = cdnMatch[0].trim().replace(/&amp;/g, "&");
+        const cdnUrl = cdnMatch[0].trim();
         addLog("success", `📸 Foto original encontrada (Shopee CDN): ${cdnUrl.substring(0, 60)}...`);
         return cdnUrl;
       }
@@ -1207,107 +1245,122 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
   return null;
 };
 
-// Helper to fetch original product photo from Mercado Livre URL
+// Helper to transform any Mercado Livre CDN image URL to ultra high resolution / 2X Retina
+const getHighResMlImage = (imgUrl: string | null): string | null => {
+  if (!imgUrl || !imgUrl.startsWith("http")) return null;
+  let enhanced = imgUrl.trim();
+  
+  if (enhanced.includes("mlstatic.com") || enhanced.includes("mercadolibre.com")) {
+    // 1. Upgrade variation/thumbnail suffix (-V., -D., -I., -M., -W., etc.) to original full-res (-O.webp)
+    enhanced = enhanced.replace(/-[A-Z]\.(jpg|jpeg|png|webp)/i, "-O.webp");
+    // 2. Upgrade to 2X high-resolution format if not already 2X
+    enhanced = enhanced.replace(/\/D_NQ_NP_([0-9])/, "/D_NQ_NP_2X_$1");
+    // 3. Remove query parameters that might constrain width/height
+    if (enhanced.includes("?")) {
+      enhanced = enhanced.split("?")[0];
+    }
+  }
+  return enhanced;
+};
+
+// Helper to fetch original product photo in Ultra High Definition from Mercado Livre URL
 const fetchOriginalMercadoLivreImage = async (url: string): Promise<string | null> => {
   if (!url || !url.startsWith("http")) return null;
-  try {
-    let cleanUrl = url.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
-    if (cleanUrl.includes("url=")) {
+  const cleanUrl = url.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
+
+  const extractImageFromHtml = (html: string): string | null => {
+    // 1. Check JSON-LD structured data for product image
+    const ldRegex = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/gi;
+    let ldMatch;
+    while ((ldMatch = ldRegex.exec(html)) !== null) {
       try {
-        const urlObj = new URL(cleanUrl);
-        const nestedUrl = urlObj.searchParams.get("url");
-        if (nestedUrl && nestedUrl.startsWith("http")) {
-          cleanUrl = decodeURIComponent(nestedUrl);
+        const parsed = JSON.parse(ldMatch[1]);
+        if (parsed.image) {
+          const img = Array.isArray(parsed.image) ? parsed.image[0] : (typeof parsed.image === "string" ? parsed.image : parsed.image.url);
+          if (img && typeof img === "string" && img.startsWith("http")) {
+            return getHighResMlImage(img);
+          }
         }
       } catch (e) {}
     }
 
-    const targetUrl = await expandMercadoLivreUrl(cleanUrl);
-    addLog("info", `Buscando foto original do produto no Mercado Livre: ${targetUrl}`);
-
-    // 1. Check if there is an MLB Item ID or Product ID to fetch via Mercado Livre Official Free API
-    const mlbMatch = targetUrl.match(/MLB-?(\d+)/i) || cleanUrl.match(/MLB-?(\d+)/i);
-    if (mlbMatch && mlbMatch[1]) {
-      const mlbId = `MLB${mlbMatch[1]}`;
-      try {
-        addLog("info", `🔎 Consultando foto original via API Oficial Mercado Livre (${mlbId})...`);
-        
-        // Try items API first
-        let apiRes = await fetch(`https://api.mercadolibre.com/items/${mlbId}`, {
-          headers: {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-            "Accept": "application/json",
-          }
-        });
-
-        // If items API returns 404, try products API (catalog products like /p/MLB...)
-        if (!apiRes.ok) {
-          apiRes = await fetch(`https://api.mercadolibre.com/products/${mlbId}`, {
-            headers: {
-              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-              "Accept": "application/json",
-            }
-          });
-        }
-
-        if (apiRes.ok) {
-          const json = await apiRes.json();
-          let rawImgUrl = json?.pictures?.[0]?.secure_url || 
-                          json?.pictures?.[0]?.url || 
-                          json?.thumbnail || 
-                          (json?.images && json.images[0]?.url);
-          if (rawImgUrl && typeof rawImgUrl === "string" && rawImgUrl.startsWith("http")) {
-            const highResImgUrl = rawImgUrl
-              .replace(/-I\.(jpg|jpeg|webp|gif)/i, "-O.$1")
-              .replace(/-I-/i, "-O-")
-              .replace(/-V\.(jpg|jpeg|webp)/i, "-O.$1");
-            addLog("success", `📸 Foto do produto extraída com alta resolução via API do Mercado Livre!`);
-            return highResImgUrl;
-          }
-        }
-      } catch (apiErr) {
-        console.warn("Aviso API Mercado Livre:", apiErr);
-      }
+    // 2. OpenGraph / Twitter meta tags
+    const ogMatch = html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i) ||
+                    html.match(/<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i) ||
+                    html.match(/<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i) ||
+                    html.match(/<meta\s+content=["']([^"']+)["']\s+name=["']twitter:image["']/i);
+    if (ogMatch && ogMatch[1] && ogMatch[1].startsWith("http")) {
+      return getHighResMlImage(ogMatch[1]);
     }
 
-    // 2. HTML Fallback Scraper
-    let fetchTarget = targetUrl;
-    if (fetchTarget.startsWith("https://meli.li")) {
-      fetchTarget = fetchTarget.replace("https://meli.li", "http://meli.li");
+    // 3. Match any high-res mlstatic product image (excluding UI assets)
+    const mlStaticMatches = html.match(/https?:\/\/http2\.mlstatic\.com\/D_NQ_NP_[^\s"'<>\\]+/gi) || [];
+    const validProductPhotos = mlStaticMatches.filter(u => 
+      !u.includes("frontend-assets") && 
+      !u.includes("ui-navigation") && 
+      !u.includes("logo") && 
+      !u.includes("icon") &&
+      !u.includes("fallback")
+    );
+    if (validProductPhotos.length > 0) {
+      return getHighResMlImage(validProductPhotos[0]);
     }
 
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000);
+    // 4. Match generic picture_url in Nordic/Redux state
+    const picMatch = html.match(/"picture_url"\s*:\s*"([^"]+)"/i) || html.match(/"secure_url"\s*:\s*"([^"]+)"/i);
+    if (picMatch && picMatch[1] && picMatch[1].startsWith("http")) {
+      return getHighResMlImage(picMatch[1]);
+    }
 
-    const response = await fetch(fetchTarget, {
-      method: "GET",
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-        "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-      },
-      signal: controller.signal,
-    });
+    return null;
+  };
 
-    clearTimeout(timeoutId);
-
-    if (response.ok) {
-      const html = await response.text();
-      const ogMatch = html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i) ||
-                      html.match(/<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i) ||
-                      html.match(/<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i);
-      if (ogMatch && ogMatch[1] && ogMatch[1].startsWith("http")) {
-        const cleanOg = ogMatch[1].replace(/&amp;/g, "&").replace(/&quot;/g, "");
-        addLog("success", `📸 Foto do produto extraída com sucesso do Mercado Livre!`);
-        return cleanOg;
+  const tryFetchUrl = async (target: string): Promise<string | null> => {
+    try {
+      let fetchUrl = target;
+      if (fetchUrl.startsWith("https://meli.li")) {
+        fetchUrl = fetchUrl.replace("https://meli.li", "http://meli.li");
       }
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const response = await fetch(fetchUrl, {
+        method: "GET",
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+          "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+          "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
+        },
+        redirect: "follow",
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
 
-      const mlStaticMatch = html.match(/https:\/\/http2\.mlstatic\.com\/D_NQ_NP_[^\s"'\<\>]+/i) ||
-                            html.match(/https:\/\/http2\.mlstatic\.com\/D_[^\s"'\<\>]+/i);
-      if (mlStaticMatch && mlStaticMatch[0]) {
-        const cleanCdnUrl = mlStaticMatch[0].replace(/[\\"'\]>)]+$/, "").replace(/&amp;/g, "&");
-        addLog("success", `📸 Foto do produto extraída com sucesso da CDN do Mercado Livre!`);
-        return cleanCdnUrl;
+      if (response.ok) {
+        const html = await response.text();
+        const foundImage = extractImageFromHtml(html);
+        if (foundImage) return foundImage;
+      }
+    } catch (err) {}
+    return null;
+  };
+
+  try {
+    addLog("info", `Buscando foto em alta resolução do Mercado Livre: ${cleanUrl}`);
+
+    // Step 1: Try fetching original URL directly
+    let photo = await tryFetchUrl(cleanUrl);
+    if (photo) {
+      addLog("success", `📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!`);
+      return photo;
+    }
+
+    // Step 2: Try expanded URL if different
+    const expandedUrl = await expandMercadoLivreUrl(cleanUrl);
+    if (expandedUrl && expandedUrl !== cleanUrl) {
+      photo = await tryFetchUrl(expandedUrl);
+      if (photo) {
+        addLog("success", `📸 Foto em Alta Resolução (HD 2X) extraída da página expandida do Mercado Livre!`);
+        return photo;
       }
     }
   } catch (err) {
@@ -1316,100 +1369,36 @@ const fetchOriginalMercadoLivreImage = async (url: string): Promise<string | nul
   return null;
 };
 
-// Helper to fetch product photo from generic store URLs
-const fetchGenericStoreImage = async (url: string): Promise<string | null> => {
-  if (!url || !url.startsWith("http")) return null;
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      },
-      signal: controller.signal,
-    });
-
-    clearTimeout(timeoutId);
-
-    if (response.ok) {
-      const html = await response.text();
-      const ogMatch = html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i) ||
-                      html.match(/<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i) ||
-                      html.match(/<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i);
-      if (ogMatch && ogMatch[1] && ogMatch[1].startsWith("http")) {
-        return ogMatch[1].replace(/&amp;/g, "&").replace(/&quot;/g, "");
-      }
-    }
-  } catch (e) {}
-  return null;
-};
-
-// Master function to fetch or resolve product image
-const fetchProductImageUnified = async (url?: string | null, productTitle?: string): Promise<string> => {
-  if (url && typeof url === "string" && url.startsWith("http")) {
-    const cleanUrl = url.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
-    try {
-      if (isMercadoLivreUrl(cleanUrl)) {
-        const mlImg = await fetchOriginalMercadoLivreImage(cleanUrl);
-        if (mlImg) return mlImg;
-      } else if (isShopeeUrl(cleanUrl)) {
-        const shopeeImg = await fetchOriginalShopeeImage(cleanUrl);
-        if (shopeeImg) return shopeeImg;
-      }
-      
-      const genericImg = await fetchGenericStoreImage(cleanUrl);
-      if (genericImg) return genericImg;
-    } catch (e) {
-      console.warn("Aviso ao resolver foto do produto:", e);
-    }
-  }
-  return getProductImage(productTitle || "");
-};
-
 // Map product titles or keywords to beautiful high-quality Unsplash image URLs
 const getProductImage = (title: string): string => {
   const cleanTitle = (title || "").toLowerCase();
 
-  if (cleanTitle.includes("fone") || cleanTitle.includes("headphone") || cleanTitle.includes("ouvido") || cleanTitle.includes("bluetooth") || cleanTitle.includes("airdots") || cleanTitle.includes("jbl")) {
+  if (cleanTitle.includes("fone") || cleanTitle.includes("headphone") || cleanTitle.includes("ouvido") || cleanTitle.includes("bluetooth")) {
     return "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800";
   }
-  if (cleanTitle.includes("garrafa") || cleanTitle.includes("squeeze") || cleanTitle.includes("copo") || cleanTitle.includes("termos") || cleanTitle.includes("térmica") || cleanTitle.includes("stanley")) {
+  if (cleanTitle.includes("garrafa") || cleanTitle.includes("squeeze") || cleanTitle.includes("copo") || cleanTitle.includes("termos") || cleanTitle.includes("térmica")) {
     return "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800";
   }
-  if (cleanTitle.includes("mochila") || cleanTitle.includes("bolsa") || cleanTitle.includes("backpack") || cleanTitle.includes("mala") || cleanTitle.includes("pochete")) {
+  if (cleanTitle.includes("mochila") || cleanTitle.includes("bolsa") || cleanTitle.includes("backpack") || cleanTitle.includes("mala")) {
     return "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800";
   }
-  if (cleanTitle.includes("relógio") || cleanTitle.includes("relogio") || cleanTitle.includes("smartwatch") || cleanTitle.includes("watch") || cleanTitle.includes("band") || cleanTitle.includes("mido")) {
+  if (cleanTitle.includes("relógio") || cleanTitle.includes("smartwatch") || cleanTitle.includes("watch") || cleanTitle.includes("mido")) {
     return "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800";
   }
-  if (cleanTitle.includes("cozinha") || cleanTitle.includes("triturador") || cleanTitle.includes("alho") || cleanTitle.includes("airfryer") || cleanTitle.includes("fritadeira") || cleanTitle.includes("panela") || cleanTitle.includes("cafeteira") || cleanTitle.includes("processador")) {
+  if (cleanTitle.includes("cozinha") || cleanTitle.includes("triturador") || cleanTitle.includes("alho") || cleanTitle.includes("mini") || cleanTitle.includes("processador")) {
     return "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=800";
   }
-  if (cleanTitle.includes("iluminação") || cleanTitle.includes("ring") || cleanTitle.includes("lâmpada") || cleanTitle.includes("lampada") || cleanTitle.includes("refletor") || cleanTitle.includes("luz") || cleanTitle.includes("led")) {
+  if (cleanTitle.includes("iluminação") || cleanTitle.includes("ring") || cleanTitle.includes("lâmpada") || cleanTitle.includes("refletor") || cleanTitle.includes("luz")) {
     return "https://images.unsplash.com/photo-1626266842868-aba7dd2373c6?w=800";
   }
-  if (cleanTitle.includes("camisa") || cleanTitle.includes("roupa") || cleanTitle.includes("vestido") || cleanTitle.includes("camiseta") || cleanTitle.includes("calça") || cleanTitle.includes("tênis") || cleanTitle.includes("tenis") || cleanTitle.includes("sapato")) {
+  if (cleanTitle.includes("camisa") || cleanTitle.includes("roupa") || cleanTitle.includes("vestido") || cleanTitle.includes("camiseta") || cleanTitle.includes("calça")) {
     return "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800";
   }
-  if (cleanTitle.includes("maquiagem") || cleanTitle.includes("beleza") || cleanTitle.includes("batom") || cleanTitle.includes("makeup") || cleanTitle.includes("pincel") || cleanTitle.includes("skincare") || cleanTitle.includes("creme") || cleanTitle.includes("perfume")) {
+  if (cleanTitle.includes("maquiagem") || cleanTitle.includes("beleza") || cleanTitle.includes("batom") || cleanTitle.includes("makeup") || cleanTitle.includes("pincel")) {
     return "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800";
   }
-  if (cleanTitle.includes("ferramenta") || cleanTitle.includes("chave") || cleanTitle.includes("parafusadeira") || cleanTitle.includes("furadeira") || cleanTitle.includes("trena")) {
+  if (cleanTitle.includes("ferramenta") || cleanTitle.includes("chave") || cleanTitle.includes("parafusadeira")) {
     return "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800";
-  }
-  if (cleanTitle.includes("celular") || cleanTitle.includes("smartphone") || cleanTitle.includes("iphone") || cleanTitle.includes("xiaomi") || cleanTitle.includes("samsung") || cleanTitle.includes("motorola")) {
-    return "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800";
-  }
-  if (cleanTitle.includes("notebook") || cleanTitle.includes("laptop") || cleanTitle.includes("computador") || cleanTitle.includes("teclado") || cleanTitle.includes("mouse") || cleanTitle.includes("gamer") || cleanTitle.includes("monitor")) {
-    return "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800";
-  }
-  if (cleanTitle.includes("tv") || cleanTitle.includes("television") || cleanTitle.includes("som") || cleanTitle.includes("caixa") || cleanTitle.includes("alexa")) {
-    return "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=800";
-  }
-  if (cleanTitle.includes("brinquedo") || cleanTitle.includes("jogo") || cleanTitle.includes("ps5") || cleanTitle.includes("playstation") || cleanTitle.includes("xbox") || cleanTitle.includes("nintendo") || cleanTitle.includes("game")) {
-    return "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800";
   }
   // Generic beautiful product photo
   return "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800";
@@ -1423,7 +1412,7 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   }
 
   // 1. Checagem rápida de duplicidade antes do processamento pesado do Gemini
-  const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shp\.ee|shope\.ee|shopee\.com\.br|shopee\.com|mercadolivre\.com(?:\.br)?|mercadolibre\.com|ml\.com\.br|meli\.li|sec\.mercadolivre\.com(?:\.br)?|produto\.mercadolivre\.com\.br)[^\s]+)/i;
+  const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shp\.ee|shope\.ee|shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|a\.shopee\.[a-z]{2,3}|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com(?:\.[a-z]{2})?|produto\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|oferta\.mercadolivre\.com\.br)[^\s]+)/i;
   const match = messageText.match(dealLinkRegex);
   const foundLink = match ? match[1].toLowerCase().trim() : null;
   const cleanMessage = messageText.trim().replace(/\s+/g, " ");
@@ -1504,8 +1493,15 @@ const processIncomingMessage = async (sourceGroupName: string, messageText: stri
   }
 
   let resolvedImageUrl = imageUrl;
+  if (!resolvedImageUrl && parsed.originalLink) {
+    if (isMercadoLivreUrl(parsed.originalLink)) {
+      resolvedImageUrl = await fetchOriginalMercadoLivreImage(parsed.originalLink);
+    } else {
+      resolvedImageUrl = await fetchOriginalShopeeImage(parsed.originalLink);
+    }
+  }
   if (!resolvedImageUrl) {
-    resolvedImageUrl = await fetchProductImageUnified(parsed.originalLink, parsed.productTitle);
+    resolvedImageUrl = getProductImage(parsed.productTitle);
   }
 
   const historyItem = {
@@ -2000,7 +1996,13 @@ app.post("/api/sandbox/parse", async (req, res) => {
       state.config.shopeeAffiliateId || state.config.affiliateId,
       state.config.rewriteStyle
     );
-    result.imageUrl = await fetchProductImageUnified(result.originalLink, result.productTitle);
+    // Add imageUrl using fetchOriginalShopeeImage or fetchOriginalMercadoLivreImage if originalLink is present
+    let imageUrl = null;
+    if (result.originalLink) {
+      const isMl = isMercadoLivreUrl(result.originalLink);
+      imageUrl = isMl ? await fetchOriginalMercadoLivreImage(result.originalLink) : await fetchOriginalShopeeImage(result.originalLink);
+    }
+    result.imageUrl = imageUrl || getProductImage(result.productTitle);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });

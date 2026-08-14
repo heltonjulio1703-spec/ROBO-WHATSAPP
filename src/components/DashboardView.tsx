@@ -31,10 +31,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [ap, setAp] = React.useState(config.autoPilot);
   const [shopeeAppKey, setShopeeAppKey] = React.useState(config.shopeeAppKey || "");
   const [shopeeAppSecret, setShopeeAppSecret] = React.useState(config.shopeeAppSecret || "");
-  const [shopeeAffId, setShopeeAffId] = React.useState(config.shopeeAffiliateId || "");
-  const [mlAffId, setMlAffId] = React.useState(config.mercadolivreAffiliateId || config.affiliateId || "heltonjulio1703");
+  const [shopeeAffId, setShopeeAffId] = React.useState(config.shopeeAffiliateId || config.affiliateId || "");
+  const [mlAffId, setMlAffId] = React.useState(config.mercadolivreAffiliateId || config.affiliateId || "");
   const [shopeeEnabled, setShopeeEnabled] = React.useState(config.shopeeEnabled ?? true);
   const [mercadolivreEnabled, setMercadolivreEnabled] = React.useState(config.mercadolivreEnabled ?? true);
+  const [shortenLinks, setShortenLinks] = React.useState(config.shortenAffiliateLinks ?? true);
   const [showAppKey, setShowAppKey] = React.useState(false);
   const [showAppSecret, setShowAppSecret] = React.useState(false);
   const [footer, setFooter] = React.useState(config.customFooter || "");
@@ -67,7 +68,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         }),
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type");
+      let data: any = {};
+      if (contentType && contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        data = { success: false, error: "Servidor retornou resposta inesperada." };
+      }
+
       if (res.ok && data.success) {
         setTestConnectionStatus("success");
         setTestConnectionMessage("Conexão estabelecida com sucesso! Suas credenciais estão ativas e funcionando perfeitamente.");
@@ -121,12 +129,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   React.useEffect(() => {
     if (saveStatus !== "unsaved") {
-      const initialShopeeAffId = config.shopeeAffiliateId || config.affiliateId || "heltonjulio1703";
-      const initialMlAffId = config.mercadolivreAffiliateId || "heltonjulio1703";
+      const initialShopeeAffId = config.shopeeAffiliateId || config.affiliateId || "";
+      const initialMlAffId = config.mercadolivreAffiliateId || config.affiliateId || "";
       setShopeeAffId(initialShopeeAffId);
       setMlAffId(initialMlAffId);
       setShopeeEnabled(config.shopeeEnabled ?? true);
       setMercadolivreEnabled(config.mercadolivreEnabled ?? true);
+      setShortenLinks(config.shortenAffiliateLinks ?? true);
       setIntervalTime(config.autoPilotInterval);
       setKw(config.keywords);
       setAp(config.autoPilot);
@@ -140,8 +149,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     e.preventDefault();
     setSaveStatus("saving");
     try {
-      const cleanShopeeId = shopeeAffId.trim() || "heltonjulio1703";
-      const cleanMlId = mlAffId.trim() || "heltonjulio1703";
+      const cleanShopeeId = shopeeAffId.trim() || config.shopeeAffiliateId || config.affiliateId || "";
+      const cleanMlId = mlAffId.trim() || config.mercadolivreAffiliateId || config.affiliateId || "";
       const updatedConfig = {
         ...config,
         affiliateId: cleanShopeeId,
@@ -149,6 +158,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         mercadolivreAffiliateId: cleanMlId,
         shopeeEnabled,
         mercadolivreEnabled,
+        shortenAffiliateLinks: shortenLinks,
         autoPilotInterval: Number(intervalTime),
         keywords: kw,
         autoPilot: ap,
@@ -580,7 +590,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                         setMlAffId(e.target.value);
                         setSaveStatus("unsaved");
                       }}
-                      placeholder="Ex: heltonjulio1703 ou sua tag de afiliado"
+                      placeholder="Ex: is20251020221720 ou sua tag de afiliado"
                       className="flex-1 px-3 py-1.5 border border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-xs text-slate-800 bg-white"
                       required
                     />
@@ -590,6 +600,27 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Formatação Inteligente de Links */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
+                    🔗
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-800">Links Oficiais & Diretos (Anti-Bloqueio)</h3>
+                    <p className="text-[11px] text-slate-500">Gera links canônicos limpos que abrem direto no app do Mercado Livre e Shopee</p>
+                  </div>
+                </div>
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">
+                  Ativo 100%
+                </span>
+              </div>
+              <p className="text-[10px] text-slate-500">
+                ✅ <strong>Proteção de Comissão:</strong> Os links são convertidos diretamente para o formato oficial canônico (<code>matt_tool</code> / <code>universal-link</code>), sem intermediários de anúncios que travam o app ou geram telas de verificação.
+              </p>
             </div>
 
             {/* Save Button */}

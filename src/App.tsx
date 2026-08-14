@@ -185,25 +185,29 @@ export default function App() {
     }
   };
 
+  // Safe API Fetch Helper to guard against non-JSON/HTML error responses
+  const safeJsonFetch = async <T = any>(url: string, init?: RequestInit): Promise<T | null> => {
+    try {
+      const r = await fetch(url, init);
+      const contentType = r.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        return null;
+      }
+      return await r.json();
+    } catch (e) {
+      return null;
+    }
+  };
+
   // Initial Data Load
   const fetchAllData = async () => {
     try {
-      const safeFetch = async (url: string) => {
-        try {
-          const r = await fetch(url);
-          if (!r.ok) return null;
-          return await r.json();
-        } catch (e) {
-          return null;
-        }
-      };
-
       const [configRes, whatsappRes, groupsRes, logsRes, historyRes] = await Promise.all([
-        safeFetch("/api/config"),
-        safeFetch("/api/whatsapp/status"),
-        safeFetch("/api/groups"),
-        safeFetch("/api/logs"),
-        safeFetch("/api/history"),
+        safeJsonFetch<AppConfig>("/api/config"),
+        safeJsonFetch<WhatsAppStatus>("/api/whatsapp/status"),
+        safeJsonFetch<GroupConfig>("/api/groups"),
+        safeJsonFetch<LogItem[]>("/api/logs"),
+        safeJsonFetch<HistoryItem[]>("/api/history"),
       ]);
 
       if (configRes) setConfig(configRes);
@@ -212,7 +216,7 @@ export default function App() {
       if (logsRes) setLogs(logsRes);
       if (historyRes) setHistory(historyRes);
     } catch (err) {
-      console.error("Erro ao carregar dados da API:", err);
+      console.warn("Aviso ao carregar dados da API:", err);
     }
   };
 
@@ -233,20 +237,17 @@ export default function App() {
 
     // Set polling for logs, history and WhatsApp status so UI stays fully in sync
     const interval = setInterval(() => {
-      fetch("/api/whatsapp/status")
-        .then((r) => (r.ok ? r.json() : null))
-        .then((data) => { if (data) setWhatsapp(data); })
-        .catch(() => {});
+      safeJsonFetch<WhatsAppStatus>("/api/whatsapp/status").then((data) => {
+        if (data) setWhatsapp(data);
+      });
 
-      fetch("/api/logs")
-        .then((r) => (r.ok ? r.json() : null))
-        .then((data) => { if (data) setLogs(data); })
-        .catch(() => {});
+      safeJsonFetch<LogItem[]>("/api/logs").then((data) => {
+        if (data) setLogs(data);
+      });
 
-      fetch("/api/history")
-        .then((r) => (r.ok ? r.json() : null))
-        .then((data) => { if (data) setHistory(data); })
-        .catch(() => {});
+      safeJsonFetch<HistoryItem[]>("/api/history").then((data) => {
+        if (data) setHistory(data);
+      });
     }, 1500);
 
     return () => {
@@ -258,107 +259,101 @@ export default function App() {
 
   const handleSaveConfig = async (newConfig: AppConfig) => {
     try {
-      const response = await fetch("/api/config", {
+      const data = await safeJsonFetch<any>("/api/config", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newConfig),
       });
-      const data = await response.json();
-      if (data.success) {
+      if (data && data.success) {
         setConfig(data.config);
         if (data.historyCleared || data.history) {
           setHistory(data.history || []);
         }
       }
     } catch (err) {
-      console.error("Erro ao salvar config:", err);
+      console.warn("Aviso ao salvar config:", err);
     }
   };
 
   const handleSaveGroups = async (newGroups: GroupConfig) => {
     try {
-      const response = await fetch("/api/groups", {
+      const data = await safeJsonFetch<any>("/api/groups", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newGroups),
       });
-      const data = await response.json();
-      if (data.success) {
+      if (data && data.success) {
         setGroups(data.groups);
       }
     } catch (err) {
-      console.error("Erro ao salvar grupos:", err);
+      console.warn("Aviso ao salvar grupos:", err);
     }
   };
 
   const handleConnectWhatsApp = async (phoneNumber?: string) => {
     try {
-      const response = await fetch("/api/whatsapp/connect", {
+      const data = await safeJsonFetch<WhatsAppStatus>("/api/whatsapp/connect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phoneNumber }),
       });
-      const data = await response.json();
-      setWhatsapp(data);
+      if (data) setWhatsapp(data);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
   const handleConfirmScan = async () => {
     try {
-      const response = await fetch("/api/whatsapp/confirm-scan", { method: "POST" });
-      const data = await response.json();
-      setWhatsapp(data);
+      const data = await safeJsonFetch<WhatsAppStatus>("/api/whatsapp/confirm-scan", { method: "POST" });
+      if (data) setWhatsapp(data);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
   const handleDisconnectWhatsApp = async () => {
     try {
-      const response = await fetch("/api/whatsapp/disconnect", { method: "POST" });
-      const data = await response.json();
-      setWhatsapp(data);
+      const data = await safeJsonFetch<WhatsAppStatus>("/api/whatsapp/disconnect", { method: "POST" });
+      if (data) setWhatsapp(data);
       
       // Fetch and update groups and history states to immediately clear UI counts and data
       const [groupsRes, historyRes] = await Promise.all([
-        fetch("/api/groups").then(r => r.json()),
-        fetch("/api/history").then(r => r.json()),
+        safeJsonFetch<GroupConfig>("/api/groups"),
+        safeJsonFetch<HistoryItem[]>("/api/history"),
       ]);
-      setGroups(groupsRes);
-      setHistory(historyRes);
+      if (groupsRes) setGroups(groupsRes);
+      if (historyRes) setHistory(historyRes);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
   const handleClearLogs = async () => {
     try {
-      await fetch("/api/logs/clear", { method: "POST" });
+      await safeJsonFetch("/api/logs/clear", { method: "POST" });
       setLogs([]);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
   const handleClearHistory = async () => {
     try {
-      await fetch("/api/history/clear", { method: "POST" });
+      await safeJsonFetch("/api/history/clear", { method: "POST" });
       setHistory([]);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
   const handleRefreshLogsOnly = async () => {
     setIsRefreshing(true);
     try {
-      const r = await fetch("/api/logs");
-      const d = await r.json();
-      setLogs(d);
+      const d = await safeJsonFetch<LogItem[]>("/api/logs");
+      if (d) setLogs(d);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     } finally {
       setIsRefreshing(false);
     }
@@ -366,19 +361,17 @@ export default function App() {
 
   const handleRefreshHistoryOnly = async () => {
     try {
-      const r = await fetch("/api/history");
-      const d = await r.json();
-      setHistory(d);
+      const d = await safeJsonFetch<HistoryItem[]>("/api/history");
+      if (d) setHistory(d);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
   const handleToggleTransmission = async () => {
     try {
-      const response = await fetch("/api/transmission/toggle", { method: "POST" });
-      const data = await response.json();
-      if (data.success) {
+      const data = await safeJsonFetch<any>("/api/transmission/toggle", { method: "POST" });
+      if (data && data.success) {
         setConfig(prev => ({ ...prev, isTransmissionEnabled: data.isTransmissionEnabled }));
         if (data.historyCleared || !data.isTransmissionEnabled) {
           setHistory([]);
@@ -387,26 +380,26 @@ export default function App() {
         }
       }
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 
   const handleSimulateIncoming = async (sourceGroupId: string, messageText: string) => {
     try {
-      await fetch("/api/simulation/incoming", {
+      await safeJsonFetch("/api/simulation/incoming", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sourceGroupId, messageText }),
       });
       // Fetch latest history/logs immediately
       const [hRes, lRes] = await Promise.all([
-        fetch("/api/history").then(r => r.json()),
-        fetch("/api/logs").then(r => r.json()),
+        safeJsonFetch<HistoryItem[]>("/api/history"),
+        safeJsonFetch<LogItem[]>("/api/logs"),
       ]);
-      setHistory(hRes);
-      setLogs(lRes);
+      if (hRes) setHistory(hRes);
+      if (lRes) setLogs(lRes);
     } catch (err) {
-      console.error(err);
+      console.warn(err);
     }
   };
 

@@ -98,6 +98,7 @@ const checkBackendAvailability = async () => {
     if (res.ok && contentType && contentType.includes("application/json")) {
       console.log("🟢 API real detectada e conectada. Usando backend de produção.");
       window.isOfflineMode = false;
+      window.dispatchEvent(new CustomEvent("backend-detected"));
     } else {
       console.warn("⚠️ API real não encontrada ou retornou 404. Ativando Modo de Demonstração 100% Client-Side.");
       window.isOfflineMode = true;
@@ -421,10 +422,10 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
       }
 
       // Extract a mock link and determine storeType
-      const dealLinkMatch = messageText.match(/(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|sec\.mercadolivre\.com(?:\.br)?|produto\.mercadolivre\.com\.br)[^\s]+)/i);
+      const dealLinkMatch = messageText.match(/(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|a\.shopee\.[a-z]{2,3}|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com(?:\.[a-z]{2})?|produto\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|oferta\.mercadolivre\.com\.br)[^\s]+)/i);
       const originalLink = dealLinkMatch ? dealLinkMatch[0] : "https://shopee.com.br/product-mock";
       
-      const isMl = /mercadolivre|mercadolibre|ml\.com\.br|meli\.li/i.test(originalLink);
+      const isMl = /mercadolivre|mercadolibre|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre/i.test(originalLink);
 
       if (isMl && configState.mercadolivreEnabled === false) {
         return createMockResponse({ success: false, error: "Plataforma Mercado Livre está desativada nas configurações" }, 400);
@@ -436,10 +437,18 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
       const storeType: "shopee" | "mercadolivre" = isMl ? "mercadolivre" : "shopee";
       const storeLabel = isMl ? "Mercado Livre 💛" : "Shopee 🧡";
 
-      const affId = (isMl ? configState.mercadolivreAffiliateId : configState.shopeeAffiliateId) || configState.affiliateId || "heltonjulio1703";
-      const affiliateLink = isMl 
-        ? `https://www.mercadolivre.com.br/social/afiliados?matt_tool=123&matt_word=${affId}&url=${encodeURIComponent(originalLink)}`
-        : `https://shopee.com.br/m/afiliados-shopee?sub_id=${affId}`;
+      const affId = (isMl ? (configState.mercadolivreAffiliateId || configState.affiliateId) : (configState.shopeeAffiliateId || configState.affiliateId)) || "is20251020221720";
+      
+      let affiliateLink = "";
+      if (isMl) {
+        let cleanBase = originalLink.split("?")[0].replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
+        if (cleanBase.includes("/social/")) {
+          cleanBase = cleanBase.replace(/\/social\/[a-zA-Z0-9_.-]+/i, `/social/${affId}`);
+        }
+        affiliateLink = `${cleanBase}?matt_tool=${encodeURIComponent(affId)}&matt_word=bot`;
+      } else {
+        affiliateLink = `https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=${encodeURIComponent(affId)}&url=${encodeURIComponent(originalLink)}`;
+      }
 
       let productTitle = isMl ? "Super Oferta Mercado Livre" : "Super Oferta Relâmpago Shopee";
       if (messageText.toLowerCase().includes("fone")) {

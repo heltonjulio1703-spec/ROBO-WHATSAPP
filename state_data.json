@@ -5,16 +5,19 @@
     "autoPilotInterval": 599,
     "rewriteStyle": "excited",
     "keywords": "promocao, cupom, desconto, oferta, achado, frete gratis, shopee, shp.ee",
-    "isTransmissionEnabled": false,
+    "isTransmissionEnabled": true,
+    "shopeeEnabled": true,
+    "mercadolivreEnabled": true,
     "shopeeAppKey": "18399950350",
     "shopeeAppSecret": "VWHFAPVVLM4XQCSJQ4M6RIQDDGCQNL7K",
     "shopeeAffiliateId": "18399950350",
+    "mercadolivreAffiliateId": "is20251020221720",
     "useShopeeApi": false,
     "customFooter": "@isamara.manoel",
-    "quietStart": "00:00",
-    "quietEnd": "07:00",
+    "quietStart": "08:00",
+    "quietEnd": "23:00",
     "automaticScanInterval": 60,
-    "robotActivationTime": 1785903077217
+    "robotActivationTime": 1786654198187
   },
   "groups": {
     "sources": [
@@ -37,6 +40,161 @@
         "id": "src_4",
         "name": "Descontos da China 🇨🇳",
         "active": true
+      },
+      {
+        "id": "120363429760637815@g.us",
+        "name": "Robô destinos anúncios",
+        "active": false
+      },
+      {
+        "id": "120363426093529775@g.us",
+        "name": "Robô origem dos anúncios",
+        "active": false
+      },
+      {
+        "id": "120363043246567157@g.us",
+        "name": "❤️minha família ❤️",
+        "active": false
+      },
+      {
+        "id": "120363061855129936@g.us",
+        "name": "Aplicação|reforma|interiores",
+        "active": false
+      },
+      {
+        "id": "120363421507181717@g.us",
+        "name": "Fofocalizando",
+        "active": false
+      },
+      {
+        "id": "120363409240541459@g.us",
+        "name": "Frequência Máxima",
+        "active": false
+      },
+      {
+        "id": "5514981186018-1586749965@g.us",
+        "name": "Oliveira kidis kkkk",
+        "active": false
+      },
+      {
+        "id": "120363405779926175@g.us",
+        "name": "GRUPO DE ADORAÇÃO",
+        "active": false
+      },
+      {
+        "id": "120363192412825293@g.us",
+        "name": "Rolê hoje 🚀",
+        "active": false
+      },
+      {
+        "id": "120363423521716121@g.us",
+        "name": "Aniversário do Vô",
+        "active": false
+      },
+      {
+        "id": "120363388332817938@g.us",
+        "name": "Primos ",
+        "active": false
+      },
+      {
+        "id": "120363425617976322@g.us",
+        "name": "#101 HELEN INDICA BABY 👶🏻👩🏻‍🍼",
+        "active": false
+      },
+      {
+        "id": "120363382278720847@g.us",
+        "name": "Véspera&Natal",
+        "active": false
+      },
+      {
+        "id": "5511946232754-1447188498@g.us",
+        "name": "Familia Ribeiro",
+        "active": false
+      },
+      {
+        "id": "5514998743236-1606491165@g.us",
+        "name": "Família ❤",
+        "active": false
+      },
+      {
+        "id": "5514981186018-1559450411@g.us",
+        "name": "Família Oliveira",
+        "active": false
+      },
+      {
+        "id": "120363427135424328@g.us",
+        "name": "Cantinho dos ACHADOS ✨",
+        "active": false
+      },
+      {
+        "id": "120363426714650720@g.us",
+        "name": "Bem Viver",
+        "active": false
+      },
+      {
+        "id": "120363403083896588@g.us",
+        "name": "# 111 achadinhos da Isa 👶🏠🧰",
+        "active": false
+      },
+      {
+        "id": "120363416778227172@g.us",
+        "name": "• Achadinhos Ju e Gui #08 🧡",
+        "active": false
+      },
+      {
+        "id": "120363402438703554@g.us",
+        "name": "#101 HELEN INDICA  🏠",
+        "active": false
+      },
+      {
+        "id": "120363401571829114@g.us",
+        "name": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+        "active": true
+      },
+      {
+        "id": "120363424379987080@g.us",
+        "name": "Ofertas da Amanda #12 🏠💕",
+        "active": false
+      },
+      {
+        "id": "120363362127780099@g.us",
+        "name": "Bebezinhos Promo #5",
+        "active": false
+      },
+      {
+        "id": "120363406098875058@g.us",
+        "name": "Gaby Garimpou #10",
+        "active": false
+      },
+      {
+        "id": "120363421526675635@g.us",
+        "name": "Will Garimpou [416]",
+        "active": false
+      },
+      {
+        "id": "120363198421045239@g.us",
+        "name": "Shopee Ofertas Bombásticas 💣",
+        "active": false
+      },
+      {
+        "id": "120363198421045240@g.us",
+        "name": "Cupom & Descontos Diários 🤑",
+        "active": false
+      },
+      {
+        "id": "120363198421045241@g.us",
+        "name": "Achados da Shopee Brasil 🇧🇷",
+        "active": false
+      },
+      {
+        "id": "120363198421045242@g.us",
+        "name": "Grupo da Família e Promoções 🏡",
+        "active": false
+      },
+      {
+        "id": "120363198421045243@g.us",
+        "name": "Canal de Teste Replicador 📲",
+        "active": false
       }
     ],
     "targets": [
@@ -54,510 +212,756 @@
         "id": "tgt_3",
         "name": "Ofertas Exclusivas Afiliado 💎",
         "active": true
+      },
+      {
+        "id": "120363429760637815@g.us",
+        "name": "Robô destinos anúncios",
+        "active": true
+      },
+      {
+        "id": "120363426093529775@g.us",
+        "name": "Robô origem dos anúncios",
+        "active": false
+      },
+      {
+        "id": "120363043246567157@g.us",
+        "name": "❤️minha família ❤️",
+        "active": false
+      },
+      {
+        "id": "120363061855129936@g.us",
+        "name": "Aplicação|reforma|interiores",
+        "active": false
+      },
+      {
+        "id": "120363421507181717@g.us",
+        "name": "Fofocalizando",
+        "active": false
+      },
+      {
+        "id": "120363409240541459@g.us",
+        "name": "Frequência Máxima",
+        "active": false
+      },
+      {
+        "id": "5514981186018-1586749965@g.us",
+        "name": "Oliveira kidis kkkk",
+        "active": false
+      },
+      {
+        "id": "120363405779926175@g.us",
+        "name": "GRUPO DE ADORAÇÃO",
+        "active": false
+      },
+      {
+        "id": "120363192412825293@g.us",
+        "name": "Rolê hoje 🚀",
+        "active": false
+      },
+      {
+        "id": "120363423521716121@g.us",
+        "name": "Aniversário do Vô",
+        "active": false
+      },
+      {
+        "id": "120363388332817938@g.us",
+        "name": "Primos ",
+        "active": false
+      },
+      {
+        "id": "120363425617976322@g.us",
+        "name": "#101 HELEN INDICA BABY 👶🏻👩🏻‍🍼",
+        "active": false
+      },
+      {
+        "id": "120363382278720847@g.us",
+        "name": "Véspera&Natal",
+        "active": false
+      },
+      {
+        "id": "5511946232754-1447188498@g.us",
+        "name": "Familia Ribeiro",
+        "active": false
+      },
+      {
+        "id": "5514998743236-1606491165@g.us",
+        "name": "Família ❤",
+        "active": false
+      },
+      {
+        "id": "5514981186018-1559450411@g.us",
+        "name": "Família Oliveira",
+        "active": false
+      },
+      {
+        "id": "120363427135424328@g.us",
+        "name": "Cantinho dos ACHADOS ✨",
+        "active": false
+      },
+      {
+        "id": "120363426714650720@g.us",
+        "name": "Bem Viver",
+        "active": false
+      },
+      {
+        "id": "120363403083896588@g.us",
+        "name": "# 111 achadinhos da Isa 👶🏠🧰",
+        "active": false
+      },
+      {
+        "id": "120363416778227172@g.us",
+        "name": "• Achadinhos Ju e Gui #08 🧡",
+        "active": false
+      },
+      {
+        "id": "120363402438703554@g.us",
+        "name": "#101 HELEN INDICA  🏠",
+        "active": false
+      },
+      {
+        "id": "120363401571829114@g.us",
+        "name": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+        "active": false
+      },
+      {
+        "id": "120363424379987080@g.us",
+        "name": "Ofertas da Amanda #12 🏠💕",
+        "active": false
+      },
+      {
+        "id": "120363362127780099@g.us",
+        "name": "Bebezinhos Promo #5",
+        "active": false
+      },
+      {
+        "id": "120363406098875058@g.us",
+        "name": "Gaby Garimpou #10",
+        "active": false
+      },
+      {
+        "id": "120363421526675635@g.us",
+        "name": "Will Garimpou [416]",
+        "active": false
+      },
+      {
+        "id": "120363198421045239@g.us",
+        "name": "Shopee Ofertas Bombásticas 💣",
+        "active": false
+      },
+      {
+        "id": "120363198421045240@g.us",
+        "name": "Cupom & Descontos Diários 🤑",
+        "active": false
+      },
+      {
+        "id": "120363198421045241@g.us",
+        "name": "Achados da Shopee Brasil 🇧🇷",
+        "active": false
+      },
+      {
+        "id": "120363198421045242@g.us",
+        "name": "Grupo da Família e Promoções 🏡",
+        "active": false
+      },
+      {
+        "id": "120363198421045243@g.us",
+        "name": "Canal de Teste Replicador 📲",
+        "active": false
       }
     ]
   },
-  "history": [],
+  "history": [
+    {
+      "id": "deal_ipav6piqs",
+      "time": "21:32",
+      "sourceGroup": "Grupo Simulado 📲",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Tábua de Passar Roupa",
+      "originalLink": "https://meli.la/15zvKPc",
+      "affiliateLink": "https://www.mercadolivre.com.br/p/MLB64578882?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720",
+      "originalMessage": "🚨 OFERTA NO MERCADO LIVRE! Tábua de passar em promoção: https://meli.la/15zvKPc Aproveitem!",
+      "rewrittenMessage": "🚨 GENTE, OLHA ESSE ACHADO NO MERCADO LIVRE! 😱🔥 Tábua de passar em super promoção para facilitar o seu dia a dia! 💛 Aproveite a entrega rápida e garanta a sua agora mesmo antes que esgote! 🏃💨 Acesse o link: https://www.mercadolivre.com.br/p/MLB64578882?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720\n\n@isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_dzwq7t7s2",
+      "time": "21:16",
+      "sourceGroup": "Descontos da China 🇨🇳",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Smart TV 50 Polegadas 4K Samsung",
+      "originalLink": "https://www.mercadolivre.com.br/p/MLB22819382",
+      "affiliateLink": "https://www.mercadolivre.com.br/p/MLB22819382?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720",
+      "originalMessage": "🚨 IMPERDÍVEL MERCADO LIVRE! Smart TV 50 Polegadas 4K Samsung com FRETE GRÁTIS e entrega rápida! De R$ 2.899 por apenas R$ 2.199,00 em até 10x sem juros! 📺 Compre no Mercado Livre: https://www.mercadolivre.com.br/p/MLB22819382 Aproveite!",
+      "rewrittenMessage": "🚨 IMPERDÍVEL MERCADO LIVRE! 😱 Smart TV 50 Polegadas 4K Samsung com FRETE GRÁTIS e entrega rápida! 🔥 De R$ 2.899 por apenas R$ 2.199,00 em até 10x sem juros! 📺 Aproveite essa oferta incrível no Mercado Livre! ✨\n\nhttps://www.mercadolivre.com.br/p/MLB22819382?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720\n\n@isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_bu2a6wjer",
+      "time": "20:57",
+      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Triturador elétrico de alho e temperos USB",
+      "originalLink": "https://shp.ee/u29kd8a",
+      "affiliateLink": "https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2Fu29kd8a",
+      "originalMessage": "😱 FACILITE SUA VIDA NA COZINHA! Triturador elétrico de alho e temperos USB por apenas R$ 22,99! É maravilhoso, comprei um e recomendo demais. Link promocional aqui: https://shp.ee/u29kd8a",
+      "rewrittenMessage": "😱 FACILITE SUA VIDA NA COZINHA! Triturador elétrico de alho e temperos USB por apenas R$ 22,99! É maravilhoso, comprei um e recomendo demais. Aproveite esse achado da Shopee 🧡 https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2Fu29kd8a\n\n@isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=800",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_9tt0w18sf",
+      "time": "20:50",
+      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Garrafa de Água Motivacional 2 Litros",
+      "originalLink": "https://shope.ee/a283kd91",
+      "affiliateLink": "https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshope.ee%2Ferror_page",
+      "originalMessage": "🛍️ ACHADO IMPERDÍVEL! Garrafa de Água Motivacional 2 Litros com adesivos lindos por R$ 14,50. Link do produto: https://shope.ee/a283kd91 Corre que o estoque está acabando!",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! 😱 Garrafa de Água Motivacional 2 Litros com adesivos lindos por R$ 14,50. 🔥 Corre que o estoque está acabando! 🧡\n\nhttps://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshope.ee%2Ferror_page\n\n@isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_r3rl1nna0",
+      "time": "20:50",
+      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Fone de Ouvido Bluetooth Sem Fio i12 TWS",
+      "originalLink": "https://shopee.com.br/product-10293021-9988231",
+      "affiliateLink": "https://s.shopee.com.br/8AVGpjmivJ",
+      "originalMessage": "🚨 CUPOM EXCLUSIVO SHOPEE! Fone de Ouvido Bluetooth Sem Fio i12 TWS com estojo de recarga por apenas R$ 18,90! Compre aqui: https://shopee.com.br/product-10293021-9988231 Garanta já o seu!",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO DA SHOPEE! 🔥 Fone de Ouvido Bluetooth Sem Fio i12 TWS com estojo de recarga por apenas R$ 18,90! 😱 Aproveite os cupons de frete grátis da Shopee e garanta já o seu! ✨ https://s.shopee.com.br/8AVGpjmivJ\n\n@isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800",
+      "storeType": "shopee"
+    }
+  ],
   "logs": [
     {
-      "time": "04:29:48",
+      "time": "21:38:42",
       "type": "success",
-      "message": "🔑 Código de Emparelhamento oficial gerado com sucesso: RTGN-5C5P"
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"Gaby Garimpou #10\"!"
     },
     {
-      "time": "04:29:48",
+      "time": "21:38:42",
       "type": "info",
-      "message": "Enviando solicitação de código de emparelhamento oficial para +5511999998888 (Tentativa 1/15)..."
+      "message": "Baixando imagem recebida de \"Gaby Garimpou #10\"..."
     },
     {
-      "time": "04:29:46",
-      "type": "info",
-      "message": "Aguardando registro inicial para solicitar código de emparelhamento para +5511999998888..."
-    },
-    {
-      "time": "04:29:46",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:29:46",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:29:07",
-      "type": "info",
-      "message": "QR Code oficial do WhatsApp gerado com sucesso! Escaneie com seu celular."
-    },
-    {
-      "time": "04:29:07",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:29:06",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:28:22",
+      "time": "21:37:40",
       "type": "success",
-      "message": "🔑 Código de Emparelhamento oficial gerado com sucesso: VF3D-RJ6H"
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
     },
     {
-      "time": "04:28:22",
+      "time": "21:37:39",
       "type": "info",
-      "message": "Enviando solicitação de código de emparelhamento oficial para +5514981186018 (Tentativa 1/15)..."
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
     },
     {
-      "time": "04:28:20",
-      "type": "info",
-      "message": "Aguardando registro inicial para solicitar código de emparelhamento para +5514981186018..."
-    },
-    {
-      "time": "04:28:20",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:28:20",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:28:16",
-      "type": "error",
-      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
-    },
-    {
-      "time": "04:28:16",
-      "type": "info",
-      "message": "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos."
-    },
-    {
-      "time": "04:28:16",
-      "type": "info",
-      "message": "Dados de autenticação locais removidos com sucesso."
-    },
-    {
-      "time": "04:27:36",
+      "time": "21:36:30",
       "type": "success",
-      "message": "🔑 Código de Emparelhamento oficial gerado com sucesso: W6QV-X1WL"
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"Will Garimpou [416]\"!"
     },
     {
-      "time": "04:27:36",
+      "time": "21:36:29",
       "type": "info",
-      "message": "Enviando solicitação de código de emparelhamento oficial para +5514981186018 (Tentativa 1/15)..."
+      "message": "Baixando imagem recebida de \"Will Garimpou [416]\"..."
     },
     {
-      "time": "04:27:34",
-      "type": "info",
-      "message": "Aguardando registro inicial para solicitar código de emparelhamento para +5514981186018..."
-    },
-    {
-      "time": "04:27:34",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:27:34",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:27:16",
-      "type": "info",
-      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
-    },
-    {
-      "time": "04:24:01",
-      "type": "info",
-      "message": "Dados de autenticação locais removidos com sucesso."
-    },
-    {
-      "time": "04:24:01",
-      "type": "error",
-      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
-    },
-    {
-      "time": "04:23:57",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:23:57",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:23:57",
-      "type": "info",
-      "message": "🔄 Sincronizando conexão com os servidores do WhatsApp..."
-    },
-    {
-      "time": "04:21:18",
+      "time": "21:35:27",
       "type": "success",
-      "message": "🔑 Código de Emparelhamento oficial gerado com sucesso: KQJYVTNQ"
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
     },
     {
-      "time": "04:21:18",
+      "time": "21:35:27",
       "type": "info",
-      "message": "Enviando solicitação de código de emparelhamento oficial para +5514981186018 (Tentativa 1/15)..."
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
     },
     {
-      "time": "04:21:16",
+      "time": "21:34:59",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"Bebezinhos Promo #5\"!"
+    },
+    {
+      "time": "21:34:59",
       "type": "info",
-      "message": "Aguardando registro inicial para solicitar código de emparelhamento para +5514981186018..."
+      "message": "Baixando imagem recebida de \"Bebezinhos Promo #5\"..."
     },
     {
-      "time": "04:21:16",
+      "time": "21:33:55",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"Will Garimpou [416]\"!"
+    },
+    {
+      "time": "21:33:55",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"Will Garimpou [416]\"..."
+    },
+    {
+      "time": "21:33:48",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+    },
+    {
+      "time": "21:33:48",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+    },
+    {
+      "time": "21:33:17",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+    },
+    {
+      "time": "21:33:17",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+    },
+    {
+      "time": "21:33:01",
+      "type": "success",
+      "message": "✨ Sincronizados 26 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "21:33:01",
+      "type": "info",
+      "message": "Sincronização concluída: 0 novos e 52 nomes de grupos atualizados."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "📊 Varredura automática em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Descontos da China 🇨🇳\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Descontos da China 🇨🇳\"..."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Ofertas e Cupons Relâmpago ⚡\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Ofertas e Cupons Relâmpago ⚡\"..."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Achadinhos Shopee Brasil 🇧🇷\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Achadinhos Shopee Brasil 🇧🇷\"..."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "🚀 [Conexão WhatsApp Estabelecida] Iniciando varredura automática em 4 grupo(s) de origem ativo(s)..."
+    },
+    {
+      "time": "21:33:00",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "21:33:00",
+      "type": "success",
+      "message": "🟢 Conectado com sucesso como Isamara Manoel"
+    },
+    {
+      "time": "21:32:57",
       "type": "info",
       "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
     },
     {
-      "time": "04:21:16",
+      "time": "21:32:57",
       "type": "info",
       "message": "Iniciando processo de conexão oficial com WhatsApp..."
     },
     {
-      "time": "04:21:08",
-      "type": "error",
-      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
-    },
-    {
-      "time": "04:21:07",
-      "type": "info",
-      "message": "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos."
-    },
-    {
-      "time": "04:21:07",
-      "type": "info",
-      "message": "Dados de autenticação locais removidos com sucesso."
-    },
-    {
-      "time": "04:20:54",
-      "type": "info",
-      "message": "QR Code oficial do WhatsApp gerado com sucesso! Escaneie com seu celular."
-    },
-    {
-      "time": "04:20:54",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:20:54",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:20:54",
+      "time": "21:32:57",
       "type": "info",
       "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
     },
     {
-      "time": "04:20:54",
+      "time": "21:32:57",
       "type": "info",
       "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
     },
     {
-      "time": "04:20:46",
+      "time": "21:32:37",
       "type": "info",
-      "message": "QR Code oficial do WhatsApp gerado com sucesso! Escaneie com seu celular."
+      "message": "Buscando foto original do produto no Mercado Livre: https://www.mercadolivre.com.br/p/MLB64578882"
     },
     {
-      "time": "04:20:46",
+      "time": "21:32:37",
+      "type": "success",
+      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
+    },
+    {
+      "time": "21:32:36",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
+    },
+    {
+      "time": "21:32:36",
+      "type": "success",
+      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
+    },
+    {
+      "time": "21:32:35",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
+    },
+    {
+      "time": "21:32:34",
+      "type": "info",
+      "message": "Laboratório de Teste: Analisando mensagem com IA..."
+    },
+    {
+      "time": "21:32:30",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+    },
+    {
+      "time": "21:32:30",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+    },
+    {
+      "time": "21:32:28",
+      "type": "success",
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Tábua de Passar Roupa"
+    },
+    {
+      "time": "21:32:28",
+      "type": "success",
+      "message": "📸 Anúncio com FOTO enviado para \"Robô destinos anúncios\""
+    },
+    {
+      "time": "21:32:26",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "21:32:26",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "21:32:26",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "21:32:26",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "21:32:26",
+      "type": "info",
+      "message": "Buscando foto original do produto no Mercado Livre: https://www.mercadolivre.com.br/p/MLB64578882"
+    },
+    {
+      "time": "21:32:26",
+      "type": "success",
+      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
+    },
+    {
+      "time": "21:32:26",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
+    },
+    {
+      "time": "21:32:26",
+      "type": "success",
+      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
+    },
+    {
+      "time": "21:32:25",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
+    },
+    {
+      "time": "21:32:22",
+      "type": "info",
+      "message": "Nova mensagem em \"Grupo Simulado 📲\": Analisando anúncio..."
+    },
+    {
+      "time": "21:32:18",
+      "type": "success",
+      "message": "✨ Sincronizados 26 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "21:32:18",
+      "type": "info",
+      "message": "Sincronização concluída: 0 novos e 52 nomes de grupos atualizados."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "📊 Varredura automática em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Descontos da China 🇨🇳\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Descontos da China 🇨🇳\"..."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Ofertas e Cupons Relâmpago ⚡\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Ofertas e Cupons Relâmpago ⚡\"..."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Achadinhos Shopee Brasil 🇧🇷\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Achadinhos Shopee Brasil 🇧🇷\"..."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "🚀 [Conexão WhatsApp Estabelecida] Iniciando varredura automática em 4 grupo(s) de origem ativo(s)..."
+    },
+    {
+      "time": "21:32:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "21:32:17",
+      "type": "success",
+      "message": "🟢 Conectado com sucesso como Isamara Manoel"
+    },
+    {
+      "time": "21:32:15",
       "type": "info",
       "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
     },
     {
-      "time": "04:20:46",
+      "time": "21:32:15",
       "type": "info",
       "message": "Iniciando processo de conexão oficial com WhatsApp..."
     },
     {
-      "time": "04:19:57",
-      "type": "error",
-      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
-    },
-    {
-      "time": "04:19:57",
+      "time": "21:32:15",
       "type": "info",
-      "message": "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos."
+      "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
     },
     {
-      "time": "04:19:57",
+      "time": "21:32:15",
       "type": "info",
-      "message": "Dados de autenticação locais removidos com sucesso."
+      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
     },
     {
-      "time": "04:19:44",
+      "time": "21:26:41",
+      "type": "info",
+      "message": "Anúncio em \"Achadinhos Shopee Brasil 🇧🇷\" já foi convertido e enviado anteriormente (https://shp.ee/u29kd8a). Ignorando para evitar duplicidade."
+    },
+    {
+      "time": "21:26:41",
+      "type": "info",
+      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
+    },
+    {
+      "time": "21:16:45",
       "type": "success",
-      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Smart TV 50 Polegadas 4K Samsung"
     },
     {
-      "time": "04:19:44",
-      "type": "info",
-      "message": "Sincronização concluída: 78 novos e 0 nomes de grupos atualizados."
-    },
-    {
-      "time": "04:19:43",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "04:19:43",
+      "time": "21:16:45",
       "type": "success",
-      "message": "🟢 Conectado com sucesso como Minha Conta"
+      "message": "📢 [Vercel Demo] Enviado para \"Robô destinos anúncios\" com sucesso!"
     },
     {
-      "time": "04:19:41",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:19:41",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:19:41",
-      "type": "info",
-      "message": "🔄 Sincronizando conexão com os servidores do WhatsApp..."
-    },
-    {
-      "time": "04:19:21",
-      "type": "info",
-      "message": "QR Code oficial do WhatsApp gerado com sucesso! Escaneie com seu celular."
-    },
-    {
-      "time": "04:19:21",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:19:20",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:18:54",
+      "time": "21:16:45",
       "type": "success",
-      "message": "🔑 Código de Emparelhamento oficial gerado com sucesso: NSCZTQZF"
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Ofertas Exclusivas Afiliado 💎\": Smart TV 50 Polegadas 4K Samsung"
     },
     {
-      "time": "04:18:54",
-      "type": "info",
-      "message": "Enviando solicitação de código de emparelhamento oficial para +5514981017533 (Tentativa 1/15)..."
-    },
-    {
-      "time": "04:18:52",
-      "type": "info",
-      "message": "Aguardando registro inicial para solicitar código de emparelhamento para +5514981017533..."
-    },
-    {
-      "time": "04:18:52",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:18:52",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:18:39",
+      "time": "21:16:45",
       "type": "success",
-      "message": "✨ Sincronizados 0 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "📢 [Vercel Demo] Enviado para \"Ofertas Exclusivas Afiliado 💎\" com sucesso!"
     },
     {
-      "time": "04:17:50",
-      "type": "error",
-      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
-    },
-    {
-      "time": "04:17:50",
-      "type": "info",
-      "message": "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos."
-    },
-    {
-      "time": "04:17:50",
-      "type": "info",
-      "message": "Dados de autenticação locais removidos com sucesso."
-    },
-    {
-      "time": "04:17:39",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "04:17:39",
+      "time": "21:16:45",
       "type": "success",
-      "message": "🟢 [Vercel Demo] WhatsApp conectado com sucesso como Conta de Teste!"
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Meus Achados Shopee - Helton 🛍️\": Smart TV 50 Polegadas 4K Samsung"
     },
     {
-      "time": "04:17:35",
+      "time": "21:16:45",
       "type": "success",
-      "message": "🔑 Código de Emparelhamento oficial gerado com sucesso: 1YLMN6KQ"
+      "message": "📢 [Vercel Demo] Enviado para \"Meus Achados Shopee - Helton 🛍️\" com sucesso!"
     },
     {
-      "time": "04:17:35",
+      "time": "21:16:44",
       "type": "info",
-      "message": "Enviando solicitação de código de emparelhamento oficial para +5514981017533 (Tentativa 1/15)..."
+      "message": "Buscando foto original do produto no Mercado Livre: https://www.mercadolivre.com.br/p/MLB22819382"
     },
     {
-      "time": "04:17:33",
+      "time": "21:16:42",
       "type": "info",
-      "message": "Aguardando registro inicial para solicitar código de emparelhamento para +5514981017533..."
+      "message": "Nova mensagem em \"Descontos da China 🇨🇳\": Analisando anúncio..."
     },
     {
-      "time": "04:17:33",
+      "time": "21:16:42",
       "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
     },
     {
-      "time": "04:17:33",
+      "time": "21:06:43",
       "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
+      "message": "Anúncio em \"Achadinhos Shopee Brasil 🇧🇷\" já foi convertido e enviado anteriormente (https://shp.ee/u29kd8a). Ignorando para evitar duplicidade."
     },
     {
-      "time": "04:17:12",
-      "type": "error",
-      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
-    },
-    {
-      "time": "04:17:11",
+      "time": "21:06:43",
       "type": "info",
-      "message": "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos."
+      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
     },
     {
-      "time": "04:17:11",
-      "type": "info",
-      "message": "Dados de autenticação locais removidos com sucesso."
-    },
-    {
-      "time": "04:15:45",
+      "time": "20:57:07",
       "type": "success",
-      "message": "🔑 Código de Emparelhamento oficial gerado com sucesso: HLAK2C8R"
+      "message": "✨ [Shopee 🧡] Anúncio enviado para \"Robô destinos anúncios\": Triturador elétrico de alho e temperos USB"
     },
     {
-      "time": "04:15:45",
-      "type": "info",
-      "message": "Enviando solicitação de código de emparelhamento oficial para +5514981186018 (Tentativa 1/15)..."
-    },
-    {
-      "time": "04:15:43",
-      "type": "info",
-      "message": "Aguardando registro inicial para solicitar código de emparelhamento para +5514981186018..."
-    },
-    {
-      "time": "04:15:43",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "04:15:43",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "04:14:13",
-      "type": "error",
-      "message": "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code."
-    },
-    {
-      "time": "04:14:13",
-      "type": "info",
-      "message": "WhatsApp desconectado. Grupos sincronizados e histórico de envios foram limpos."
-    },
-    {
-      "time": "04:14:13",
-      "type": "info",
-      "message": "Dados de autenticação locais removidos com sucesso."
-    },
-    {
-      "time": "04:14:10",
-      "type": "info",
-      "message": "Lista de grupos atualizada."
-    },
-    {
-      "time": "04:14:10",
+      "time": "20:57:07",
       "type": "success",
-      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "📢 [Vercel Demo] Enviado para \"Robô destinos anúncios\" com sucesso!"
     },
     {
-      "time": "04:14:10",
+      "time": "20:57:07",
       "type": "success",
-      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "✨ [Shopee 🧡] Anúncio enviado para \"Ofertas Exclusivas Afiliado 💎\": Triturador elétrico de alho e temperos USB"
     },
     {
-      "time": "04:14:09",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "04:14:09",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "04:14:03",
-      "type": "info",
-      "message": "Lista de grupos atualizada."
-    },
-    {
-      "time": "04:14:02",
+      "time": "20:57:06",
       "type": "success",
-      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "📢 [Vercel Demo] Enviado para \"Ofertas Exclusivas Afiliado 💎\" com sucesso!"
     },
     {
-      "time": "04:14:01",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "04:13:47",
-      "type": "info",
-      "message": "Lista de grupos atualizada."
-    },
-    {
-      "time": "04:13:47",
+      "time": "20:57:06",
       "type": "success",
-      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "✨ [Shopee 🧡] Anúncio enviado para \"Meus Achados Shopee - Helton 🛍️\": Triturador elétrico de alho e temperos USB"
     },
     {
-      "time": "04:13:46",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "04:13:32",
-      "type": "info",
-      "message": "Lista de grupos atualizada."
-    },
-    {
-      "time": "04:13:32",
+      "time": "20:57:06",
       "type": "success",
-      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "📢 [Vercel Demo] Enviado para \"Meus Achados Shopee - Helton 🛍️\" com sucesso!"
     },
     {
-      "time": "04:13:31",
+      "time": "20:57:06",
       "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+      "message": "Buscando foto original do produto no link: https://shp.ee/u29kd8a"
     },
     {
-      "time": "04:13:17",
+      "time": "20:57:05",
       "type": "info",
-      "message": "Lista de grupos atualizada."
+      "message": "Expandindo link curto da Shopee: https://shp.ee/u29kd8a"
     },
     {
-      "time": "04:13:17",
-      "type": "success",
-      "message": "✨ Sincronizados 39 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
-    },
-    {
-      "time": "04:13:16",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+      "time": "20:57:05",
+      "type": "warning",
+      "message": "⚠️ Falha de conexão com a API da Shopee (Erro de Permissão (10020/10035): O seu aplicativo no Shopee Open Platform precisa ser do tipo 'Affiliate' e estar com status 'Active' (Aprovado).). Alternando automaticamente para conversão direta com ID de Afiliado \"18399950350\"..."
     }
   ]
 }

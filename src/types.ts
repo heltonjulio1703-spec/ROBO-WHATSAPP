@@ -12,6 +12,7 @@ export interface AppConfig {
   shopeeAffiliateId?: string;
   mercadolivreAffiliateId?: string;
   useShopeeApi?: boolean;
+  shortenAffiliateLinks?: boolean;
   customFooter?: string;
   quietStart?: string;
   quietEnd?: string;

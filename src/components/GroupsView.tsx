@@ -72,6 +72,10 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
     const performAutoSync = async () => {
       try {
         const response = await fetch("/api/whatsapp/sync-groups", { method: "POST" });
+        const contentType = response.headers.get("content-type");
+        if (!response.ok || !contentType || !contentType.includes("application/json")) {
+          return;
+        }
         const data = await response.json();
         if (isMounted && data.success && data.groups) {
           await saveGroups(data.groups);
@@ -116,16 +120,21 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
       const response = await fetch("/api/whatsapp/sync-groups", {
         method: "POST",
       });
+      const contentType = response.headers.get("content-type");
+      if (!response.ok || !contentType || !contentType.includes("application/json")) {
+        setSyncMessage("Erro na resposta do servidor.");
+        return;
+      }
       const data = await response.json();
       if (data.success) {
         await saveGroups(data.groups);
         setSyncMessage("Lista atualizada!");
         setTimeout(() => setSyncMessage(null), 4000);
       } else {
-        setSyncMessage("Erro ao atualizar.");
+        setSyncMessage(data.error || "Erro ao atualizar.");
       }
     } catch (err) {
-      console.error("Erro ao sincronizar:", err);
+      console.warn("Aviso ao sincronizar:", err);
       setSyncMessage("Erro na conexão.");
     } finally {
       setIsSyncing(false);
@@ -174,7 +183,13 @@ export const GroupsView: React.FC<GroupsViewProps> = ({ groups, saveGroups, what
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ groupId }),
       });
-      const data = await response.json();
+      const contentType = response.headers.get("content-type");
+      let data: any = {};
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        data = { success: false, error: "Servidor retornou resposta inválida." };
+      }
 
       clearTimeout(p1);
       clearTimeout(p2);

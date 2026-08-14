@@ -20,7 +20,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   const isMlItem = (item: HistoryItem) => {
     if (item.storeType === "mercadolivre") return true;
     if (item.storeType === "shopee") return false;
-    return /mercadolivre|mercadolibre|ml\.com\.br|meli\.li/i.test(item.originalLink);
+    return /mercadolivre|mercadolibre|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre|produto\.mercadolivre/i.test(item.originalLink);
   };
 
   const filteredHistory = history.filter((item) => {
@@ -240,9 +240,6 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       alt={item.productTitle} 
                       referrerPolicy="no-referrer"
                       className="w-20 h-20 object-cover rounded-xl border border-gray-100 shadow-xs shrink-0 bg-slate-50"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800";
-                      }}
                     />
                   )}
                   <div className="flex-1 min-w-0 space-y-3">
