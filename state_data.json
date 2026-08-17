@@ -13,11 +13,12 @@
     "shopeeAffiliateId": "18399950350",
     "mercadolivreAffiliateId": "is20251020221720",
     "useShopeeApi": false,
-    "customFooter": "@isamara.manoel",
+    "shortenAffiliateLinks": true,
+    "customFooter": "siga no Instagram e Tik Tok  @isamara.manoel",
     "quietStart": "08:00",
     "quietEnd": "23:00",
     "automaticScanInterval": 60,
-    "robotActivationTime": 1786654198187
+    "robotActivationTime": 1786809579459
   },
   "groups": {
     "sources": [
@@ -144,7 +145,7 @@
       {
         "id": "120363402438703554@g.us",
         "name": "#101 HELEN INDICA  🏠",
-        "active": false
+        "active": true
       },
       {
         "id": "120363401571829114@g.us",
@@ -194,6 +195,11 @@
       {
         "id": "120363198421045243@g.us",
         "name": "Canal de Teste Replicador 📲",
+        "active": false
+      },
+      {
+        "id": "120363429307421991@g.us",
+        "name": "Vídeos para shopee",
         "active": false
       }
     ],
@@ -367,601 +373,804 @@
         "id": "120363198421045243@g.us",
         "name": "Canal de Teste Replicador 📲",
         "active": false
+      },
+      {
+        "id": "120363429307421991@g.us",
+        "name": "Vídeos para shopee",
+        "active": false
       }
     ]
   },
   "history": [
     {
-      "id": "deal_ipav6piqs",
-      "time": "21:32",
-      "sourceGroup": "Grupo Simulado 📲",
+      "id": "deal_jf3ki2oa3",
+      "time": "16:29",
+      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "Robô destinos anúncios"
       ],
-      "productTitle": "Tábua de Passar Roupa",
-      "originalLink": "https://meli.la/15zvKPc",
-      "affiliateLink": "https://www.mercadolivre.com.br/p/MLB64578882?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720",
-      "originalMessage": "🚨 OFERTA NO MERCADO LIVRE! Tábua de passar em promoção: https://meli.la/15zvKPc Aproveitem!",
-      "rewrittenMessage": "🚨 GENTE, OLHA ESSE ACHADO NO MERCADO LIVRE! 😱🔥 Tábua de passar em super promoção para facilitar o seu dia a dia! 💛 Aproveite a entrega rápida e garanta a sua agora mesmo antes que esgote! 🏃💨 Acesse o link: https://www.mercadolivre.com.br/p/MLB64578882?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720\n\n@isamara.manoel",
+      "productTitle": "Jaqueta Feminina Bobojaco Impermeável Puffer com Capuz Removível",
+      "originalLink": "https://meli.la/27E5Eig",
+      "affiliateLink": "https://meli.la/2S5rJzD",
+      "originalMessage": "*CHUVA BATE E O VISUAL SEGUE*\n\nJaqueta Feminina Bobojaco Impermeável Puffer com Capuz Removível\n\nDe: ~R$149~ Por: R$54\n\n🎟️ Cupom: *SEMPREMODA*\nhttps://meli.la/27E5Eig",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSA OFERTA NO MERCADO LIVRE! 😱🔥\n\n🧥 Jaqueta Feminina Bobojaco Impermeável Puffer com Capuz Removível\n\n💥 De: ~R$149~ Por: R$54\n🎟️ Cupom: SEMPREMODA\n\n✨ Corre garantir antes que acabe:\n👉 https://meli.la/2S5rJzD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_740189-MLB107452699125_022026-O.webp",
       "storeType": "mercadolivre"
     },
     {
-      "id": "deal_dzwq7t7s2",
-      "time": "21:16",
+      "id": "deal_4opd7iy9w",
+      "time": "16:28",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Jogo Kit De Toalhas De Banho 4pçs Atlântica Aura Superluxo",
+      "originalLink": "https://meli.la/1kQ6gfh",
+      "affiliateLink": "https://meli.la/2S5rJzD",
+      "originalMessage": "*AMIGAAAA, VEM AQUI* 😱\n\n💛 Jogo Kit De Toalhas De  Banho 4pçs Atlântica Aura Superluxo!\n\nDe: ~R$ 259,90~\n Poooor: *R$ 124,75*\n\n🎟️ Use o cupom: *PREFERIDO* para sair nesse valor\n\n🔥 Compre aqui:  https://meli.la/1kQ6gfh\n\n> curadoria @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥 💛 Jogo Kit De Toalhas De Banho 4pçs Atlântica Aura Superluxo! De: ~R$ 259,90~ Poooor: *R$ 124,75* 🎟️ Use o cupom: *PREFERIDO* para sair nesse valor ✨ Aproveite a entrega rápida do Mercado Livre: https://meli.la/2S5rJzD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_818279-MLB107425852079_022026-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_mj5iuzo6f",
+      "time": "16:27",
+      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Mochila Resistente Impermeável com Saída USB",
+      "originalLink": "https://shopee.com.br/product-2283921-12039201",
+      "affiliateLink": "https://s.shopee.com.br/3LQ3ycHJCo",
+      "originalMessage": "🚨 MOCHILA RESISTENTE EM PROMOÇÃO! Ótima para escola, faculdade ou trabalho, impermeável e com saída USB de carregamento por R$59,90! 🏃‍♂️ Aproveite: https://shopee.com.br/product-2283921-12039201",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO DA SHOPEE! 🔥 Mochila super resistente, ideal para faculdade ou trabalho, impermeável e ainda com saída USB por apenas R$59,90! 😱 Corra antes que acabe! 🏃‍♂️ Aproveite: https://s.shopee.com.br/3LQ3ycHJCo\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_t1eq27qj8",
+      "time": "16:21",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Sabonete Em Óleo Corporal Natura Ekos Castanha 200ml",
+      "originalLink": "https://meli.la/183SMU2",
+      "affiliateLink": "https://meli.la/2S5rJzD",
+      "originalMessage": "*LEVE ESSA EXPERIÊNCIA PARA SUA CASA HOJE MESMO! ✨*\n\n *Sabonete Em Óleo Corporal Natura Ekos Castanha 200ml*\n\n❌ De: ~R$ 74,90~\n✅ Por: *R$ 56,18*\n\n_Loja Verificada no ML_\n\n🔗 Link do produto:\nhttps://meli.la/183SMU2\n\n @gatagarotafinds\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥 ✨ LEVE ESSA EXPERIÊNCIA PARA SUA CASA HOJE MESMO! ✨ Sabonete Em Óleo Corporal Natura Ekos Castanha 200ml ❌ De: ~R$ 74,90~ ✅ Por: *R$ 56,18* 📦 Aproveite a entrega rápida do Mercado Livre! 🔗 https://meli.la/2S5rJzD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_828265-MLB95238923695_102025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_tw5lnwy4w",
+      "time": "16:21",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Kit Colcha Queen 3 Peças Itália 150 Fios Grid Dupla Face",
+      "originalLink": "https://meli.la/31dYyRJ",
+      "affiliateLink": "https://meli.la/2S5rJzD",
+      "originalMessage": "*SUA CAMA POSTA VAI FICAR LINDONAAAAA* 🥹\n\n💛  Kit Colcha Queen 3 Peças Itália 150 Fios Grid Dupla Face\n\nDe: ~R$ 179,90~\n Poooor: *R$ 79,54*\n\n🎟️ Use o cupom: *PREFERIDO* para sair nesse valor\n\n🔥 Compre aqui: https://meli.la/31dYyRJ\n\n> curadoria @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSA OFERTA IMPERDÍVEL NO MERCADO LIVRE! 😱💛\n\n✨ SUA CAMA POSTA VAI FICAR LINDONAAAAA! 🥹\n\n🛏️ Kit Colcha Queen 3 Peças Itália 150 Fios Grid Dupla Face\n\n❌ De: R$ 179,90\n🔥 Poooor: R$ 79,54\n\n🎟️ Use o cupom: PREFERIDO para sair nesse valor\n\n⚡ Aproveite a entrega rápida e garanta o seu aqui:\nhttps://meli.la/2S5rJzD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_763333-MLB84818832312_052025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_tr0b6txna",
+      "time": "16:20",
+      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Mala de Bordo Londres 10kg Swiss Move",
+      "originalLink": "https://meli.la/17vBy4F",
+      "affiliateLink": "https://meli.la/2S5rJzD",
+      "originalMessage": "*ADEUS MALA COM CARA DE SACOLA*\n\nMala de bordo pequena Londres 10kg Swiss Move preta\n\nDe: ~R$360~ Por: R$120 NO PIX\n\n🎟️ Cupom: *SEMPREMODA*\nhttps://meli.la/17vBy4F",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA VIAJAR COM ESTILO! 🔥\n\nChega de passar perrengue com mala ruim! A Mala de bordo pequena Londres 10kg Swiss Move preta está com um preço imperdível! 😱\n\nDe: ~R$360~ Por: R$120 NO PIX\n\n🎟️ Cupom: SEMPREMODA\n\n🔗 https://meli.la/2S5rJzD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_699637-MLA105241923207_012026-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_2o1yb1v2u",
+      "time": "16:18",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Micro-ondas 25l Philco Função Tira Odor 1100w Pm27",
+      "originalLink": "https://meli.la/1w7RSnn",
+      "affiliateLink": "https://meli.la/2S5rJzD",
+      "originalMessage": "*AMIGAAAAA, APROVEITAAA, ESSE CUPOM VENCE JÁ JÁ*\n> no pix sai por R$413,91!\n\n💛 Micro-ondas 25l Philco Função Tira  Odor 1100w  Pm27\n\nDe: ~R$ 631,90~\n  Poooor: *R$ 449,90*\n\n🎟️ Use o cupom: *CASA1508* para sair nesse valor\n\n🔥 Compre aqui: https://meli.la/1w7RSnn\n\n> curadoria @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\n💛 Micro-ondas 25l Philco Função Tira Odor 1100w Pm27\n> no pix sai por R$413,91!\n\nDe: ~R$ 631,90~\nPoooor: *R$ 449,90*\n\n🎟️ Use o cupom: *CASA1508* para sair nesse valor\n\n🔥 Aproveite a entrega rápida do Mercado Livre aqui: https://meli.la/2S5rJzD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_852329-MLA99938052657_112025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_l33otp706",
+      "time": "16:18",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Perfume My Euphoria Edp 50ml Calvin Klein",
+      "originalLink": "https://meli.la/2ZNHbr7",
+      "affiliateLink": "https://meli.la/2S5rJzD",
+      "originalMessage": "ESSE NÃO TEM ERRO\n\n💨 *Perfume My Euphoria Edp 50ml Calvin Klein*\n\n🔥 ~DE 609~ | *POR 226,42 no Pix*\n🔗 https://meli.la/2ZNHbr7\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE, OLHA ESSA OFERTA NO MERCADO LIVRE! 😱💛 💨 Perfume My Euphoria Edp 50ml Calvin Klein 🔥 DE 609 | POR 226,42 no Pix! Aproveite antes que acabe: https://meli.la/2S5rJzD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_897297-MLU75261284763_032024-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_3allu9776",
+      "time": "16:10",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Kit 5 Conjuntos Acessórios Suporte Banheiro Inox 304",
+      "originalLink": "https://meli.la/2SNW8zg",
+      "affiliateLink": "https://www.mercadolivre.com.br/kit-5-conjunto-acessorios-suporte-banheiro-lavabo-inox-304/up/MLBU3398761107?matt_tool=is20251020221720&matt_word=bot",
+      "originalMessage": "*PRA RENOVAR  SEU BANHEIRO* 🩶✨\n\n💛 Kit 5 Conjunto Acessorios Suporte Banheiro Lavabo Inox 304 Prateado\n\nDe: ~R$ 149,00~\n Poooor: *R$ 91,57*\n\n🎟️ Use o cupom: *PREFERIDO* para sair nesse valor\n\n🔥 Compre aqui: https://meli.la/2SNW8zg\n\n> curadoria @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA RENOVAR SEU BANHEIRO! 🩶✨\n\n💛 Kit 5 Conjunto Acessorios Suporte Banheiro Lavabo Inox 304 Prateado\n\nDe: ~R$ 149,00~\n Poooor: *R$ 91,57*\n\n🎟️ Use o cupom: *PREFERIDO* para sair nesse valor\n\n🔥 Aproveite a entrega rápida do Mercado Livre aqui: https://www.mercadolivre.com.br/kit-5-conjunto-acessorios-suporte-banheiro-lavabo-inox-304/up/MLBU3398761107?matt_tool=is20251020221720&matt_word=bot\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_685357-MLB84593336927_052025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_bq5a5a1fo",
+      "time": "16:09",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Lava-Louças Electrolux 8 Serviços",
+      "originalLink": "https://meli.la/2RhyueX",
+      "affiliateLink": "https://www.mercadolivre.com.br/lava-louca-electrolux-8-servicos-inox-com-programa-lava-seca-50-minutos-ls08e-display-digital/p/MLB49940241?matt_tool=is20251020221720&matt_word=bot",
+      "originalMessage": "ACABOU A BRIGA PRA LAVAR A LOUÇA\n\n💧 *Lava-Louças Electrolux 8 Serviços Lava e Seca 50min*\n\n🔥 ~DE 3.500~ | *POR 1.749 no Pix*\n🎟 CUPOM: *PROMOCERTAML*\n\n🔗 https://meli.la/2RhyueX\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 ACABOU A BRIGA PRA LAVAR A LOUÇA! 😱🔥 \n\nOlha essa oportunidade incrível: Lava-Louças Electrolux 8 Serviços Lava e Seca 50min! ✨\n\n🔥 DE R$ 3.500 | POR R$ 1.749 no Pix\n🎟 CUPOM: PROMOCERTAML\n\nGaranta a sua aqui: https://www.mercadolivre.com.br/lava-louca-electrolux-8-servicos-inox-com-programa-lava-seca-50-minutos-ls08e-display-digital/p/MLB49940241?matt_tool=is20251020221720&matt_word=bot\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_888971-MLA95503120756_102025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_4otn1g51a",
+      "time": "16:08",
       "sourceGroup": "Descontos da China 🇨🇳",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "Robô destinos anúncios"
       ],
-      "productTitle": "Smart TV 50 Polegadas 4K Samsung",
-      "originalLink": "https://www.mercadolivre.com.br/p/MLB22819382",
-      "affiliateLink": "https://www.mercadolivre.com.br/p/MLB22819382?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720",
-      "originalMessage": "🚨 IMPERDÍVEL MERCADO LIVRE! Smart TV 50 Polegadas 4K Samsung com FRETE GRÁTIS e entrega rápida! De R$ 2.899 por apenas R$ 2.199,00 em até 10x sem juros! 📺 Compre no Mercado Livre: https://www.mercadolivre.com.br/p/MLB22819382 Aproveite!",
-      "rewrittenMessage": "🚨 IMPERDÍVEL MERCADO LIVRE! 😱 Smart TV 50 Polegadas 4K Samsung com FRETE GRÁTIS e entrega rápida! 🔥 De R$ 2.899 por apenas R$ 2.199,00 em até 10x sem juros! 📺 Aproveite essa oferta incrível no Mercado Livre! ✨\n\nhttps://www.mercadolivre.com.br/p/MLB22819382?matt_tool=is20251020221720&matt_word=bot&utm_source=afiliados&utm_medium=referral&utm_campaign=is20251020221720\n\n@isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_bu2a6wjer",
-      "time": "20:57",
-      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "Robô destinos anúncios"
-      ],
-      "productTitle": "Triturador elétrico de alho e temperos USB",
-      "originalLink": "https://shp.ee/u29kd8a",
-      "affiliateLink": "https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2Fu29kd8a",
-      "originalMessage": "😱 FACILITE SUA VIDA NA COZINHA! Triturador elétrico de alho e temperos USB por apenas R$ 22,99! É maravilhoso, comprei um e recomendo demais. Link promocional aqui: https://shp.ee/u29kd8a",
-      "rewrittenMessage": "😱 FACILITE SUA VIDA NA COZINHA! Triturador elétrico de alho e temperos USB por apenas R$ 22,99! É maravilhoso, comprei um e recomendo demais. Aproveite esse achado da Shopee 🧡 https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2Fu29kd8a\n\n@isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=800",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_9tt0w18sf",
-      "time": "20:50",
-      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "Robô destinos anúncios"
-      ],
-      "productTitle": "Garrafa de Água Motivacional 2 Litros",
-      "originalLink": "https://shope.ee/a283kd91",
-      "affiliateLink": "https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshope.ee%2Ferror_page",
-      "originalMessage": "🛍️ ACHADO IMPERDÍVEL! Garrafa de Água Motivacional 2 Litros com adesivos lindos por R$ 14,50. Link do produto: https://shope.ee/a283kd91 Corre que o estoque está acabando!",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! 😱 Garrafa de Água Motivacional 2 Litros com adesivos lindos por R$ 14,50. 🔥 Corre que o estoque está acabando! 🧡\n\nhttps://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshope.ee%2Ferror_page\n\n@isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_r3rl1nna0",
-      "time": "20:50",
-      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "Robô destinos anúncios"
-      ],
-      "productTitle": "Fone de Ouvido Bluetooth Sem Fio i12 TWS",
+      "productTitle": "Fone de Ouvido Bluetooth sem fio",
       "originalLink": "https://shopee.com.br/product-10293021-9988231",
-      "affiliateLink": "https://s.shopee.com.br/8AVGpjmivJ",
-      "originalMessage": "🚨 CUPOM EXCLUSIVO SHOPEE! Fone de Ouvido Bluetooth Sem Fio i12 TWS com estojo de recarga por apenas R$ 18,90! Compre aqui: https://shopee.com.br/product-10293021-9988231 Garanta já o seu!",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO DA SHOPEE! 🔥 Fone de Ouvido Bluetooth Sem Fio i12 TWS com estojo de recarga por apenas R$ 18,90! 😱 Aproveite os cupons de frete grátis da Shopee e garanta já o seu! ✨ https://s.shopee.com.br/8AVGpjmivJ\n\n@isamara.manoel",
+      "affiliateLink": "https://s.shopee.com.br/2LXWlUDlTe",
+      "originalMessage": "🔥 ALERTA DE PREÇO BAIXO! Fone de Ouvido Bluetooth sem fio por apenas R$18,90! Excelente som e bateria! Compre no precinho: https://shopee.com.br/product-10293021-9988231 Frete grátis usando cupom!",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥 Fone de Ouvido Bluetooth sem fio por apenas R$18,90! Excelente som e bateria! Aproveite os cupons de frete grátis da Shopee 🧡 Compre no precinho: https://s.shopee.com.br/2LXWlUDlTe\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800",
       "storeType": "shopee"
+    },
+    {
+      "id": "deal_py16fubyu",
+      "time": "16:06",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Kit 6 Potes De Vidro Com Tampa Trava 1040ml Divisória",
+      "originalLink": "https://meli.la/2VQVWZ2",
+      "affiliateLink": "https://www.mercadolivre.com.br/kit-6-potes-de-vidro-com-tampa-trava-1040ml-divisoria-hermetico-marmita-alimentos-forno-refratario-microondas-pitia/p/MLB67512251?matt_tool=is20251020221720&matt_word=bot",
+      "originalMessage": "*SÃO 1040ML COM DIVISÓRIAAAAAA* 😱😱\n\n💛 Kit 6 Potes De Vidro Com Tampa Trava 1040ml Divisória Hermético Marmita  Alimentos Forno Refratário Microondas Pítia!\n\nDe: ~R$ 239,99~\n Poooor: *R$ 112,79*\n\n🎟️ Use o cupom: *PREFERIDO* para sair nesse valor\n\n🔥 Compre aqui: https://meli.la/2VQVWZ2\n\n> curadoria @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\n*SÃO 1040ML COM DIVISÓRIAAAAAA* 😱😱\n\n💛 Kit 6 Potes De Vidro Com Tampa Trava 1040ml Divisória Hermético Marmita Alimentos Forno Refratário Microondas Pítia!\n\nDe: ~R$ 239,99~\n Poooor: *R$ 112,79*\n\n🎟️ Use o cupom: *PREFERIDO* para sair nesse valor\n\n🔥 Aproveite a entrega rápida do Mercado Livre aqui: https://www.mercadolivre.com.br/kit-6-potes-de-vidro-com-tampa-trava-1040ml-divisoria-hermetico-marmita-alimentos-forno-refratario-microondas-pitia/p/MLB67512251?matt_tool=is20251020221720&matt_word=bot\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_896584-MLA109939663157_042026-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_zrek4l7x9",
+      "time": "16:06",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Óleo Capilar Braé Revival 60mL",
+      "originalLink": "https://meli.la/1f3ZUjf",
+      "affiliateLink": "https://www.mercadolivre.com.br/oleo-capilar-brae-revival-brilho-para-cabelos-fragilizados-60-ml/p/MLB19567006?matt_tool=is20251020221720&matt_word=bot",
+      "originalMessage": "*REVITALIZE SEUS FIOS COM ESSE ACHADO! 💆♀️*\n\n *Óleo Capilar Braé Revival Brilho para Cabelos Fragilizados 60 mL*\n\n❌ De: ~R$ 134,55~\n✅ Por: *R$ 67,93*\n\n_Loja Verificada no ML_\n\n🔗 Link do produto:\nhttps://meli.la/1f3ZUjf\n\n @gatagarotafinds\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA O SEU CABELO! 🔥💆‍♀️ Óleo Capilar Braé Revival Brilho para Cabelos Fragilizados 60 mL! 😱 Aproveite a entrega rápida do Mercado Livre! 💛\n\n❌ De: ~R$ 134,55~\n✅ Por: *R$ 67,93*\n\nGaranta o seu aqui: https://www.mercadolivre.com.br/oleo-capilar-brae-revival-brilho-para-cabelos-fragilizados-60-ml/p/MLB19567006?matt_tool=is20251020221720&matt_word=bot\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_847485-MLA99440126432_112025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_yovdfbkib",
+      "time": "16:06",
+      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Cama Túnel Gato Interativa Donut Pet",
+      "originalLink": "https://meli.la/2t6aEAZ",
+      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-3586988311-cama-tunel-gato-interativa-donut-pet-brinquedo-felino-casa-_JM?matt_tool=is20251020221720&matt_word=bot",
+      "originalMessage": "🛍️ Cama Túnel Gato Interativa Donut Pet Brinquedo Felino Casa\n\n~De R$ 78,90~\n💥 *Por R$ 78,70*\n\n🛒 Compre aqui 👉 https://meli.la/2t6aEAZ\n\n⚠️ *Promoção sujeita à alteração de preço e estoque do site*",
+      "rewrittenMessage": "🚨 GENTE OLHA ESSE ACHADO PRO SEU GATINHO! 😱✨\n\n💛 Cama Túnel Gato Interativa Donut Pet Brinquedo Felino Casa\n\n~De R$ 78,90~\n🔥 *Por apenas R$ 78,70!* 💥\n\nGaranta o seu com entrega rápida do Mercado Livre! 🏃💨\n\n🛒 Compre aqui 👉 https://produto.mercadolivre.com.br/MLB-3586988311-cama-tunel-gato-interativa-donut-pet-brinquedo-felino-casa-_JM?matt_tool=is20251020221720&matt_word=bot\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_885130-MLB89720563257_082025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_hmsedj696",
+      "time": "16:04",
+      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Micro-ondas Consul 23L Branco CMS23AB",
+      "originalLink": "https://meli.la/2siUveB",
+      "affiliateLink": "https://www.mercadolivre.com.br/micro-ondas-consul-23l-branco-cms23ab/p/MLB69351361?matt_tool=is20251020221720&matt_word=bot",
+      "originalMessage": "*ITEM NECESSÁRIO NA VIDA ADULTA*\n\nMicro-ondas Consul 23L Branco CMS23AB\n\nDe: ~R$529~ Por: R$392\n\n🎟️ Cupom: *PROMOCERTAML*\nLoja Oficial Mercado Livre\nhttps://meli.la/2siUveB",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 😱💛 Micro-ondas Consul 23L Branco CMS23AB 🔥 De: R$529 Por: R$392 🎟️ Use o cupom: PROMOCERTAML ⚡ Aproveite a entrega rápida do Mercado Livre: https://www.mercadolivre.com.br/micro-ondas-consul-23l-branco-cms23ab/p/MLB69351361?matt_tool=is20251020221720&matt_word=bot\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_914513-MLA110469751630_052026-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_3il2ijywx",
+      "time": "16:01",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "Robô destinos anúncios"
+      ],
+      "productTitle": "Ar-Condicionado Split Electrolux Color Adapt 12k Inverter 220v",
+      "originalLink": "https://meli.la/2QaKe1g",
+      "affiliateLink": "https://www.mercadolivre.com.br/ar-split-electrolux-color-adapt-wifi-12k-inverter-r32-220v/up/MLBU3843920278?matt_tool=is20251020221720&matt_word=bot",
+      "originalMessage": "ESSE É SONHO DE CONSUMO\n\n❄️ *Ar-Condicionado Split Electrolux Color Adapt 12k Inverter 220v*\n\n🔥 ~DE 2.229~ | *POR 1.655,17 no Pix*\n🎟 CUPOM: *PROMOCERTAML*\n\n🔗 https://meli.la/2QaKe1g\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE SONHO DE CONSUMO! 😱\n\n❄️ Ar-Condicionado Split Electrolux Color Adapt 12k Inverter 220v\n\n🔥 DE 2.229 | POR 1.655,17 no Pix\n🎟 CUPOM: PROMOCERTAML\n\nGaranta o seu aqui: https://www.mercadolivre.com.br/ar-split-electrolux-color-adapt-wifi-12k-inverter-r32-220v/up/MLBU3843920278?matt_tool=is20251020221720&matt_word=bot\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_811165-MLB115734239833_082026-O.webp",
+      "storeType": "mercadolivre"
     }
   ],
   "logs": [
     {
-      "time": "21:38:42",
-      "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"Gaby Garimpou #10\"!"
-    },
-    {
-      "time": "21:38:42",
+      "time": "16:31:57",
       "type": "info",
-      "message": "Baixando imagem recebida de \"Gaby Garimpou #10\"..."
+      "message": "Buscando foto em alta resolução do Mercado Livre: https://produto.mercadolivre.com.br/MLB-1231146019-kit-10-pares-de-meias-lupo-soquete-invisivel-sport-_JM"
     },
     {
-      "time": "21:37:40",
+      "time": "16:31:57",
       "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+      "message": "✅ Link do Mercado Livre extraído do card principal: https://produto.mercadolivre.com.br/MLB-1231146019-kit-10-pares-de-meias-lupo-soquete-invisivel-sport-_JM"
     },
     {
-      "time": "21:37:39",
+      "time": "16:31:56",
       "type": "info",
-      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+      "message": "Expandindo link do Mercado Livre: https://meli.la/2S5rJzD"
     },
     {
-      "time": "21:36:30",
+      "time": "16:31:43",
+      "type": "info",
+      "message": "Buscando foto em alta resolução do Mercado Livre: https://www.mercadolivre.com.br/mesa-tabua-de-passar-roupa-slim-dobravel-reforcada-passadera-cor-branca-liso/p/MLB64578882"
+    },
+    {
+      "time": "16:31:43",
       "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"Will Garimpou [416]\"!"
+      "message": "✅ Link do Mercado Livre extraído do card principal: https://www.mercadolivre.com.br/mesa-tabua-de-passar-roupa-slim-dobravel-reforcada-passadera-cor-branca-liso/p/MLB64578882"
     },
     {
-      "time": "21:36:29",
+      "time": "16:31:42",
       "type": "info",
-      "message": "Baixando imagem recebida de \"Will Garimpou [416]\"..."
+      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
     },
     {
-      "time": "21:35:27",
+      "time": "16:31:37",
       "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+      "message": "✨ Sincronizados 27 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
     },
     {
-      "time": "21:35:27",
+      "time": "16:31:37",
       "type": "info",
-      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+      "message": "Sincronização concluída: 0 novos e 54 nomes de grupos atualizados."
     },
     {
-      "time": "21:34:59",
+      "time": "16:31:36",
+      "type": "info",
+      "message": "📊 Varredura automática em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "📊 Varredura automática em \"#101 HELEN INDICA  🏠\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"#101 HELEN INDICA  🏠\"..."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Descontos da China 🇨🇳\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Descontos da China 🇨🇳\"..."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Ofertas e Cupons Relâmpago ⚡\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Ofertas e Cupons Relâmpago ⚡\"..."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "📊 Varredura automática em \"Achadinhos Shopee Brasil 🇧🇷\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🔎 Varrendo automaticamente grupo: \"Achadinhos Shopee Brasil 🇧🇷\"..."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "🚀 [Conexão WhatsApp Estabelecida] Iniciando varredura automática em 5 grupo(s) de origem ativo(s)..."
+    },
+    {
+      "time": "16:31:36",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "16:31:36",
+      "type": "success",
+      "message": "🟢 Conectado com sucesso como Isamara Manoel"
+    },
+    {
+      "time": "16:31:35",
+      "type": "info",
+      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+    },
+    {
+      "time": "16:31:35",
+      "type": "info",
+      "message": "Iniciando processo de conexão oficial com WhatsApp..."
+    },
+    {
+      "time": "16:31:35",
+      "type": "info",
+      "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
+    },
+    {
+      "time": "16:31:35",
+      "type": "info",
+      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
+    },
+    {
+      "time": "16:31:31",
       "type": "success",
       "message": "📸 Imagem baixada com sucesso da mensagem de \"Bebezinhos Promo #5\"!"
     },
     {
-      "time": "21:34:59",
+      "time": "16:31:30",
       "type": "info",
       "message": "Baixando imagem recebida de \"Bebezinhos Promo #5\"..."
     },
     {
-      "time": "21:33:55",
+      "time": "16:29:01",
       "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"Will Garimpou [416]\"!"
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Jaqueta Feminina Bobojaco Impermeável Puffer com Capuz Removível"
     },
     {
-      "time": "21:33:55",
-      "type": "info",
-      "message": "Baixando imagem recebida de \"Will Garimpou [416]\"..."
-    },
-    {
-      "time": "21:33:48",
-      "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
-    },
-    {
-      "time": "21:33:48",
-      "type": "info",
-      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
-    },
-    {
-      "time": "21:33:17",
-      "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
-    },
-    {
-      "time": "21:33:17",
-      "type": "info",
-      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
-    },
-    {
-      "time": "21:33:01",
-      "type": "success",
-      "message": "✨ Sincronizados 26 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
-    },
-    {
-      "time": "21:33:01",
-      "type": "info",
-      "message": "Sincronização concluída: 0 novos e 52 nomes de grupos atualizados."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "📊 Varredura automática em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "📊 Varredura automática em \"Descontos da China 🇨🇳\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"Descontos da China 🇨🇳\"..."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "📊 Varredura automática em \"Ofertas e Cupons Relâmpago ⚡\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"Ofertas e Cupons Relâmpago ⚡\"..."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "📊 Varredura automática em \"Achadinhos Shopee Brasil 🇧🇷\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"Achadinhos Shopee Brasil 🇧🇷\"..."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "🚀 [Conexão WhatsApp Estabelecida] Iniciando varredura automática em 4 grupo(s) de origem ativo(s)..."
-    },
-    {
-      "time": "21:33:00",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "21:33:00",
-      "type": "success",
-      "message": "🟢 Conectado com sucesso como Isamara Manoel"
-    },
-    {
-      "time": "21:32:57",
-      "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
-    },
-    {
-      "time": "21:32:57",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "21:32:57",
-      "type": "info",
-      "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
-    },
-    {
-      "time": "21:32:57",
-      "type": "info",
-      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
-    },
-    {
-      "time": "21:32:37",
-      "type": "info",
-      "message": "Buscando foto original do produto no Mercado Livre: https://www.mercadolivre.com.br/p/MLB64578882"
-    },
-    {
-      "time": "21:32:37",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
-    },
-    {
-      "time": "21:32:36",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
-    },
-    {
-      "time": "21:32:36",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
-    },
-    {
-      "time": "21:32:35",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
-    },
-    {
-      "time": "21:32:34",
-      "type": "info",
-      "message": "Laboratório de Teste: Analisando mensagem com IA..."
-    },
-    {
-      "time": "21:32:30",
-      "type": "success",
-      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
-    },
-    {
-      "time": "21:32:30",
-      "type": "info",
-      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
-    },
-    {
-      "time": "21:32:28",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Tábua de Passar Roupa"
-    },
-    {
-      "time": "21:32:28",
+      "time": "16:29:01",
       "type": "success",
       "message": "📸 Anúncio com FOTO enviado para \"Robô destinos anúncios\""
     },
     {
-      "time": "21:32:26",
+      "time": "16:29:01",
       "type": "warning",
       "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
     },
     {
-      "time": "21:32:26",
+      "time": "16:29:01",
       "type": "warning",
       "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
     },
     {
-      "time": "21:32:26",
+      "time": "16:29:01",
       "type": "warning",
       "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
     },
     {
-      "time": "21:32:26",
+      "time": "16:29:01",
       "type": "warning",
       "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
     },
     {
-      "time": "21:32:26",
-      "type": "info",
-      "message": "Buscando foto original do produto no Mercado Livre: https://www.mercadolivre.com.br/p/MLB64578882"
-    },
-    {
-      "time": "21:32:26",
+      "time": "16:29:01",
       "type": "success",
-      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
+      "message": "📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!"
     },
     {
-      "time": "21:32:26",
+      "time": "16:29:00",
       "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
+      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.la/27E5Eig"
     },
     {
-      "time": "21:32:26",
+      "time": "16:29:00",
       "type": "success",
-      "message": "✅ Link do Mercado Livre resolvido para produto canônico: https://www.mercadolivre.com.br/p/MLB64578882"
+      "message": "🔗 Link Mercado Livre gerado com sucesso: https://meli.la/2S5rJzD"
     },
     {
-      "time": "21:32:25",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/15zvKPc"
-    },
-    {
-      "time": "21:32:22",
-      "type": "info",
-      "message": "Nova mensagem em \"Grupo Simulado 📲\": Analisando anúncio..."
-    },
-    {
-      "time": "21:32:18",
+      "time": "16:29:00",
       "type": "success",
-      "message": "✨ Sincronizados 26 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+      "message": "✅ Link do Mercado Livre extraído do card principal: https://produto.mercadolivre.com.br/MLB-5579138038-jaqueta-feminina-bobojaco-impermeavel-puffer-capuz-removivel-_JM"
     },
     {
-      "time": "21:32:18",
+      "time": "16:29:00",
       "type": "info",
-      "message": "Sincronização concluída: 0 novos e 52 nomes de grupos atualizados."
+      "message": "Expandindo link do Mercado Livre: https://meli.la/27E5Eig"
     },
     {
-      "time": "21:32:17",
+      "time": "16:28:52",
       "type": "info",
-      "message": "📊 Varredura automática em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+      "message": "Nova mensagem em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Analisando anúncio..."
     },
     {
-      "time": "21:32:17",
+      "time": "16:28:52",
       "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
+      "message": "📥 Novo anúncio detectado no grupo de origem \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\". Processando e encaminhando instantaneamente..."
     },
     {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "📊 Varredura automática em \"Descontos da China 🇨🇳\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"Descontos da China 🇨🇳\"..."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "📊 Varredura automática em \"Ofertas e Cupons Relâmpago ⚡\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"Ofertas e Cupons Relâmpago ⚡\"..."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "📊 Varredura automática em \"Achadinhos Shopee Brasil 🇧🇷\": Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🔎 Varredura concluída: Nenhuma mensagem foi capturada da memória deste grupo até o momento. O robô monitora e processa mensagens continuamente assim que são postadas."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🔎 Varrendo automaticamente grupo: \"Achadinhos Shopee Brasil 🇧🇷\"..."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "🚀 [Conexão WhatsApp Estabelecida] Iniciando varredura automática em 4 grupo(s) de origem ativo(s)..."
-    },
-    {
-      "time": "21:32:17",
-      "type": "info",
-      "message": "Buscando lista de grupos que você participa no WhatsApp..."
-    },
-    {
-      "time": "21:32:17",
+      "time": "16:28:52",
       "type": "success",
-      "message": "🟢 Conectado com sucesso como Isamara Manoel"
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"!"
     },
     {
-      "time": "21:32:15",
+      "time": "16:28:51",
       "type": "info",
-      "message": "Aguardando geração do QR Code oficial pelo servidor WhatsApp..."
+      "message": "Baixando imagem recebida de \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\"..."
     },
     {
-      "time": "21:32:15",
-      "type": "info",
-      "message": "Iniciando processo de conexão oficial com WhatsApp..."
-    },
-    {
-      "time": "21:32:15",
-      "type": "info",
-      "message": "Sessão anterior do WhatsApp detectada. Tentando reconectar automaticamente..."
-    },
-    {
-      "time": "21:32:15",
-      "type": "info",
-      "message": "Robô de Afiliados iniciado. Aguardando conexão do WhatsApp..."
-    },
-    {
-      "time": "21:26:41",
-      "type": "info",
-      "message": "Anúncio em \"Achadinhos Shopee Brasil 🇧🇷\" já foi convertido e enviado anteriormente (https://shp.ee/u29kd8a). Ignorando para evitar duplicidade."
-    },
-    {
-      "time": "21:26:41",
-      "type": "info",
-      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
-    },
-    {
-      "time": "21:16:45",
+      "time": "16:28:21",
       "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Smart TV 50 Polegadas 4K Samsung"
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Jogo Kit De Toalhas De Banho 4pçs Atlântica Aura Superluxo"
     },
     {
-      "time": "21:16:45",
+      "time": "16:28:21",
       "type": "success",
-      "message": "📢 [Vercel Demo] Enviado para \"Robô destinos anúncios\" com sucesso!"
+      "message": "📸 Anúncio com FOTO enviado para \"Robô destinos anúncios\""
     },
     {
-      "time": "21:16:45",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Ofertas Exclusivas Afiliado 💎\": Smart TV 50 Polegadas 4K Samsung"
-    },
-    {
-      "time": "21:16:45",
-      "type": "success",
-      "message": "📢 [Vercel Demo] Enviado para \"Ofertas Exclusivas Afiliado 💎\" com sucesso!"
-    },
-    {
-      "time": "21:16:45",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Meus Achados Shopee - Helton 🛍️\": Smart TV 50 Polegadas 4K Samsung"
-    },
-    {
-      "time": "21:16:45",
-      "type": "success",
-      "message": "📢 [Vercel Demo] Enviado para \"Meus Achados Shopee - Helton 🛍️\" com sucesso!"
-    },
-    {
-      "time": "21:16:44",
-      "type": "info",
-      "message": "Buscando foto original do produto no Mercado Livre: https://www.mercadolivre.com.br/p/MLB22819382"
-    },
-    {
-      "time": "21:16:42",
-      "type": "info",
-      "message": "Nova mensagem em \"Descontos da China 🇨🇳\": Analisando anúncio..."
-    },
-    {
-      "time": "21:16:42",
-      "type": "info",
-      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
-    },
-    {
-      "time": "21:06:43",
-      "type": "info",
-      "message": "Anúncio em \"Achadinhos Shopee Brasil 🇧🇷\" já foi convertido e enviado anteriormente (https://shp.ee/u29kd8a). Ignorando para evitar duplicidade."
-    },
-    {
-      "time": "21:06:43",
-      "type": "info",
-      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
-    },
-    {
-      "time": "20:57:07",
-      "type": "success",
-      "message": "✨ [Shopee 🧡] Anúncio enviado para \"Robô destinos anúncios\": Triturador elétrico de alho e temperos USB"
-    },
-    {
-      "time": "20:57:07",
-      "type": "success",
-      "message": "📢 [Vercel Demo] Enviado para \"Robô destinos anúncios\" com sucesso!"
-    },
-    {
-      "time": "20:57:07",
-      "type": "success",
-      "message": "✨ [Shopee 🧡] Anúncio enviado para \"Ofertas Exclusivas Afiliado 💎\": Triturador elétrico de alho e temperos USB"
-    },
-    {
-      "time": "20:57:06",
-      "type": "success",
-      "message": "📢 [Vercel Demo] Enviado para \"Ofertas Exclusivas Afiliado 💎\" com sucesso!"
-    },
-    {
-      "time": "20:57:06",
-      "type": "success",
-      "message": "✨ [Shopee 🧡] Anúncio enviado para \"Meus Achados Shopee - Helton 🛍️\": Triturador elétrico de alho e temperos USB"
-    },
-    {
-      "time": "20:57:06",
-      "type": "success",
-      "message": "📢 [Vercel Demo] Enviado para \"Meus Achados Shopee - Helton 🛍️\" com sucesso!"
-    },
-    {
-      "time": "20:57:06",
-      "type": "info",
-      "message": "Buscando foto original do produto no link: https://shp.ee/u29kd8a"
-    },
-    {
-      "time": "20:57:05",
-      "type": "info",
-      "message": "Expandindo link curto da Shopee: https://shp.ee/u29kd8a"
-    },
-    {
-      "time": "20:57:05",
+      "time": "16:28:21",
       "type": "warning",
-      "message": "⚠️ Falha de conexão com a API da Shopee (Erro de Permissão (10020/10035): O seu aplicativo no Shopee Open Platform precisa ser do tipo 'Affiliate' e estar com status 'Active' (Aprovado).). Alternando automaticamente para conversão direta com ID de Afiliado \"18399950350\"..."
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:28:21",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:28:21",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:28:21",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:28:21",
+      "type": "success",
+      "message": "📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!"
+    },
+    {
+      "time": "16:28:20",
+      "type": "info",
+      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.la/1kQ6gfh"
+    },
+    {
+      "time": "16:28:20",
+      "type": "success",
+      "message": "🔗 Link Mercado Livre gerado com sucesso: https://meli.la/2S5rJzD"
+    },
+    {
+      "time": "16:28:20",
+      "type": "success",
+      "message": "✅ Link do Mercado Livre extraído do card principal: https://produto.mercadolivre.com.br/MLB-6214291588-jogo-kit-de-toalhas-de-banho-4pcs-atlntica-aura-superluxo-_JM"
+    },
+    {
+      "time": "16:28:20",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.la/1kQ6gfh"
+    },
+    {
+      "time": "16:28:17",
+      "type": "info",
+      "message": "Nova mensagem em \"#101 HELEN INDICA  🏠\": Analisando anúncio..."
+    },
+    {
+      "time": "16:28:17",
+      "type": "info",
+      "message": "📥 Novo anúncio detectado no grupo de origem \"#101 HELEN INDICA  🏠\". Processando e encaminhando instantaneamente..."
+    },
+    {
+      "time": "16:28:17",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+    },
+    {
+      "time": "16:28:17",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+    },
+    {
+      "time": "16:27:42",
+      "type": "success",
+      "message": "✨ [Shopee 🧡] Anúncio enviado para \"Robô destinos anúncios\": Mochila Resistente Impermeável com Saída USB"
+    },
+    {
+      "time": "16:27:42",
+      "type": "success",
+      "message": "📸 Anúncio com FOTO enviado para \"Robô destinos anúncios\""
+    },
+    {
+      "time": "16:27:41",
+      "type": "warning",
+      "message": "⚠️ [Shopee 🧡] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:27:41",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:27:41",
+      "type": "warning",
+      "message": "⚠️ [Shopee 🧡] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:27:41",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:27:40",
+      "type": "info",
+      "message": "Buscando foto original do produto no link: https://shopee.com.br/product-2283921-12039201"
+    },
+    {
+      "time": "16:27:40",
+      "type": "success",
+      "message": "🔗 Link Shopee gerado com sucesso: https://s.shopee.com.br/3LQ3ycHJCo"
+    },
+    {
+      "time": "16:27:40",
+      "type": "success",
+      "message": "✅ Link curto oficial Shopee gerado com sucesso: https://s.shopee.com.br/3LQ3ycHJCo"
+    },
+    {
+      "time": "16:27:40",
+      "type": "info",
+      "message": "Tentando gerar link curto oficial via API Shopee Open Platform..."
+    },
+    {
+      "time": "16:26:49",
+      "type": "info",
+      "message": "Nova mensagem em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Analisando anúncio..."
+    },
+    {
+      "time": "16:26:49",
+      "type": "info",
+      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
+    },
+    {
+      "time": "16:26:20",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"Bebezinhos Promo #5\"!"
+    },
+    {
+      "time": "16:26:19",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"Bebezinhos Promo #5\"..."
+    },
+    {
+      "time": "16:21:51",
+      "type": "success",
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Sabonete Em Óleo Corporal Natura Ekos Castanha 200ml"
+    },
+    {
+      "time": "16:21:51",
+      "type": "success",
+      "message": "📸 Anúncio com FOTO enviado para \"Robô destinos anúncios\""
+    },
+    {
+      "time": "16:21:51",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:21:51",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:21:51",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:21:51",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:21:51",
+      "type": "success",
+      "message": "📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!"
+    },
+    {
+      "time": "16:21:50",
+      "type": "info",
+      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.la/183SMU2"
+    },
+    {
+      "time": "16:21:50",
+      "type": "success",
+      "message": "🔗 Link Mercado Livre gerado com sucesso: https://meli.la/2S5rJzD"
+    },
+    {
+      "time": "16:21:50",
+      "type": "success",
+      "message": "✅ Link do Mercado Livre extraído do card principal: https://www.mercadolivre.com.br/sabonete-em-oleo-corporal-natura-ekos-castanha-200ml/up/MLBU3479760895"
+    },
+    {
+      "time": "16:21:50",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.la/183SMU2"
+    },
+    {
+      "time": "16:21:47",
+      "type": "info",
+      "message": "Nova mensagem em \"#101 HELEN INDICA  🏠\": Analisando anúncio..."
+    },
+    {
+      "time": "16:21:47",
+      "type": "info",
+      "message": "📥 Novo anúncio detectado no grupo de origem \"#101 HELEN INDICA  🏠\". Processando e encaminhando instantaneamente..."
+    },
+    {
+      "time": "16:21:47",
+      "type": "success",
+      "message": "📸 Imagem baixada com sucesso da mensagem de \"#101 HELEN INDICA  🏠\"!"
+    },
+    {
+      "time": "16:21:46",
+      "type": "info",
+      "message": "Baixando imagem recebida de \"#101 HELEN INDICA  🏠\"..."
+    },
+    {
+      "time": "16:21:13",
+      "type": "success",
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"Robô destinos anúncios\": Kit Colcha Queen 3 Peças Itália 150 Fios Grid Dupla Face"
+    },
+    {
+      "time": "16:21:13",
+      "type": "success",
+      "message": "📸 Anúncio com FOTO enviado para \"Robô destinos anúncios\""
+    },
+    {
+      "time": "16:21:13",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:21:13",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:21:13",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "16:21:13",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "16:21:13",
+      "type": "success",
+      "message": "📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!"
+    },
+    {
+      "time": "16:21:12",
+      "type": "info",
+      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.la/31dYyRJ"
+    },
+    {
+      "time": "16:21:12",
+      "type": "success",
+      "message": "🔗 Link Mercado Livre gerado com sucesso: https://meli.la/2S5rJzD"
     }
   ]
 }

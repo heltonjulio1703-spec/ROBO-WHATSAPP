@@ -348,12 +348,13 @@ const getGeminiClient = () => {
 };
 
 // Helper to convert links to affiliate
-const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string, subId: string = "bot") => {
+const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string, subId: string = "bot", forceModel?: "shopee_short" | "universal" | "direct") => {
   if (!originalUrl) return "";
   let cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
   
   // Resolve effective affiliate ID specifically for Shopee
   const affIdToUse = (shopeeAffiliateId || state.config.shopeeAffiliateId || state.config.affiliateId || "18399950350").trim();
+  const linkModel = forceModel || state.config.shopeeLinkModel || "shopee_short";
 
   // If cleanUrl is already a universal-link, unwrap it to get the raw product URL and avoid nesting
   let targetUrl = cleanUrl;
@@ -400,6 +401,17 @@ const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string,
     // Keep default domain if parsing fails
   }
 
+  if (linkModel === "direct") {
+    try {
+      const directObj = new URL(targetUrl);
+      directObj.searchParams.set("utm_source", "an_affiliate");
+      directObj.searchParams.set("utm_medium", "affiliates");
+      directObj.searchParams.set("utm_content", subId);
+      directObj.searchParams.set("utm_term", affIdToUse);
+      return directObj.toString();
+    } catch (e) {}
+  }
+
   // Shopee Universal Link structure (clean deep link compatible with both mobile app & desktop)
   const universalUrl = `https://${shopeeDomain}/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=${encodeURIComponent(subId)}&utm_term=${encodeURIComponent(affIdToUse)}&url=${encodeURIComponent(targetUrl)}`;
   
@@ -435,16 +447,16 @@ const convertWithShopeeApi = async (
       
       const queries = [
         {
+          name: "generateShortLink",
+          body: `mutation{generateShortLink(input:{originUrl:${JSON.stringify(cleanUrl)},subIds:[${JSON.stringify(subId)}]}){shortLink}}`
+        },
+        {
           name: "generatePromotionLink",
           body: `mutation{generatePromotionLink(linkParams:{originalUrl:${JSON.stringify(cleanUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink shortLink}}}`
         },
         {
           name: "generatePromotionLinkAlt",
           body: `mutation{generatePromotionLink(linkParams:{originUrl:${JSON.stringify(cleanUrl)},subIds:[${JSON.stringify(subId)}]}){code message data{promotionLink shortLink}}}`
-        },
-        {
-          name: "generateShortLink",
-          body: `mutation{generateShortLink(input:{originUrl:${JSON.stringify(cleanUrl)},subIds:[${JSON.stringify(subId)}]}){shortLink}}`
         }
       ];
 
@@ -505,15 +517,15 @@ const convertWithShopeeApi = async (
                 continue;
               }
 
-              const result = json.data?.generatePromotionLink?.data?.promotionLink || 
+              const result = json.data?.generateShortLink?.shortLink ||
+                             json.data?.generatePromotionLink?.data?.promotionLink || 
                              json.data?.generatePromotionLink?.data?.shortLink ||
                              json.data?.generatePromotionLink?.promotionLink ||
-                             json.data?.generatePromotionLink?.shortLink ||
-                             json.data?.generateShortLink?.shortLink || 
+                             json.data?.generatePromotionLink?.shortLink || 
                              json.data?.batchGetCustomLink?.customLinkList?.[0]?.customLink;
 
               if (result) {
-                console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint} usando ${queryObj.name}`);
+                console.log(`Conversão com sucesso via endpoint Shopee: ${endpoint} usando ${queryObj.name} => ${result}`);
                 return result;
               }
             } catch (innerErr: any) {
@@ -642,11 +654,12 @@ const expandShopeeUrl = async (url: string): Promise<string> => {
 };
 
 // Async Link Converter that automatically attempts Shopee API if configured, falling back to Affiliate ID link
-const convertToAffiliateLinkAsync = async (originalUrl: string, shopeeAffiliateId?: string, subId: string = "bot") => {
+const convertToAffiliateLinkAsync = async (originalUrl: string, shopeeAffiliateId?: string, subId: string = "bot", forceModel?: "shopee_short" | "universal" | "direct") => {
   if (!originalUrl) return "";
 
   const cleanInputUrl = originalUrl.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
-  const effAffId = (shopeeAffiliateId || state.config.shopeeAffiliateId || state.config.affiliateId || "heltonjulio1703").trim();
+  const effAffId = (shopeeAffiliateId || state.config.shopeeAffiliateId || state.config.affiliateId || "18399950350").trim();
+  const linkModel = forceModel || state.config.shopeeLinkModel || "shopee_short";
   
   // Expand short URLs first to ensure the best tracking and conversion results
   const resolvedUrl = await expandShopeeUrl(cleanInputUrl);
@@ -654,9 +667,9 @@ const convertToAffiliateLinkAsync = async (originalUrl: string, shopeeAffiliateI
   const hasAppKey = !!(state.config.shopeeAppKey && state.config.shopeeAppKey.trim());
   const hasAppSecret = !!(state.config.shopeeAppSecret && state.config.shopeeAppSecret.trim());
 
-  if (hasAppKey && hasAppSecret) {
+  if (linkModel === "shopee_short" && hasAppKey && hasAppSecret) {
     try {
-      addLog("info", `Tentando gerar link via API Oficial da Shopee...`);
+      addLog("info", `Tentando gerar link curto oficial via API Shopee Open Platform...`);
       const apiLink = await convertWithShopeeApi(
         resolvedUrl,
         state.config.shopeeAppKey!.trim(),
@@ -665,18 +678,18 @@ const convertToAffiliateLinkAsync = async (originalUrl: string, shopeeAffiliateI
       );
 
       if (apiLink) {
-        addLog("success", `✅ Link gerado com sucesso via API Oficial da Shopee!`);
+        addLog("success", `✅ Link curto oficial Shopee gerado com sucesso: ${apiLink}`);
         return apiLink;
       }
-      addLog("warning", `⚠️ Resposta da API Shopee sem link retornado. Alternando automaticamente para conversão direta com ID de Afiliado "${effAffId}"...`);
+      addLog("warning", `⚠️ Resposta da API Shopee sem link retornado. Alternando para conversão direta com ID "${effAffId}"...`);
     } catch (err) {
       const errMsg = (err as Error).message || "";
-      addLog("warning", `⚠️ Falha de conexão com a API da Shopee (${errMsg}). Alternando automaticamente para conversão direta com ID de Afiliado "${effAffId}"...`);
+      addLog("warning", `⚠️ Falha temporária com API Shopee (${errMsg}). Alternando para conversão com ID "${effAffId}"...`);
     }
   }
 
-  // Fallback to Universal Link with Affiliate ID
-  return convertToAffiliateLink(resolvedUrl, effAffId, subId);
+  // Fallback to Universal or Direct Link with Affiliate ID
+  return convertToAffiliateLink(resolvedUrl, effAffId, subId, linkModel);
 };
 
 // Helper to check if a URL belongs to Mercado Livre
@@ -825,7 +838,7 @@ const expandMercadoLivreUrl = async (url: string): Promise<string> => {
   return cleanUrl;
 };
 
-// Official / Custom Mercado Livre Affiliate Converter
+// Official Mercado Livre Per-Product Affiliate Converter
 const convertToMercadoLivreAffiliateLink = (originalUrl: string, mlAffiliateId?: string, subId: string = "bot") => {
   if (!originalUrl) return "";
   let cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
@@ -853,9 +866,42 @@ const convertToMercadoLivreAffiliateLink = (originalUrl: string, mlAffiliateId?:
     } catch (e) {}
   }
 
-  // Clean the base URL by stripping query and hash fragments
-  const cleanBase = cleanUrl.split("?")[0].split("#")[0];
-  return `${cleanBase}?matt_tool=${encodeURIComponent(effMlAffId)}&matt_word=${encodeURIComponent(subId)}`;
+  try {
+    const urlObj = new URL(cleanUrl);
+    // Remove previous competitor affiliate/tracking params
+    urlObj.searchParams.delete("matt_tool");
+    urlObj.searchParams.delete("matt_word");
+    urlObj.searchParams.delete("matt_source");
+    urlObj.searchParams.delete("tracking_id");
+    urlObj.searchParams.delete("ref");
+    urlObj.searchParams.delete("item_id");
+    urlObj.searchParams.delete("c_id");
+    urlObj.searchParams.delete("c_element_order");
+    urlObj.searchParams.delete("c_campaign");
+    urlObj.searchParams.delete("c_uid");
+    urlObj.searchParams.delete("sid");
+    urlObj.searchParams.delete("wid");
+    urlObj.searchParams.delete("polycard_client");
+
+    // Clean hash
+    urlObj.hash = "";
+
+    // Set affiliate tag and tracking parameters for THIS specific product
+    const isCustomTag = isNaN(Number(effMlAffId));
+    if (isCustomTag) {
+      urlObj.searchParams.set("matt_word", effMlAffId);
+      urlObj.searchParams.set("matt_tool", "37552149");
+    } else {
+      urlObj.searchParams.set("matt_tool", effMlAffId);
+      urlObj.searchParams.set("matt_word", subId || "bot");
+    }
+    urlObj.searchParams.set("forceInApp", "true");
+
+    return urlObj.toString();
+  } catch (e) {
+    const cleanBase = cleanUrl.split("?")[0].split("#")[0];
+    return `${cleanBase}?matt_word=${encodeURIComponent(effMlAffId)}&matt_tool=37552149&forceInApp=true`;
+  }
 };
 
 // Unified Async Link Converter supporting both Shopee and Mercado Livre with clean, direct URLs
@@ -1979,6 +2025,72 @@ app.post("/api/whatsapp/scan-today", async (req, res) => {
   } catch (err) {
     addLog("error", `Falha na varredura do grupo "${groupName}": ${(err as Error).message}`);
     res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+// Manual Link Validation and Testing Endpoint
+app.post("/api/links/validate", async (req, res) => {
+  const { url, affiliateId } = req.body;
+  if (!url || typeof url !== "string") {
+    return res.status(400).json({ success: false, error: "Link ou texto inválido." });
+  }
+
+  const cleanInput = url.trim();
+  const dealRegex = /(https?:\/\/(?:[a-zA-Z0-9_-]+\.)*(?:shopee\.[a-z.]+|shp\.ee|shope\.ee|s\.shopee\.[a-z.]+|a\.shopee\.[a-z.]+|mercadolivre\.[a-z.]+|mercadolibre\.[a-z.]+|ml\.com\.br|meli\.li|meli\.la)[^\s]+)/i;
+  const match = cleanInput.match(dealRegex);
+  const targetUrl = match ? match[0].replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "") : cleanInput;
+
+  const isMl = isMercadoLivreUrl(targetUrl);
+  const isShp = isShopeeUrl(targetUrl);
+
+  if (!isMl && !isShp) {
+    return res.json({
+      success: false,
+      error: "O link informado não é reconhecido como sendo do Mercado Livre ou da Shopee.",
+      detectedStore: "other",
+      originalUrl: targetUrl,
+    });
+  }
+
+  try {
+    let resolvedUrl = targetUrl;
+    let highResImage = null;
+    let convertedAffiliate = "";
+
+    if (isMl) {
+      resolvedUrl = await expandMercadoLivreUrl(targetUrl);
+      convertedAffiliate = convertToMercadoLivreAffiliateLink(resolvedUrl, affiliateId || state.config.mercadolivreAffiliateId, "bot");
+      highResImage = await fetchOriginalMercadoLivreImage(resolvedUrl);
+    } else {
+      resolvedUrl = await expandShopeeUrl(targetUrl);
+      convertedAffiliate = await convertToAffiliateLinkAsync(resolvedUrl, affiliateId || state.config.shopeeAffiliateId, "bot");
+      highResImage = await fetchOriginalShopeeImage(resolvedUrl);
+    }
+
+    const isValid = convertedAffiliate.startsWith("http") && (
+      (isMl && (convertedAffiliate.includes("meli.la") || convertedAffiliate.includes("meli.li") || convertedAffiliate.includes("matt_tool="))) ||
+      (isShp && (convertedAffiliate.includes("universal-link") || convertedAffiliate.includes("s.shopee.com") || convertedAffiliate.includes("shp.ee")))
+    );
+
+    return res.json({
+      success: true,
+      store: isMl ? "mercadolivre" : "shopee",
+      storeLabel: isMl ? "Mercado Livre" : "Shopee",
+      originalUrl: targetUrl,
+      resolvedUrl,
+      affiliateLink: convertedAffiliate,
+      imageUrl: highResImage || getProductImage(isMl ? "Produto Mercado Livre" : "Produto Shopee"),
+      hasHighResImage: !!highResImage,
+      isValid,
+      affiliateIdUsed: isMl 
+        ? (affiliateId || state.config.mercadolivreAffiliateId || state.config.affiliateId)
+        : (affiliateId || state.config.shopeeAffiliateId || state.config.affiliateId),
+    });
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      error: error.message || "Erro ao validar o link.",
+    });
   }
 });
 

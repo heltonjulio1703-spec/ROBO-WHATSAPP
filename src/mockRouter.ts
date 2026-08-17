@@ -406,6 +406,63 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
       });
     }
 
+    // POST /api/links/validate
+    if (pathname === "/api/links/validate" && method === "POST") {
+      const testUrl = bodyObj.url || "";
+      const isMl = /mercadolivre|mercadolibre|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre/i.test(testUrl);
+      const isShp = /shopee|shp\.ee|shope\.ee|s\.shopee|a\.shopee/i.test(testUrl);
+
+      if (!isMl && !isShp) {
+        return createMockResponse({
+          success: false,
+          error: "O link informado não é reconhecido como sendo do Mercado Livre ou da Shopee.",
+        }, 400);
+      }
+
+      const affId = (isMl ? (bodyObj.affiliateId || configState.mercadolivreAffiliateId || configState.affiliateId) : (bodyObj.affiliateId || configState.shopeeAffiliateId || configState.affiliateId)) || "heltonjulio1703";
+      let convertedAffiliate = "";
+      let resolvedUrl = testUrl.split("?")[0].split("#")[0];
+
+      if (isMl) {
+        if (testUrl.includes("2S5rJzD")) {
+          resolvedUrl = "https://produto.mercadolivre.com.br/MLB-1231146019-kit-10-pares-de-meias-lupo-soquete-invisivel-sport-_JM";
+        } else if (testUrl.includes("15zvKPc") || testUrl.includes("meli.la") || testUrl.includes("meli.li")) {
+          resolvedUrl = "https://www.mercadolivre.com.br/mesa-tabua-de-passar-roupa-slim-dobravel/p/MLB64578882";
+        }
+        const isCustomTag = isNaN(Number(affId));
+        if (isCustomTag) {
+          convertedAffiliate = `${resolvedUrl}?matt_word=${encodeURIComponent(affId)}&matt_tool=37552149&forceInApp=true`;
+        } else {
+          convertedAffiliate = `${resolvedUrl}?matt_tool=${encodeURIComponent(affId)}&matt_word=bot&forceInApp=true`;
+        }
+      } else {
+        const shpModel = configState.shopeeLinkModel || "shopee_short";
+        const shpShort = configState.shopeeShortLink || "https://s.shopee.com.br/3VjU9xABK7";
+        if (shpModel === "shopee_short" && shpShort.startsWith("http")) {
+          convertedAffiliate = shpShort;
+        } else if (shpModel === "direct") {
+          convertedAffiliate = `${resolvedUrl}?utm_source=an_affiliate&utm_medium=affiliates&utm_content=bot&utm_term=${encodeURIComponent(affId)}`;
+        } else {
+          convertedAffiliate = `https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=${encodeURIComponent(affId)}&url=${encodeURIComponent(resolvedUrl)}`;
+        }
+      }
+
+      return createMockResponse({
+        success: true,
+        store: isMl ? "mercadolivre" : "shopee",
+        storeLabel: isMl ? "Mercado Livre" : "Shopee",
+        originalUrl: testUrl,
+        resolvedUrl,
+        affiliateLink: convertedAffiliate,
+        imageUrl: isMl 
+          ? "https://http2.mlstatic.com/D_NQ_NP_2X_746838-MLB64578882_102024-F.webp" 
+          : "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+        hasHighResImage: true,
+        isValid: true,
+        affiliateIdUsed: affId,
+      });
+    }
+
     // POST /api/simulation/incoming
     if (pathname === "/api/simulation/incoming" && method === "POST") {
       const sourceGroupId = bodyObj.sourceGroupId;

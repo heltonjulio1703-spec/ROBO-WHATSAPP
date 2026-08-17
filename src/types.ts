@@ -10,7 +10,11 @@ export interface AppConfig {
   shopeeAppKey?: string;
   shopeeAppSecret?: string;
   shopeeAffiliateId?: string;
+  shopeeShortLink?: string;
+  shopeeLinkModel?: "shopee_short" | "universal" | "direct";
   mercadolivreAffiliateId?: string;
+  mercadolivreShortLink?: string;
+  mercadolivreLinkModel?: "meli_la" | "canonical";
   useShopeeApi?: boolean;
   shortenAffiliateLinks?: boolean;
   customFooter?: string;
