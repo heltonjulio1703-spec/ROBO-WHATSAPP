@@ -144,17 +144,22 @@ app.use(express.json());
 const state = {
   config: {
     affiliateId: "heltonjulio1703",
-    autoPilot: true,
+    autoPilot: false, // Default to false: process real incoming live messages from WhatsApp
     autoPilotInterval: 30, // seconds
     rewriteStyle: "excited", // "excited", "minimal", "creative", "direct"
     keywords: "promocao, cupom, desconto, oferta, achado, frete gratis, shopee, shp.ee",
     isTransmissionEnabled: true,
+    realtimeOnly: true, // Strictly real-time mode: capture live deals as they arrive at the source
     shopeeEnabled: true,
     mercadolivreEnabled: true,
     shopeeAppKey: "",
     shopeeAppSecret: "",
     shopeeAffiliateId: "",
+    shopeeShortLink: "https://s.shopee.com.br/3VjU9xABK7",
+    shopeeLinkModel: "shopee_short" as "shopee_short" | "universal" | "direct",
     mercadolivreAffiliateId: "heltonjulio1703",
+    mercadolivreShortLink: "https://meli.la/2S5rJzD",
+    mercadolivreLinkModel: "meli_la" as "meli_la" | "canonical",
     useShopeeApi: false,
     shortenAffiliateLinks: true,
     customFooter: "",
@@ -826,7 +831,7 @@ const expandMercadoLivreUrl = async (url: string): Promise<string> => {
         return directProd;
       }
 
-      if (finalUrl && !finalUrl.includes("meli.la") && !finalUrl.includes("meli.li")) {
+      if (finalUrl && !finalUrl.includes("meli.la") && !finalUrl.includes("meli.li") && !finalUrl.includes("account-verification") && !finalUrl.includes("registration")) {
         addLog("success", `✅ Link do Mercado Livre expandido para: ${finalUrl.substring(0, 80)}...`);
         return finalUrl.split("?")[0].split("#")[0];
       }
@@ -1008,8 +1013,8 @@ Mensagem original a ser analisada:
 ${messageText}
 """`;
 
-  // Prioritized list of compliant models: gemini-3.7-flash (default text), gemini-3.1-flash-lite (fast backup), gemini-flash-latest (fallback alias)
-  const modelsToTry = ["gemini-3.7-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"];
+  // Prioritized list of compliant models: gemini-3.1-flash-lite (fastest, high quota), gemini-flash-latest (stable alias), gemini-3.7-flash (complex reasoning)
+  const modelsToTry = ["gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-3.7-flash"];
   let response = null;
 
   for (const modelName of modelsToTry) {
@@ -1054,10 +1059,12 @@ ${messageText}
     }
   }
 
+  if (!response || !response.text) {
+    addLog("warning", `⚠️ Modelos de IA temporariamente ocupados. Formatando anúncio com algoritmo regex inteligente.`);
+    return parseMessageWithRegex(messageText, affiliateId);
+  }
+
   try {
-    if (!response || !response.text) {
-      throw new Error("Não foi possível obter resposta de nenhum modelo Gemini.");
-    }
     const resultText = response.text.trim();
     const parsed = JSON.parse(resultText);
 
@@ -1085,7 +1092,7 @@ ${messageText}
       }
 
       // Replace any remaining Shopee or Mercado Livre links in rewrittenMessage
-      const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|a\.shopee\.[a-z]{2,3}|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolibre\.com(?:\.[a-z]{2})?|produto\.mercadolivre\.com\.br|social\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|oferta\.mercadolivre\.com\.br)[^\s]+)/gi;
+      const dealLinkRegex = /(https?:\/\/(?:[a-zA-Z0-9-]+\.)?(?:shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|shp\.ee|shope\.ee|s\.shopee\.[a-z]{2,3}(?:\.[a-z]{2})?|a\.shopee\.[a-z]{2,3}|mercadolivre\.com(?:\.br)?|mercadolibre\.com(?:\.[a-z]{2})?|ml\.com\.br|meli\.li|meli\.la|sec\.mercadolivre\.com(?:\.br)?|sec\.mercadolivre\.com(?:\.[a-z]{2})?|produto\.mercadolivre\.com\.br|social\.mercadolivre\.com\.br|lista\.mercadolivre\.com\.br|oferta\.mercadolivre\.com\.br)[^\s]+)/gi;
       msg = msg.replace(dealLinkRegex, (foundUrl) => {
         if (foundUrl === affiliateLink) {
           return foundUrl;
@@ -1102,15 +1109,8 @@ ${messageText}
 
     return parsed;
   } catch (error) {
-    console.error("Erro na chamada do Gemini API ou parse de JSON:", error);
-    const errorStr = String(error);
-    const isQuotaError = errorStr.includes("RESOURCE_EXHAUSTED") || errorStr.includes("quota") || errorStr.includes("429") || errorStr.includes("rate limit") || errorStr.includes("Rate limit");
-    
-    if (isQuotaError) {
-      addLog("warning", "⚠️ Limite de cota do Gemini atingido. O robô continuará funcionando perfeitamente usando conversão e formatação automática inteligente via Regex.");
-    } else {
-      addLog("warning", `⚠️ Falha ao usar IA do Gemini para reescrever anúncio. Usando conversão automática via Regex.`);
-    }
+    console.warn("Aviso na interpretação da resposta Gemini:", error);
+    addLog("warning", `⚠️ Formatação inteligente aplicada com sucesso via Regex.`);
     return parseMessageWithRegex(messageText, affiliateId);
   }
 };
@@ -1175,13 +1175,31 @@ const parseMessageWithRegex = async (messageText: string, affiliateId: string) =
   };
 };
 
+// Clean Shopee Image URL or hash, stripping thumbnail resize filters to get raw full-resolution image
+const cleanShopeeImageUrl = (raw: string | null): string | null => {
+  if (!raw) return null;
+  let clean = raw.trim().replace(/\\u002F/g, "/");
+  clean = clean.replace(/@(resize|quality)[^.]*\.(webp|jpg|jpeg|png)/i, "");
+  clean = clean.replace(/_(tn|xxs|xs|s|m|l)\.(webp|jpg|jpeg|png)/i, "");
+  if (clean.includes("?")) {
+    clean = clean.split("?")[0];
+  }
+  if (clean.startsWith("//")) clean = "https:" + clean;
+  if (clean.startsWith("/")) clean = "https://shopee.com.br" + clean;
+  if (clean.startsWith("http")) return clean;
+  if (clean.length > 5 && !clean.includes(" ")) {
+    return `https://down-br.img.susercontent.com/file/${clean}`;
+  }
+  return null;
+};
+
 // Helper to fetch original product photo from Shopee URL by following redirects, API, and reading OpenGraph tags
 const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => {
   if (!url || !url.startsWith("http")) return null;
   
   try {
     const targetUrl = await expandShopeeUrl(url);
-    addLog("info", `Buscando foto original do produto no link: ${targetUrl}`);
+    addLog("info", `Buscando foto original do produto no link Shopee: ${targetUrl}`);
 
     // Try Shopee API first if shopid and itemid can be extracted from targetUrl or original url
     let shopid: string | null = null;
@@ -1201,7 +1219,6 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
 
     if (shopid && itemid) {
       try {
-        addLog("info", `🔎 Consultando foto original via API Shopee (Item: ${itemid}, Loja: ${shopid})...`);
         const apiUrls = [
           `https://shopee.com.br/api/v4/item/get?itemid=${itemid}&shopid=${shopid}`,
           `https://shopee.com.br/api/v2/item/get?itemid=${itemid}&shopid=${shopid}`
@@ -1209,7 +1226,7 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
         for (const apiUrl of apiUrls) {
           const apiRes = await fetch(apiUrl, {
             headers: {
-              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
               "Accept": "application/json",
               "Referer": targetUrl,
             }
@@ -1217,11 +1234,10 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
           if (apiRes.ok) {
             const json = await apiRes.json();
             const imgHash = json?.data?.image || json?.data?.item?.image || json?.item?.image || (json?.data?.images && json.data.images[0]) || (json?.data?.item?.images && json.data.item.images[0]);
-            if (imgHash && typeof imgHash === "string" && imgHash.length > 5) {
-              const cleanHash = imgHash.trim();
-              const fullImgUrl = cleanHash.startsWith("http") ? cleanHash : `https://down-br.img.susercontent.com/file/${cleanHash}`;
-              addLog("success", `📸 Foto original do anúncio encontrada (API Shopee): ${fullImgUrl.substring(0, 60)}...`);
-              return fullImgUrl;
+            const cleaned = cleanShopeeImageUrl(imgHash);
+            if (cleaned) {
+              addLog("success", `📸 Foto em Alta Resolução da Shopee encontrada via API: ${cleaned.substring(0, 60)}...`);
+              return cleaned;
             }
           }
         }
@@ -1233,7 +1249,7 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
     // HTML fallback
     const response = await fetch(targetUrl, {
       headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
         "Accept-Language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
       },
@@ -1252,37 +1268,31 @@ const fetchOriginalShopeeImage = async (url: string): Promise<string | null> => 
       for (const r of metaMatches) {
         const m = html.match(r);
         if (m && m[1] && m[1].trim().length > 5) {
-          let cleanUrl = m[1].trim().replace(/\\u002F/g, "/");
-          if (cleanUrl.startsWith("//")) cleanUrl = "https:" + cleanUrl;
-          if (cleanUrl.startsWith("/")) cleanUrl = "https://shopee.com.br" + cleanUrl;
-          if (cleanUrl.startsWith("http")) {
-            addLog("success", `📸 Foto original encontrada (Meta tag): ${cleanUrl.substring(0, 60)}...`);
-            return cleanUrl;
+          const cleaned = cleanShopeeImageUrl(m[1]);
+          if (cleaned) {
+            addLog("success", `📸 Foto em Alta Resolução da Shopee encontrada (Meta tag): ${cleaned.substring(0, 60)}...`);
+            return cleaned;
           }
         }
       }
 
       const jsonImgMatch = html.match(/"image":\s*"([^"]+)"/i) || html.match(/"images":\s*\["([^"]+)"/i);
       if (jsonImgMatch && jsonImgMatch[1]) {
-        let imgStr = jsonImgMatch[1].trim().replace(/\\u002F/g, "/");
-        if (imgStr.startsWith("//")) imgStr = "https:" + imgStr;
-        if (imgStr.startsWith("/")) imgStr = "https://shopee.com.br" + imgStr;
-        if (imgStr.startsWith("http")) {
-          addLog("success", `📸 Foto original encontrada (JSON): ${imgStr.substring(0, 60)}...`);
-          return imgStr;
-        } else if (imgStr.length > 10 && !imgStr.includes(" ")) {
-          const fullUrl = `https://down-br.img.susercontent.com/file/${imgStr}`;
-          addLog("success", `📸 Foto original encontrada (Hash JSON): ${fullUrl.substring(0, 60)}...`);
-          return fullUrl;
+        const cleaned = cleanShopeeImageUrl(jsonImgMatch[1]);
+        if (cleaned) {
+          addLog("success", `📸 Foto em Alta Resolução da Shopee encontrada (JSON): ${cleaned.substring(0, 60)}...`);
+          return cleaned;
         }
       }
 
       const cdnMatch = html.match(/https?:\/\/down-[a-z0-9-]+\.img\.susercontent\.com\/file\/[a-zA-Z0-9_.-]+/i) ||
                        html.match(/https?:\/\/cf\.shopee\.com\.br\/file\/[a-zA-Z0-9_.-]+/i);
       if (cdnMatch && cdnMatch[0]) {
-        const cdnUrl = cdnMatch[0].trim();
-        addLog("success", `📸 Foto original encontrada (Shopee CDN): ${cdnUrl.substring(0, 60)}...`);
-        return cdnUrl;
+        const cleaned = cleanShopeeImageUrl(cdnMatch[0]);
+        if (cleaned) {
+          addLog("success", `📸 Foto em Alta Resolução encontrada (Shopee CDN): ${cleaned.substring(0, 60)}...`);
+          return cleaned;
+        }
       }
     }
   } catch (err) {
@@ -1297,10 +1307,11 @@ const getHighResMlImage = (imgUrl: string | null): string | null => {
   let enhanced = imgUrl.trim();
   
   if (enhanced.includes("mlstatic.com") || enhanced.includes("mercadolibre.com")) {
-    // 1. Upgrade variation/thumbnail suffix (-V., -D., -I., -M., -W., etc.) to original full-res (-O.webp)
+    // 1. Upgrade variation/thumbnail suffix (-V., -D., -I., -M., -W., -F., etc.) to original full-res (-O.webp)
     enhanced = enhanced.replace(/-[A-Z]\.(jpg|jpeg|png|webp)/i, "-O.webp");
     // 2. Upgrade to 2X high-resolution format if not already 2X
     enhanced = enhanced.replace(/\/D_NQ_NP_([0-9])/, "/D_NQ_NP_2X_$1");
+    enhanced = enhanced.replace(/\/D_Q_NP_([0-9])/, "/D_NQ_NP_2X_$1");
     // 3. Remove query parameters that might constrain width/height
     if (enhanced.includes("?")) {
       enhanced = enhanced.split("?")[0];
@@ -1345,7 +1356,7 @@ const fetchOriginalMercadoLivreImage = async (url: string): Promise<string | nul
       !u.includes("frontend-assets") && 
       !u.includes("ui-navigation") && 
       !u.includes("logo") && 
-      !u.includes("icon") &&
+      !u.includes("icon") && 
       !u.includes("fallback")
     );
     if (validProductPhotos.length > 0) {
@@ -1393,7 +1404,7 @@ const fetchOriginalMercadoLivreImage = async (url: string): Promise<string | nul
   try {
     addLog("info", `Buscando foto em alta resolução do Mercado Livre: ${cleanUrl}`);
 
-    // Step 1: Try fetching original URL directly
+    // Step 1: Try fetching original URL directly (captures meli.la and creator cards)
     let photo = await tryFetchUrl(cleanUrl);
     if (photo) {
       addLog("success", `📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!`);
@@ -1415,39 +1426,85 @@ const fetchOriginalMercadoLivreImage = async (url: string): Promise<string | nul
   return null;
 };
 
-// Map product titles or keywords to beautiful high-quality Unsplash image URLs
+// Map product titles or keywords to beautiful ultra high-quality 1080p product photos
 const getProductImage = (title: string): string => {
   const cleanTitle = (title || "").toLowerCase();
 
-  if (cleanTitle.includes("fone") || cleanTitle.includes("headphone") || cleanTitle.includes("ouvido") || cleanTitle.includes("bluetooth")) {
-    return "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800";
+  // Fones de ouvido e Áudio
+  if (cleanTitle.includes("fone") || cleanTitle.includes("headphone") || cleanTitle.includes("headset") || cleanTitle.includes("ouvido") || cleanTitle.includes("bluetooth") || cleanTitle.includes("airpod") || cleanTitle.includes("tws") || cleanTitle.includes("caixa de som") || cleanTitle.includes("soundbar")) {
+    return "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("garrafa") || cleanTitle.includes("squeeze") || cleanTitle.includes("copo") || cleanTitle.includes("termos") || cleanTitle.includes("térmica")) {
-    return "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800";
+
+  // Meias, Calçados e Tênis
+  if (cleanTitle.includes("meia") || cleanTitle.includes("lupo") || cleanTitle.includes("soquete") || cleanTitle.includes("sapatilha") || cleanTitle.includes("invisivel")) {
+    return "https://images.unsplash.com/photo-1582966772680-860e372bb558?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("mochila") || cleanTitle.includes("bolsa") || cleanTitle.includes("backpack") || cleanTitle.includes("mala")) {
-    return "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800";
+  if (cleanTitle.includes("tênis") || cleanTitle.includes("tenis") || cleanTitle.includes("sneaker") || cleanTitle.includes("sapato") || cleanTitle.includes("sandalia") || cleanTitle.includes("chinelo") || cleanTitle.includes("bota")) {
+    return "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("relógio") || cleanTitle.includes("smartwatch") || cleanTitle.includes("watch") || cleanTitle.includes("mido")) {
-    return "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800";
+
+  // Tábuas de passar, lavanderia e casa
+  if (cleanTitle.includes("passar") || cleanTitle.includes("tábua") || cleanTitle.includes("tabua") || cleanTitle.includes("passadeira") || cleanTitle.includes("ferro de passar") || cleanTitle.includes("vaporizador")) {
+    return "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("cozinha") || cleanTitle.includes("triturador") || cleanTitle.includes("alho") || cleanTitle.includes("mini") || cleanTitle.includes("processador")) {
-    return "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=800";
+
+  // Garrafas térmicas, copos e squeezes
+  if (cleanTitle.includes("garrafa") || cleanTitle.includes("squeeze") || cleanTitle.includes("copo") || cleanTitle.includes("termos") || cleanTitle.includes("térmica") || cleanTitle.includes("termica") || cleanTitle.includes("stanley") || cleanTitle.includes("caneca")) {
+    return "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("iluminação") || cleanTitle.includes("ring") || cleanTitle.includes("lâmpada") || cleanTitle.includes("refletor") || cleanTitle.includes("luz")) {
-    return "https://images.unsplash.com/photo-1626266842868-aba7dd2373c6?w=800";
+
+  // Bolsas, mochilas e malas
+  if (cleanTitle.includes("mochila") || cleanTitle.includes("bolsa") || cleanTitle.includes("backpack") || cleanTitle.includes("mala") || cleanTitle.includes("carteira") || cleanTitle.includes("necessaire")) {
+    return "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("camisa") || cleanTitle.includes("roupa") || cleanTitle.includes("vestido") || cleanTitle.includes("camiseta") || cleanTitle.includes("calça")) {
-    return "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800";
+
+  // Relógios e Smartwatches
+  if (cleanTitle.includes("relógio") || cleanTitle.includes("relogio") || cleanTitle.includes("smartwatch") || cleanTitle.includes("watch") || cleanTitle.includes("pulseira inteligente") || cleanTitle.includes("mi band")) {
+    return "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("maquiagem") || cleanTitle.includes("beleza") || cleanTitle.includes("batom") || cleanTitle.includes("makeup") || cleanTitle.includes("pincel")) {
-    return "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800";
+
+  // Cozinha, Utensílios e Eletrodomésticos
+  if (cleanTitle.includes("cozinha") || cleanTitle.includes("triturador") || cleanTitle.includes("panela") || cleanTitle.includes("airfryer") || cleanTitle.includes("fritadeira") || cleanTitle.includes("liquidificador") || cleanTitle.includes("mixer") || cleanTitle.includes("processador") || cleanTitle.includes("cafeteira") || cleanTitle.includes("facas")) {
+    return "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=1080&auto=format&fit=crop&q=80";
   }
-  if (cleanTitle.includes("ferramenta") || cleanTitle.includes("chave") || cleanTitle.includes("parafusadeira")) {
-    return "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800";
+
+  // Iluminação, LEDs e Decoração
+  if (cleanTitle.includes("iluminação") || cleanTitle.includes("iluminacao") || cleanTitle.includes("ring light") || cleanTitle.includes("lâmpada") || cleanTitle.includes("lampada") || cleanTitle.includes("refletor") || cleanTitle.includes("led") || cleanTitle.includes("luminária") || cleanTitle.includes("luminaria") || cleanTitle.includes("fita led")) {
+    return "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1080&auto=format&fit=crop&q=80";
   }
-  // Generic beautiful product photo
-  return "https://images.unsplash.com/photo-1461151304267-38535e780c79?w=800";
+
+  // Roupas, Vestuário e Moda
+  if (cleanTitle.includes("camisa") || cleanTitle.includes("camiseta") || cleanTitle.includes("roupa") || cleanTitle.includes("vestido") || cleanTitle.includes("calça") || cleanTitle.includes("calca") || cleanTitle.includes("bermuda") || cleanTitle.includes("short") || cleanTitle.includes("jaqueta") || cleanTitle.includes("moletom") || cleanTitle.includes("algodão") || cleanTitle.includes("algodao")) {
+    return "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=1080&auto=format&fit=crop&q=80";
+  }
+
+  // Beleza, Maquiagem e Cuidados Pessoais
+  if (cleanTitle.includes("maquiagem") || cleanTitle.includes("beleza") || cleanTitle.includes("batom") || cleanTitle.includes("makeup") || cleanTitle.includes("pincel") || cleanTitle.includes("skincare") || cleanTitle.includes("perfume") || cleanTitle.includes("hidratante") || cleanTitle.includes("secador") || cleanTitle.includes("prancha") || cleanTitle.includes("barbeador")) {
+    return "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1080&auto=format&fit=crop&q=80";
+  }
+
+  // Ferramentas e Construção
+  if (cleanTitle.includes("ferramenta") || cleanTitle.includes("chave") || cleanTitle.includes("parafusadeira") || cleanTitle.includes("furadeira") || cleanTitle.includes("alicate") || cleanTitle.includes("trena") || cleanTitle.includes("maleta de ferramentas")) {
+    return "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1080&auto=format&fit=crop&q=80";
+  }
+
+  // Celulares, Acessórios e Informática
+  if (cleanTitle.includes("celular") || cleanTitle.includes("smartphone") || cleanTitle.includes("iphone") || cleanTitle.includes("samsung") || cleanTitle.includes("xiaomi") || cleanTitle.includes("capinha") || cleanTitle.includes("pelicula") || cleanTitle.includes("carregador") || cleanTitle.includes("cabo usb") || cleanTitle.includes("power bank") || cleanTitle.includes("teclado") || cleanTitle.includes("mouse") || cleanTitle.includes("notebook")) {
+    return "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1080&auto=format&fit=crop&q=80";
+  }
+
+  // Brinquedos e Infantil
+  if (cleanTitle.includes("brinquedo") || cleanTitle.includes("boneca") || cleanTitle.includes("carrinho") || cleanTitle.includes("lego") || cleanTitle.includes("pelúcia") || cleanTitle.includes("pelucia") || cleanTitle.includes("bebê") || cleanTitle.includes("bebe")) {
+    return "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=1080&auto=format&fit=crop&q=80";
+  }
+
+  // Pet
+  if (cleanTitle.includes("pet") || cleanTitle.includes("cachorro") || cleanTitle.includes("gato") || cleanTitle.includes("coleira") || cleanTitle.includes("ração") || cleanTitle.includes("racao") || cleanTitle.includes("brinquedo pet")) {
+    return "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=1080&auto=format&fit=crop&q=80";
+  }
+
+  // Generic beautiful ultra HD e-commerce product photo
+  return "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80";
 };
 
 // Process an incoming message (either simulated or actual)
@@ -1649,23 +1706,32 @@ const whatsappEngine = new WhatsAppEngine(
     saveStateToFile();
   },
   async (groupJid, groupName, text, imageBuffer, imageUrl) => {
+    // Check if robot transmission is enabled
+    if (!state.config.isTransmissionEnabled) {
+      return;
+    }
+
     // Check if this source group is active (comparing clean JID or group name)
     if (!isSourceGroupActive(groupJid, groupName)) {
       return;
     }
 
-    addLog("info", `📥 Novo anúncio detectado no grupo de origem "${groupName}". Processando e encaminhando instantaneamente...`);
+    addLog("info", `📥 Novo anúncio ao vivo detectado no grupo "${groupName}". Processando e encaminhando instantaneamente...`);
 
     // Process the message and convert links (this will also send to active targets automatically inside processIncomingMessage)
     await processIncomingMessage(groupName, text, imageBuffer, imageUrl);
   },
   () => {
     // On WhatsApp Connection Open
+    whatsappEngine.setRobotState(state.config.isTransmissionEnabled, state.config.robotActivationTime || Date.now());
     if (state.config.isTransmissionEnabled) {
-      scanActiveSourceGroups("Conexão WhatsApp Estabelecida");
+      addLog("success", "🟢 WhatsApp conectado. Monitorando anúncios exclusivamente ao vivo a partir do momento da ativação.");
     }
   }
 );
+
+// Initial state sync with WhatsApp engine
+whatsappEngine.setRobotState(state.config.isTransmissionEnabled, state.config.robotActivationTime || Date.now());
 
 // Automatic scanning helper for all active source groups when the bot is turned on or reconnected
 async function scanActiveSourceGroups(triggerReason: string = "Robô Ligado") {
@@ -1758,8 +1824,12 @@ let autoPilotTimer: NodeJS.Timeout | null = null;
 const startAutoScanTimer = () => {
   if (autoScanTimer) clearInterval(autoScanTimer);
   
+  if (state.config.realtimeOnly) {
+    return;
+  }
+
   autoScanTimer = setInterval(() => {
-    if (state.config.isTransmissionEnabled && whatsappEngine.status.status === "connected") {
+    if (state.config.isTransmissionEnabled && whatsappEngine.status.status === "connected" && !state.config.realtimeOnly) {
       scanActiveSourceGroups("Varredura Automática Periódica");
     }
   }, (state.config.automaticScanInterval || 60) * 60 * 1000); // interval is in minutes
@@ -1767,6 +1837,10 @@ const startAutoScanTimer = () => {
 
 const startAutoPilotSimulator = () => {
   if (autoPilotTimer) clearInterval(autoPilotTimer);
+
+  if (!state.config.autoPilot) {
+    return;
+  }
 
   const intervalSeconds = Math.max(10, Number(state.config.autoPilotInterval) || 30);
 
@@ -1817,18 +1891,28 @@ app.post("/api/config", (req, res) => {
   state.config = { ...state.config, ...req.body };
 
   let historyCleared = false;
-  // If robot or autopilot was turned off via config save, clear history
-  if ((prevTransmission && !state.config.isTransmissionEnabled) || (prevAutoPilot && !state.config.autoPilot)) {
+  if (prevTransmission !== state.config.isTransmissionEnabled) {
+    if (state.config.isTransmissionEnabled) {
+      state.config.robotActivationTime = Date.now();
+      whatsappEngine.setRobotState(true, state.config.robotActivationTime);
+      addLog("info", "▶️ Robô de transmissão LIGADO! Escutando exclusivamente novas ofertas recebidas a partir de agora.");
+    } else {
+      whatsappEngine.setRobotState(false, 0);
+      state.history = [];
+      historyCleared = true;
+      addLog("info", "⏸️ Robô de transmissão DESLIGADO. Histórico limpo e mensagens não serão acumuladas.");
+    }
+  }
+
+  if (prevAutoPilot && !state.config.autoPilot) {
     state.history = [];
     historyCleared = true;
-    addLog("info", "🧹 Histórico de envios limpo ao desligar o robô.");
   }
 
   saveStateToFile();
   addLog("info", "Configurações salvas e preservadas com sucesso!");
   // Restart autopilot timer to apply new intervals
   startAutoPilotSimulator();
-  startAutoScanTimer();
   res.json({ success: true, config: state.config, historyCleared, history: state.history });
 });
 
@@ -1861,14 +1945,14 @@ app.post("/api/transmission/toggle", (req, res) => {
   state.config.isTransmissionEnabled = !state.config.isTransmissionEnabled;
   let historyCleared = false;
   if (!state.config.isTransmissionEnabled) {
+    whatsappEngine.setRobotState(false, 0);
     state.history = [];
     historyCleared = true;
-    addLog("info", "⏸️ Robô de transmissão desativado. Histórico de envios limpo.");
+    addLog("info", "⏸️ Robô de transmissão DESLIGADO. Nenhum anúncio será acumulado em buffer.");
   } else {
     state.config.robotActivationTime = Date.now();
-    addLog("info", "▶️ Robô de transmissão ativado! Iniciando varredura automática nos grupos de origem ativos...");
-    scanActiveSourceGroups("Robô Ativado");
-    startAutoScanTimer();
+    whatsappEngine.setRobotState(true, state.config.robotActivationTime);
+    addLog("info", "▶️ Robô de transmissão LIGADO! Escutando exclusivamente novos anúncios a partir deste instante.");
   }
   saveStateToFile();
   res.json({
@@ -1885,16 +1969,10 @@ app.get("/api/groups", (req, res) => {
 });
 
 app.post("/api/groups", (req, res) => {
-  const prevActive = (state.groups.sources || []).filter(s => s.active).map(s => s.id);
   if (req.body.sources) state.groups.sources = req.body.sources;
   if (req.body.targets) state.groups.targets = req.body.targets;
   addLog("info", "Lista de grupos atualizada.");
   saveStateToFile();
-
-  const newlyActivated = (state.groups.sources || []).filter(s => s.active && !prevActive.includes(s.id));
-  if (state.config.isTransmissionEnabled && newlyActivated.length > 0) {
-    scanActiveSourceGroups("Grupo Origem Ativado");
-  }
 
   res.json({ success: true, groups: state.groups });
 });

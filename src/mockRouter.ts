@@ -24,11 +24,12 @@ const setLocalStorage = <T>(key: string, value: T): void => {
 // Default States
 const defaultConfig: AppConfig = {
   affiliateId: "heltonjulio1703",
-  autoPilot: true,
+  autoPilot: false,
   autoPilotInterval: 30,
   rewriteStyle: "excited",
   keywords: "promocao, cupom, desconto, oferta, achado, frete gratis, shopee, shp.ee",
   isTransmissionEnabled: true,
+  realtimeOnly: true,
 };
 
 const defaultWhatsapp: WhatsAppStatus = {
@@ -502,7 +503,12 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
         if (cleanBase.includes("/social/")) {
           cleanBase = cleanBase.replace(/\/social\/[a-zA-Z0-9_.-]+/i, `/social/${affId}`);
         }
-        affiliateLink = `${cleanBase}?matt_tool=${encodeURIComponent(affId)}&matt_word=bot`;
+        const isCustomTag = isNaN(Number(affId));
+        if (isCustomTag) {
+          affiliateLink = `${cleanBase}?matt_word=${encodeURIComponent(affId)}&matt_tool=37552149&forceInApp=true`;
+        } else {
+          affiliateLink = `${cleanBase}?matt_tool=${encodeURIComponent(affId)}&matt_word=bot&forceInApp=true`;
+        }
       } else {
         affiliateLink = `https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=${encodeURIComponent(affId)}&url=${encodeURIComponent(originalLink)}`;
       }
@@ -514,6 +520,10 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
         productTitle = "Smartwatch Inteligente Bluetooth Esportivo";
       } else if (messageText.toLowerCase().includes("luminaria") || messageText.toLowerCase().includes("led")) {
         productTitle = "Luminária de Mesa LED Flexível Recarregável";
+      } else if (messageText.toLowerCase().includes("meia") || messageText.toLowerCase().includes("lupo")) {
+        productTitle = "Kit 10 Pares Meias Lupo Soquete Sport";
+      } else if (messageText.toLowerCase().includes("tabua") || messageText.toLowerCase().includes("passar")) {
+        productTitle = "Mesa Tábua de Passar Roupa Slim Dobrável";
       }
 
       let rewrittenText = `🔥 **${productTitle.toUpperCase()}** 🔥\n\n`;
@@ -533,10 +543,14 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
       const targetNames = activeTargets.map(t => t.name);
 
       const mockImage = messageText.toLowerCase().includes("fone")
-        ? "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=60"
+        ? "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80"
         : messageText.toLowerCase().includes("relogio")
-          ? "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=60"
-          : "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=60";
+          ? "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1080&auto=format&fit=crop&q=80"
+          : messageText.toLowerCase().includes("meia")
+            ? "https://images.unsplash.com/photo-1582966772680-860e372bb558?w=1080&auto=format&fit=crop&q=80"
+            : messageText.toLowerCase().includes("tabua") || messageText.toLowerCase().includes("passar")
+              ? "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=1080&auto=format&fit=crop&q=80"
+              : "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1080&auto=format&fit=crop&q=80";
 
       const historyItem: HistoryItem = {
         id: "deal_" + Math.random().toString(36).substring(2, 11),

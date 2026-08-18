@@ -63,6 +63,8 @@ async function downloadWhatsAppImageBuffer(msg: any, imageMsg: any): Promise<Buf
 export class WhatsAppEngine {
   public sock: WASocket | null = null;
   public connectionTimestampSec: number = 0;
+  public robotActivationTimestampSec: number = 0;
+  public isRobotEnabled: boolean = false;
   public status: WhatsAppStatus = {
     status: "disconnected",
     phone: "",
@@ -75,11 +77,34 @@ export class WhatsAppEngine {
   private groupNameCache = new Map<string, string>();
   private messageStore = new Map<string, Array<any>>();
 
+  public setRobotState(enabled: boolean, activationTimeMs: number = Date.now()) {
+    this.isRobotEnabled = enabled;
+    if (enabled) {
+      this.robotActivationTimestampSec = Math.floor(activationTimeMs / 1000);
+      // Clean previous message store to guarantee no old/buffered messages are retained
+      this.messageStore.clear();
+      const timeStr = new Date(activationTimeMs).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      this.addLogCallback("info", `🟢 [Modo Tempo Real Estrito] Robô ATIVADO às ${timeStr}. Capturando exclusivamente mensagens que chegarem a partir deste segundo.`);
+    } else {
+      this.robotActivationTimestampSec = 0;
+      this.messageStore.clear();
+      this.addLogCallback("info", `⏸️ Robô DESATIVADO. Nenhuma mensagem será acumulada em buffer.`);
+    }
+  }
+
   private storeGroupMessage(msg: any) {
+    // If the robot is not enabled, do not store or buffer any messages
+    if (!this.isRobotEnabled) return;
     if (!msg || !msg.key || !msg.key.remoteJid) return;
     const rawJid = msg.key.remoteJid;
     const cleanJid = rawJid.split(":")[0];
     if (!cleanJid.endsWith("@g.us")) return;
+
+    // Only keep messages after robot activation
+    const msgTimeSec = Number(msg.messageTimestamp) || 0;
+    if (msgTimeSec > 0 && this.robotActivationTimestampSec > 0 && msgTimeSec < this.robotActivationTimestampSec) {
+      return;
+    }
 
     let list = this.messageStore.get(cleanJid);
     if (!list) {
@@ -93,7 +118,7 @@ export class WhatsAppEngine {
     }
 
     list.push(msg);
-    if (list.length > 500) {
+    if (list.length > 200) {
       list.shift();
     }
   }
@@ -556,12 +581,20 @@ export class WhatsAppEngine {
 
       // Incoming messages listener
       this.sock.ev.on("messages.upsert", async (m) => {
-        // Store all incoming group messages regardless of type
+        // If robot is turned off, discard all incoming messages immediately (no buffering)
+        if (!this.isRobotEnabled) {
+          return;
+        }
+
+        // Ignore historical sync batches or appends from WhatsApp server (strictly live notify events)
+        if (m.type !== "notify") {
+          return;
+        }
+
+        // Store only post-activation messages
         for (const msg of m.messages) {
           this.storeGroupMessage(msg);
         }
-
-        if (m.type !== "notify") return;
 
         for (const msg of m.messages) {
           // Ignore messages sent by ourselves to avoid loops
@@ -572,19 +605,17 @@ export class WhatsAppEngine {
           const from = rawFrom.split(":")[0];
           if (!from.endsWith("@g.us")) continue; // Only group chats
 
-          // Regra: filtrar anúncios feitos a mais de 30 minutos antes da conexão ser estabelecida
+          // Regra Estrita: Somente anúncios recebidos a partir do momento em que o robô foi ligado
           const msgTimeSec = Number(msg.messageTimestamp) || 0;
-          if (msgTimeSec > 0) {
-            const refTimeSec = this.connectionTimestampSec > 0 ? this.connectionTimestampSec : Math.floor(Date.now() / 1000);
-            const minAllowedSec = refTimeSec - 30 * 60; // 30 mins = 1800s
+          const nowSec = Math.floor(Date.now() / 1000);
+          
+          // O limite mínimo é o momento da ativação do robô (com tolerância máxima de 60s em relação ao tempo real)
+          const activationSec = this.robotActivationTimestampSec > 0 ? this.robotActivationTimestampSec : nowSec;
+          const minAllowedSec = Math.max(activationSec, nowSec - 60);
 
-            if (msgTimeSec < minAllowedSec) {
-              this.addLogCallback(
-                "info",
-                `Mensagem recebida ignorada (enviada há mais de 30 minutos em relação à conexão: ${new Date(msgTimeSec * 1000).toLocaleTimeString("pt-BR")}).`
-              );
-              continue;
-            }
+          if (msgTimeSec > 0 && msgTimeSec < minAllowedSec) {
+            // Descartar imediatamente mensagens anteriores à ativação do robô
+            continue;
           }
 
           const { text, imageMsg } = extractMsgContent(msg);

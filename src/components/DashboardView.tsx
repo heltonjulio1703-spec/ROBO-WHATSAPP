@@ -45,6 +45,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [footer, setFooter] = React.useState(config.customFooter || "");
   const [quietStart, setQuietStart] = React.useState(config.quietStart || "08:00");
   const [quietEnd, setQuietEnd] = React.useState(config.quietEnd || "23:00");
+  const [realtimeOnly, setRealtimeOnly] = React.useState(config.realtimeOnly ?? true);
 
   const [copiedField, setCopiedField] = React.useState<string | null>(null);
 
@@ -228,6 +229,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         customFooter: footer,
         quietStart: quietStart,
         quietEnd: quietEnd,
+        realtimeOnly: realtimeOnly,
       };
       setConfig(updatedConfig);
       await saveConfig(updatedConfig);
@@ -305,6 +307,49 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <form id="config-form" onSubmit={handleSubmit} className="space-y-5">
+            {/* Real-time Strict Mode Section */}
+            <div id="realtime-mode-section" className="bg-emerald-50/80 border border-emerald-200 rounded-xl p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-2.5 w-2.5 relative">
+                      {realtimeOnly && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>}
+                      <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${realtimeOnly ? "bg-emerald-500" : "bg-gray-400"}`}></span>
+                    </span>
+                    <span className="text-sm font-bold text-emerald-950">Captura Somente em Tempo Real ⚡</span>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                      realtimeOnly 
+                        ? "bg-emerald-200 text-emerald-900 border-emerald-300" 
+                        : "bg-gray-150 text-gray-700 border-gray-300"
+                    }`}>
+                      {realtimeOnly ? "Tempo Real Ativo" : "Histórico & Manual"}
+                    </span>
+                  </div>
+                  <span className="text-xs text-emerald-900/80 mt-1 leading-relaxed">
+                    Processa e encaminha <strong>exclusivamente anúncios que chegarem ao vivo</strong> nos grupos de origem do WhatsApp a partir de agora, ignorando histórico ou mensagens antigas.
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRealtimeOnly(!realtimeOnly);
+                    setSaveStatus("unsaved");
+                  }}
+                  className={`flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border font-bold text-xs transition-all cursor-pointer shadow-xs shrink-0 ${
+                    realtimeOnly
+                      ? "bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-700"
+                      : "bg-slate-200 hover:bg-slate-300 text-slate-700 border-slate-300"
+                  }`}
+                >
+                  <div className={`w-7 h-4 rounded-full p-0.5 flex items-center transition-all ${realtimeOnly ? "justify-end bg-white/40" : "justify-start bg-slate-400"}`}>
+                    <div className="w-3 h-3 bg-white rounded-full shadow-md" />
+                  </div>
+                  <span>{realtimeOnly ? "ATIVO (Ao Vivo)" : "DESATIVADO"}</span>
+                </button>
+              </div>
+            </div>
+
             {/* Custom Footer */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1">

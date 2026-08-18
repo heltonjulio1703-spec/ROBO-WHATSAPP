@@ -20,6 +20,7 @@ export interface AppConfig {
   customFooter?: string;
   quietStart?: string;
   quietEnd?: string;
+  realtimeOnly?: boolean;
 }
 
 export interface WhatsAppStatus {
