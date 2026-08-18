@@ -23,7 +23,7 @@
     "quietStart": "08:00",
     "quietEnd": "23:00",
     "automaticScanInterval": 60,
-    "robotActivationTime": 1786963672383
+    "robotActivationTime": 1787012412709
   },
   "groups": {
     "sources": [
@@ -338,1885 +338,1028 @@
   },
   "history": [
     {
-      "id": "deal_3vul6sxvy",
-      "time": "20:01",
+      "id": "deal_44q1j1eb2",
+      "time": "02:04",
+      "sourceGroup": "Ofertas e Cupons Relâmpago ⚡",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Parafusadeira e Furadeira 12V com Acessórios",
+      "originalLink": "https://meli.li/382910a",
+      "affiliateLink": "https://meli.li/382910a?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "⚡ OFERTA RELÂMPAGO MERCADO LIVRE! Parafusadeira e Furadeira 12V completa com acessórios por R$ 119,90 no Mercado Livre! 🛠️ Link da promoção: https://meli.li/382910a Entrega Full!",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥 Parafusadeira e Furadeira 12V completa com acessórios por R$ 119,90! 😱 Aproveite a entrega rápida do Mercado Livre! ✨\n\nhttps://meli.li/382910a?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_ig7gloxem",
+      "time": "01:58",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*EU FICO CHOCADA COM ESSES PREÇOS! \ude2e🤌🏻",
-      "originalLink": "https://s.shopee.com.br/gPLyY7Z2i",
-      "affiliateLink": "https://s.shopee.com.br/8fRdksUb6V?lp=aff",
-      "originalMessage": "*EU FICO CHOCADA COM ESSES PREÇOS! 😮🤌🏻*\n\n> 🛍️ Máquina de Lavar Electrolux 13kg Branca Essential Care com Cesto Inox e Jet&Clean (LED13)\n\n❌ de R$ 2.825,00\n✅ *Por R$ 1.949,00*\n\n🛒: https://s.shopee.com.br/gPLyY7Z2i\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*EU FICO CHOCADA COM ESSES PREÇOS! 😮🤌🏻*\n\n> 🛍️ Máquina de Lavar Electrolux 13kg Branca Essential Care com Cesto Inox e Jet&Clean (LED13)\n\n❌ de R$ 2.825,00\n✅ *Por R$ 1.949,00*\n\n🛒: https://s.shopee.com.br/8V8DYZVESP?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Kit 6 Potes de Vidro Belifou com Tampa de Bambu 200ML",
+      "originalLink": "https://s.shopee.com.br/1BLdDdGALo",
+      "affiliateLink": "https://s.shopee.com.br/5q7SmDKOnQ?lp=aff",
+      "originalMessage": "*ESSE PASSOU NA MINHA CURADORIA!  😮‍💨😮‍💨*\n\n> 🛍️ Belifou 200ML Kit 6 Potes Para Alimentos Com Tampa Bambu Potes Vidro Potes Pote De Vidro Selado\n\n❌ de R$ 81,00\n✅ *Por R$ 37,98*\n\n🛒: https://s.shopee.com.br/1BLdDdGALo\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO QUE PASSOU NA MINHA CURADORIA! 🔥😱 Esse kit de potes com tampa de bambu é perfeito para deixar a cozinha um luxo! ✨\n\n❌ de R$ 81,00\n✅ *Por R$ 37,98*\n\n🛒 Garanta o seu aqui: https://s.shopee.com.br/5q7SmDKOnQ?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_ec9xsea82",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*BARRINHA DE DOCE DE LEITE NÃO TEM COMO",
-      "originalLink": "https://meli.la/1UmF6sY",
-      "affiliateLink": "https://www.mercadolivre.com.br/barra-de-proteina-nutrata-whey-grego-havanna-de-doce-de-leite-kit-12-unidades/p/MLB27175466?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*BARRINHA DE DOCE DE LEITE NÃO TEM COMO SER RUIM*\n\nBarra de Proteína Nutrata Whey Grego Havanna de Doce de Leite - Kit 12 Unidades (11g de proteína cada)\n\nDe ~R$ 94~ por R$ 56 (R$ 4,68 cada)\n\n-Use o Cupom: *SAUDEPRAVC* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/1UmF6sY",
-      "rewrittenMessage": "*BARRINHA DE DOCE DE LEITE NÃO TEM COMO SER RUIM*\n\nBarra de Proteína Nutrata Whey Grego Havanna de Doce de Leite - Kit 12 Unidades (11g de proteína cada)\n\nDe ~R$ 94~ por R$ 56 (R$ 4,68 cada)\n\n-Use o Cupom: *SAUDEPRAVC* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/barra-de-proteina-nutrata-whey-grego-havanna-de-doce-de-leite-kit-12-unidades/p/MLB27175466?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_927793-MLA93028165527_092025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_o1w4e98i7",
-      "time": "20:01",
+      "id": "deal_vtssal9tq",
+      "time": "01:49",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "\udef4 DIVERSÃO QUE NÃO PARA! \ude0d",
-      "originalLink": "https://meli.la/1SrFn1Q",
-      "affiliateLink": "https://www.mercadolivre.com.br/patinete-infantil-3-rodas-para-menino-dobravel-ajustavel-rodinhas-de-gel-com-led-atacarejo-kids/p/MLB61991380?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "🛴✨ DIVERSÃO QUE NÃO PARA! 😍\n\n _Patinete Infantil 3 Rodas Para Menino Dobrável Ajustável Rodinhas de Gel com Led\nAtacarejo Kids_\n\n*De:* ~R$ 119,90~  *Por:* R$ 58,32 \n\n> 🎟️Cupom: *OUTLETCUPONEIRA*\n\n🛒 https://meli.la/1SrFn1Q \n\n> @gᥲtᥲgᥲr᥆tᥲfιᥒd᥉\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🛴✨ DIVERSÃO QUE NÃO PARA! 😍\n\n _Patinete Infantil 3 Rodas Para Menino Dobrável Ajustável Rodinhas de Gel com Led\nAtacarejo Kids_\n\n*De:* ~R$ 119,90~  *Por:* R$ 58,32 \n\n> 🎟️Cupom: *OUTLETCUPONEIRA*\n\n🛒 https://www.mercadolivre.com.br/patinete-infantil-3-rodas-para-menino-dobravel-ajustavel-rodinhas-de-gel-com-led-atacarejo-kids/p/MLB61991380?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_651245-MLA111415092515_052026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_e392f52g2",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*KAPPA NESSE PREÇO NÃO DA PRA RECUSAR*",
-      "originalLink": "https://meli.la/33jfwXp",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-4049279695-tnis-masculino-feminino-kappa-park-20-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*KAPPA NESSE PREÇO NÃO DA PRA RECUSAR*\n+100mil vendidos e 4,7⭐\n\nTênis Kappa Park 2.0 Unissex (7 cores)\n\nDe ~R$ 169~ por R$ 63 no Pix\n\nUse o Cupom: *SEMPRENAMODA* 🎟️ \n\nLoja Oficial Kappa no ML\nhttps://meli.la/33jfwXp",
-      "rewrittenMessage": "*KAPPA NESSE PREÇO NÃO DA PRA RECUSAR*\n+100mil vendidos e 4,7⭐\n\nTênis Kappa Park 2.0 Unissex (7 cores)\n\nDe ~R$ 169~ por R$ 63 no Pix\n\nUse o Cupom: *SEMPRENAMODA* 🎟️ \n\nLoja Oficial Kappa no ML\nhttps://produto.mercadolivre.com.br/MLB-4049279695-tnis-masculino-feminino-kappa-park-20-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_897493-MLB112013730462_062026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_pg5puzkxy",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*PRECINHO DE BUGG! CORRE 🏃‍♀🏃‍♂*",
-      "originalLink": "https://s.shopee.com.br/9pdatgIs6n",
-      "affiliateLink": "https://s.shopee.com.br/7psWlLGJ9O?lp=aff",
-      "originalMessage": "*PRECINHO DE BUGG! CORRE 🏃‍♀️🏃‍♂️*\n\n> 🛍️ Jogo de Panelas 4 Peças Antiaderente Cerâmica Compatível Fogão Gás e Indução\n\n✅ *Por R$ 389,00*\n\n🛒: https://s.shopee.com.br/9pdatgIs6n\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*PRECINHO DE BUGG! CORRE 🏃‍♀️🏃‍♂️*\n\n> 🛍️ Jogo de Panelas 4 Peças Antiaderente Cerâmica Compatível Fogão Gás e Indução\n\n✅ *Por R$ 389,00*\n\n🛒: https://s.shopee.com.br/2BEA0vbbb1?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Kit 2 Travesseiros Hotel Collection Extra Firme",
+      "originalLink": "https://s.shopee.com.br/9KhKw1Mxxl",
+      "affiliateLink": "https://s.shopee.com.br/5fo2ZINBUK?lp=aff",
+      "originalMessage": "*DONAS DE CASA LEGAIS NÃO GUARDAM SEGREDO 😌🤭*\n\n> 🛍️ Kit 2 Travesseiro Extra Firme Hotel Collection Padrão Hotel Antialérgico Fibra Siliconada Premium\n\n❌ de R$ 100,00\n✅ *Por R$ 49,90*\n\n🛒: https://s.shopee.com.br/9KhKw1Mxxl\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! 🔥\n\nMelhore suas noites de sono com esse Kit 2 Travesseiros Extra Firme Hotel Collection, antialérgico e com fibra siliconada premium! 😱✨\n\n❌ de R$ 100,00\n✅ Por R$ 49,90\n\nGaranta o seu aqui: https://s.shopee.com.br/5fo2ZINBUK?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_a1q1kp4xi",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*KIT DE REFLETORES PERFEITO PRA SUA ÁREA",
-      "originalLink": "https://meli.la/2i7gpeo",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-2-refletor-super-led-400w-ip67-holofote-bivolt-prova-dagua-branco-frio-6500k-preto/p/MLB57490176?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*KIT DE REFLETORES PERFEITO PRA SUA ÁREA EXTERNA*\n\nKit 2 Refletor Super Led 400w Ip67 Holofote Bivolt Prova D'água Branco Frio 6500k Preto\n\nDe ~R$ 99~ por R$ 33 (R$ 16 cada)\n\n-Use o Cupom: *CASAML* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/2i7gpeo",
-      "rewrittenMessage": "*KIT DE REFLETORES PERFEITO PRA SUA ÁREA EXTERNA*\n\nKit 2 Refletor Super Led 400w Ip67 Holofote Bivolt Prova D'água Branco Frio 6500k Preto\n\nDe ~R$ 99~ por R$ 33 (R$ 16 cada)\n\n-Use o Cupom: *CASAML* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/kit-2-refletor-super-led-400w-ip67-holofote-bivolt-prova-dagua-branco-frio-6500k-preto/p/MLB57490176?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_753073-MLA110946060098_052026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_h46ej9o3d",
-      "time": "20:01",
+      "id": "deal_jwfuhmsgf",
+      "time": "01:41",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*BAIXOUUUUU*",
-      "originalLink": "https://meli.la/1ohBSTR",
-      "affiliateLink": "https://www.mercadolivre.com.br/fechadura-digital-de-sobrepor-fd-1000-d-preta-intelbras/p/MLB63323182?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*BAIXOUUUUU*🔥🔥\n  \nFechadura Digital De Sobrepor  Fd 1000 D Preta Intelbras\n\nDe: _~R$ 299,88~_\nPOOR: *R$ 224,91* ✅\n\n🎟️Use o cupom:*CASAML*\n\n🛒 Compre aqui: https://meli.la/1ohBSTR\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*BAIXOUUUUU*🔥🔥\n  \nFechadura Digital De Sobrepor  Fd 1000 D Preta Intelbras\n\nDe: _~R$ 299,88~_\nPOOR: *R$ 224,91* ✅\n\n🎟️Use o cupom:*CASAML*\n\n🛒 Compre aqui: https://www.mercadolivre.com.br/fechadura-digital-de-sobrepor-fd-1000-d-preta-intelbras/p/MLB63323182?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_764625-MLA112051292545_052026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_2u6cy96a7",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*MARMITA GELADA NÃO DA*",
-      "originalLink": "https://meli.la/2rkDxFP",
-      "affiliateLink": "https://www.mercadolivre.com.br/microondas-philco-pmo30b-28l-1100w-127v/up/MLBU4051803602?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*MARMITA GELADA NÃO DA*\n\nMicro-ondas Philco Pmo30b 28l 1100w 127v\n\nDe ~R$ 855~ por R$ 404 no PIX\n\nUse o Cupom: *AQUITEM* 🎟️ \n\nVendido por Loja Oficial no ML\nhttps://meli.la/2rkDxFP",
-      "rewrittenMessage": "*MARMITA GELADA NÃO DA*\n\nMicro-ondas Philco Pmo30b 28l 1100w 127v\n\nDe ~R$ 855~ por R$ 404 no PIX\n\nUse o Cupom: *AQUITEM* 🎟️ \n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/microondas-philco-pmo30b-28l-1100w-127v/up/MLBU4051803602?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_844287-MLB111619486350_062026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_6cvxub5mz",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "SÓ PRA GALERA DESCOLADA VIU",
-      "originalLink": "https://meli.la/1t8zXdy",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-4332011417-chinelo-qix-full-casual-adulto-masculino-feminino-liso-eva-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "SÓ PRA GALERA DESCOLADA VIU  \n\n😌 *Chinelo Qix Full Liso (Em cores)*\n\n🔥~DE 99,90~ l *POR 67,68*\n🎟️ CUPOM: *SEMPRENAMODA*\n\n🔗 https://meli.la/1t8zXdy\n> siga @helensoares.moraski",
-      "rewrittenMessage": "SÓ PRA GALERA DESCOLADA VIU  \n\n😌 *Chinelo Qix Full Liso (Em cores)*\n\n🔥~DE 99,90~ l *POR 67,68*\n🎟️ CUPOM: *SEMPRENAMODA*\n\n🔗 https://produto.mercadolivre.com.br/MLB-4332011417-chinelo-qix-full-casual-adulto-masculino-feminino-liso-eva-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_813888-MLB99738572955_112025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_rq9wjuea3",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*HOJE EM DIA ATÉ A LIXEIRA TÁ INTELIGENT",
-      "originalLink": "https://meli.la/2w3qTqG",
-      "affiliateLink": "https://www.mercadolivre.com.br/social/tu20260803182009811/lists?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*HOJE EM DIA ATÉ A LIXEIRA TÁ INTELIGENTE*\nprecisa de pilhas AA pra usar\n\nLixeira Inteligente 17 Litros com Sensor Automático\n\nR$ 40\n\nUse o Cupom: *CASAML* 🎟️ \n\nhttps://meli.la/2w3qTqG",
-      "rewrittenMessage": "*HOJE EM DIA ATÉ A LIXEIRA TÁ INTELIGENTE*\nprecisa de pilhas AA pra usar\n\nLixeira Inteligente 17 Litros com Sensor Automático\n\nR$ 40\n\nUse o Cupom: *CASAML* 🎟️ \n\nhttps://www.mercadolivre.com.br/social/tu20260803182009811/lists?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_p5h32mavm",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*VAI FICAR LIIINDO NA SUA MESA POSTA* 🥹",
-      "originalLink": "https://s.shopee.com.br/7KwFvfe6jR",
-      "affiliateLink": "https://s.shopee.com.br/2gAQbq4u4g",
-      "originalMessage": "*VAI FICAR LIIINDO NA SUA MESA POSTA* 😱🥹\n\n🧡 Porta Frios De Cristal Com Base De Madeira Montecarlo  19,5cm\n\n Pooor: *R$ 49,90*\n\n🔥*Compre aqui*: https://s.shopee.com.br/7KwFvfe6jR\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*VAI FICAR LIIINDO NA SUA MESA POSTA* 😱🥹\n\n🧡 Porta Frios De Cristal Com Base De Madeira Montecarlo  19,5cm\n\n Pooor: *R$ 49,90*\n\n🔥*Compre aqui*: https://s.shopee.com.br/2gAQbq52bK\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_t60oe9mf1",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*ESSE MERECEU VIR PRO GRUPO! 🤍*",
-      "originalLink": "https://s.shopee.com.br/30nGlr8dWl",
-      "affiliateLink": "https://s.shopee.com.br/60QsZxjPnI?lp=aff",
-      "originalMessage": "*ESSE MERECEU VIR PRO GRUPO! 🤍*\n\n> 🛍️ Jogo De Panelas Inducao 3x Mais Antiaderente Cerâmica 7peças  Livre De Pfoa Vanila Premium\n\n❌ de R$ 603,00\n✅ *Por R$ 350,00*\n\n🛒: https://s.shopee.com.br/30nGlr8dWl\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*ESSE MERECEU VIR PRO GRUPO! 🤍*\n\n> 🛍️ Jogo De Panelas Inducao 3x Mais Antiaderente Cerâmica 7peças  Livre De Pfoa Vanila Premium\n\n❌ de R$ 603,00\n✅ *Por R$ 350,00*\n\n🛒: https://s.shopee.com.br/5ArlaQmnIL?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_xnfwbf7qg",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*NUNCA MAIS VC VAI PASSAR FRIO NAS PERNA",
-      "originalLink": "https://meli.la/1SrgEKs",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-5375472694-calca-moletom-de-l-grossa-pronta-entrega-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*NUNCA MAIS VC VAI PASSAR FRIO NAS PERNAS*\nquentinha e ótimo CxB\n\nCalça Moletom De Lã Grossa (2 cores)\n\nDe ~R$ 89~ por R$ 59 em 3x \n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nhttps://meli.la/1SrgEKs\n",
-      "rewrittenMessage": "*NUNCA MAIS VC VAI PASSAR FRIO NAS PERNAS*\nquentinha e ótimo CxB\n\nCalça Moletom De Lã Grossa (2 cores)\n\nDe ~R$ 89~ por R$ 59 em 3x \n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nhttps://produto.mercadolivre.com.br/MLB-5375472694-calca-moletom-de-l-grossa-pronta-entrega-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_976956-MLB84325114953_052025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_w8i0ij8op",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*LEVE JÁ ESSA LUPO PRA SUA ROTINA! *",
-      "originalLink": "https://meli.la/2BuEnHb",
-      "affiliateLink": "https://www.mercadolivre.com.br/legging-lupo-original-poliamida-texturizada-ar-sem-costura/up/MLBU4076228717?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*LEVE JÁ ESSA LUPO PRA SUA ROTINA! ✨*\n\n _Legging Lupo Original Poliamida Texturizada Ar Sem Costura Preto Legging Academia Fitness M_\n\nde:~­ 499,08~ *por:­ 114,00* 😮\n> ᴄᴜᴘᴏᴍ: *SEMPRENAMODA* 🎟️\n\n🛒 https://meli.la/2BuEnHb\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*LEVE JÁ ESSA LUPO PRA SUA ROTINA! ✨*\n\n _Legging Lupo Original Poliamida Texturizada Ar Sem Costura Preto Legging Academia Fitness M_\n\nde:~­ 499,08~ *por:­ 114,00* 😮\n> ᴄᴜᴘᴏᴍ: *SEMPRENAMODA* 🎟️\n\n🛒 https://www.mercadolivre.com.br/legging-lupo-original-poliamida-texturizada-ar-sem-costura/up/MLBU4076228717?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_785886-MLB112801450448_072026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_m5dbhxc70",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*PARE DE SOFRER COM COLCHONETE RUIM*",
-      "originalLink": "https://meli.la/1bgSUqU",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-832692405-colchonete-profissional-95x50x3-alta-densidade-80-bagum-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*PARE DE SOFRER COM COLCHONETE RUIM*\n\nColchonete Profissional- 95x50x3 Alta Densidade (80) - Bagum\n\nDe ~R$ 104~ por R$ 77 em 3x\n\nUse o Cupom: *CORRREPROML* 🎟️\n\n+5mil vendidos e 4,8⭐\nhttps://meli.la/1bgSUqU",
-      "rewrittenMessage": "*PARE DE SOFRER COM COLCHONETE RUIM*\n\nColchonete Profissional- 95x50x3 Alta Densidade (80) - Bagum\n\nDe ~R$ 104~ por R$ 77 em 3x\n\nUse o Cupom: *CORRREPROML* 🎟️\n\n+5mil vendidos e 4,8⭐\nhttps://produto.mercadolivre.com.br/MLB-832692405-colchonete-profissional-95x50x3-alta-densidade-80-bagum-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_788408-MLB89617638369_082025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_m1xp9j96v",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*OLHA ​ESSE PREÇO*",
-      "originalLink": "https://meli.la/1GzrqrM",
-      "affiliateLink": "https://www.mercadolivre.com.br/aparador-buffet-gold-4-portas-primus-design-retro-pes-palito-sala-de-estar-mdp-15mm-perola-com-mel/p/MLB22558534?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*OLHA ​ESSE PREÇO*🚨🚨\n  \nAparador Buffet Gold 4 Portas Primus Design Retrô Pés Palito Sala de Estar MDP 15mm Pérola com Mel\n\nDe: _~R$ 793,94~_\nPOOR: *R$ 279,86* ✅\n\n🎟️Use o cupom:*CASAML*\n\n🛒 Compre aqui: https://meli.la/1GzrqrM\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*OLHA ​ESSE PREÇO*🚨🚨\n  \nAparador Buffet Gold 4 Portas Primus Design Retrô Pés Palito Sala de Estar MDP 15mm Pérola com Mel\n\nDe: _~R$ 793,94~_\nPOOR: *R$ 279,86* ✅\n\n🎟️Use o cupom:*CASAML*\n\n🛒 Compre aqui: https://www.mercadolivre.com.br/aparador-buffet-gold-4-portas-primus-design-retro-pes-palito-sala-de-estar-mdp-15mm-perola-com-mel/p/MLB22558534?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_987346-MLA115576422967_082026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_suaw1n93t",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*TENHO NEM ESPAÇO PRA UM MICROONDAS DESS",
-      "originalLink": "https://meli.la/1ZG9NYz",
-      "affiliateLink": "https://www.mercadolivre.com.br/microondas-panasonic-nn-st66nbru-black-glass-34l-dupla-refeicao/p/MLB22491295?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*TENHO NEM ESPAÇO PRA UM MICROONDAS DESSE*\n\nMicroondas Panasonic Black Glass 34L 110v e 220v\n\nDe ~R$ 899~ por R$ 584 no PIX\n\nUse o Cupom: *AQUITEM* 🎟️ \n\nVendido por Loja Oficial no ML\nhttps://meli.la/1ZG9NYz",
-      "rewrittenMessage": "*TENHO NEM ESPAÇO PRA UM MICROONDAS DESSE*\n\nMicroondas Panasonic Black Glass 34L 110v e 220v\n\nDe ~R$ 899~ por R$ 584 no PIX\n\nUse o Cupom: *AQUITEM* 🎟️ \n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/microondas-panasonic-nn-st66nbru-black-glass-34l-dupla-refeicao/p/MLB22491295?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_721450-MLA99469504130_112025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_x3nx1ceor",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "TIRA AQUELA MARCA DE BLUSA DO BRAÇO",
-      "originalLink": "https://meli.la/1yrifvS",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-7390028468-kit-3-regatas-masculinas-regular-polo-wear-sortido-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "TIRA AQUELA MARCA DE BLUSA DO BRAÇO\n\n👕 *Kit 3 Regatas Polo Wear*\n\n🔥 ~DE 160~ l *POR 80 (26,66 cada)*\n🎟️ CUPOM: *SEMPRENAMODA*\n\n🔗 https://meli.la/1yrifvS\n> siga @helensoares.moraski",
-      "rewrittenMessage": "TIRA AQUELA MARCA DE BLUSA DO BRAÇO\n\n👕 *Kit 3 Regatas Polo Wear*\n\n🔥 ~DE 160~ l *POR 80 (26,66 cada)*\n🎟️ CUPOM: *SEMPRENAMODA*\n\n🔗 https://produto.mercadolivre.com.br/MLB-7390028468-kit-3-regatas-masculinas-regular-polo-wear-sortido-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_749510-MLB114600801740_082026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_ij8dvulze",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*PARA OS CORAJOSOS QUE GOSTAM DE ACAMPAR",
-      "originalLink": "https://meli.la/236TJid",
-      "affiliateLink": "https://www.mercadolivre.com.br/barraca-de-camping-para-4-pessoas-acampamento-homefy/p/MLB27918147?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*PARA OS CORAJOSOS QUE GOSTAM DE ACAMPAR*\n\nBarraca De Camping Para 4 Pessoas Acampamento Homefy\n\nDe ~R$ 129~ por R$ 57 no PIX\n\nUse o Cupom: *CORRREPROML* 🎟️\n\n+10 mil vendidos e 4,8⭐\nhttps://meli.la/236TJid",
-      "rewrittenMessage": "*PARA OS CORAJOSOS QUE GOSTAM DE ACAMPAR*\n\nBarraca De Camping Para 4 Pessoas Acampamento Homefy\n\nDe ~R$ 129~ por R$ 57 no PIX\n\nUse o Cupom: *CORRREPROML* 🎟️\n\n+10 mil vendidos e 4,8⭐\nhttps://www.mercadolivre.com.br/barraca-de-camping-para-4-pessoas-acampamento-homefy/p/MLB27918147?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_727559-MLA99590035560_122025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_u1l2xk8tu",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*ESSE FAZ O MAIOR SUCESSO NO GRUPINHOO \ude2e",
-      "originalLink": "https://s.shopee.com.br/5VUbkxD40u",
-      "affiliateLink": "https://s.shopee.com.br/1gHtPzMaau?lp=aff",
-      "originalMessage": "*ESSE FAZ O MAIOR SUCESSO NO GRUPINHOO 😮‍💨😌*\n\n> 🛍️ Painel para TV ate 65 Polegadas Kiara Casa 812\n\n❌ de R$ 755,00\n✅ *Por R$ 694,57*\n\n🛒: https://s.shopee.com.br/5VUbkxD40u\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*ESSE FAZ O MAIOR SUCESSO NO GRUPINHOO 😮‍💨😌*\n\n> 🛍️ Painel para TV ate 65 Polegadas Kiara Casa 812\n\n❌ de R$ 755,00\n✅ *Por R$ 694,57*\n\n🛒: https://s.shopee.com.br/4qEvBoAStW?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_ju1xove7j",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*NAO VAI PRECISAR COMPRAR FILTRO DE PAPE",
-      "originalLink": "https://s.shopee.com.br/W5vo4kHhA",
-      "affiliateLink": "https://s.shopee.com.br/20ujobGqpB?lp=aff",
-      "originalMessage": "*NAO VAI PRECISAR COMPRAR FILTRO DE PAPEL MAIS❤️🤌🏼*\n\nFiltro Coador  De Café Inox 103 - Com Pegador em Silicone - Peneira Aço Reutilizável  - CH\n\nDe: _~R$ 90,00~_\n*POOR R$ 27,90* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/W5vo4kHhA\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*NAO VAI PRECISAR COMPRAR FILTRO DE PAPEL MAIS❤️🤌🏼*\n\nFiltro Coador  De Café Inox 103 - Com Pegador em Silicone - Peneira Aço Reutilizável  - CH\n\nDe: _~R$ 90,00~_\n*POOR R$ 27,90* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/6VN9ArzVwB?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_wc9uynw92",
-      "time": "20:01",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Kit com 2 Shorts Vôlei Liso Polo Wear",
-      "originalLink": "https://meli.la/25PVNxV",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-2-shorts-volei-liso-polo-wear-sortido/up/MLBU3934175616?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*COMPRA LÁ NA LOJA BOBO*\n\nKit com 2 Shorts Vôlei Liso Polo Wear\n\nDe ~R$ 169~ por R$ 79 (R$ 40 cada)\n\nUse o Cupom: *CORRREPROML* 🎟️ \n\nLoja Oficial Polo Wear no ML\nhttps://meli.la/25PVNxV",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSA SUPER OFERTA NO MERCADO LIVRE! 💛🔥\n\n😱 Kit com 2 Shorts Vôlei Liso Polo Wear (Loja Oficial Polo Wear)\n\n💥 De ~R$ 169~ por R$ 79 (R$ 40 cada)\n🎟️ Use o Cupom: CORRREPROML\n\n⚡ Aproveite a entrega rápida e garanta o seu:\n👉 https://www.mercadolivre.com.br/kit-2-shorts-volei-liso-polo-wear-sortido/up/MLBU3934175616?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_826440-MLB110082859116_042026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_ue2hxjoo9",
-      "time": "20:01",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*PENSA NUM ITEM QUE VALE A PENA! *",
-      "originalLink": "https://s.shopee.com.br/5VUblaEuOd",
-      "affiliateLink": "https://s.shopee.com.br/19fQvFfNt?lp=aff",
-      "originalMessage": "*PENSA NUM ITEM QUE VALE A PENA! ✨✨*\n\n> 🛍️ Garrafa Térmica Zaya Tuut 1L Canelada Design Sofisticado, Mantém Bebidas Quentes E Frias, Ideal Para Café E Chá Nude\n\n❌ de R$ 200,00\n✅ *Por R$ 99,99*\n\n🛒: https://s.shopee.com.br/5VUblaEuOd\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*PENSA NUM ITEM QUE VALE A PENA! ✨✨*\n\n> 🛍️ Garrafa Térmica Zaya Tuut 1L Canelada Design Sofisticado, Mantém Bebidas Quentes E Frias, Ideal Para Café E Chá Nude\n\n❌ de R$ 200,00\n✅ *Por R$ 99,99*\n\n🛒: https://s.shopee.com.br/50YLO6wdGE?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_osif0zhsg",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*TURBINE SEUS TREINOS COM ESSA ! \ude80*",
-      "originalLink": "https://meli.la/167Nhaf",
-      "affiliateLink": "https://www.mercadolivre.com.br/creatina-monohidratada-500g-growth-supplements-sem-sabor-em-po/p/MLB66637233?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*TURBINE SEUS TREINOS COM ESSA OFERTA! 🚀*\n\n _Creatina Monohidratada 500g Growth Supplements - Sem Sabor em Pó_\n\nde: ~104,90~ *por: 63,12* 😮\n\n🛒 https://meli.la/167Nhaf\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*TURBINE SEUS TREINOS COM ESSA OFERTA! 🚀*\n\n _Creatina Monohidratada 500g Growth Supplements - Sem Sabor em Pó_\n\nde: ~104,90~ *por: 63,12* 😮\n\n🛒 https://www.mercadolivre.com.br/creatina-monohidratada-500g-growth-supplements-sem-sabor-em-po/p/MLB66637233?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_602304-MLA109372354737_032026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_39oucwi60",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*5 CONTO CADA CUECA*",
-      "originalLink": "https://meli.la/2YYw7rV",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-4070278309-kit-com-10-cuecas-boxer-algodo-adulto-usee-brasil-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*5 CONTO CADA CUECA*\n\nKit Com 10 Cuecas Boxer Algodão Adulto Usee Brasil\n\nDe ~R$ 149~ por R$ 51 no PIX\n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/2YYw7rV",
-      "rewrittenMessage": "*5 CONTO CADA CUECA*\n\nKit Com 10 Cuecas Boxer Algodão Adulto Usee Brasil\n\nDe ~R$ 149~ por R$ 51 no PIX\n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://produto.mercadolivre.com.br/MLB-4070278309-kit-com-10-cuecas-boxer-algodo-adulto-usee-brasil-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_727864-MLB114020972076_072026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_ozbkr5awe",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*BAAAIXOU MAIS O PREÇO AQUIIIII*",
-      "originalLink": "https://s.shopee.com.br/7VFg9Lmztc",
-      "affiliateLink": "https://s.shopee.com.br/7fZ6Z0QPet",
-      "originalMessage": "*BAAAIXOU MAIS O PREÇO AQUIIIII* 😱😱\n\n🧡 Geladeira 413L  Philco Eco Inverter Duplex Inox PRF501TI\n\n Pooor: *R$ 2.783,90*\nou no pix: R$ 2.553,00\n\n🔥*Compre aqui*: https://s.shopee.com.br/7VFg9Lmztc\n\n🎟️ Use o cupom *R$100 OFF para tecnologia* resgate aqui: https://s.shopee.com.br/7Acpkjss8Y\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*BAAAIXOU MAIS O PREÇO AQUIIIII* 😱😱\n\n🧡 Geladeira 413L  Philco Eco Inverter Duplex Inox PRF501TI\n\n Pooor: *R$ 2.783,90*\nou no pix: R$ 2.553,00\n\n🔥*Compre aqui*: https://s.shopee.com.br/8AVN9vT2v8\n\n🎟️ Use o cupom *R$100 OFF para tecnologia* resgate aqui: https://s.shopee.com.br/60QsZwb9nH\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_0t18q0xjy",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "BORA MAROMBAR",
-      "originalLink": "https://meli.la/31Awwbg",
-      "affiliateLink": "https://www.mercadolivre.com.br/hiper-mass-1kg-growth-supplements-sabor-chocolate/p/MLB23928135?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "BORA MAROMBAR \n\n🦾 *Hiper Mass 1kg Growth Supplements - Sabor Chocolate*\n\n🔥 ~DE 79,90~ l *POR 48,72*\n🎟️ CUPOM: *SAUDEPRAVC*\n\n🔗 https://meli.la/31Awwbg\n> siga @helensoares.moraski",
-      "rewrittenMessage": "BORA MAROMBAR \n\n🦾 *Hiper Mass 1kg Growth Supplements - Sabor Chocolate*\n\n🔥 ~DE 79,90~ l *POR 48,72*\n🎟️ CUPOM: *SAUDEPRAVC*\n\n🔗 https://www.mercadolivre.com.br/hiper-mass-1kg-growth-supplements-sabor-chocolate/p/MLB23928135?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_713346-MLA107082143625_022026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_a1dvy59gw",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Centrífuga De Salada Secador Verduras Manual 4 Litros",
-      "originalLink": "https://s.shopee.com.br/W5vomfqb4",
-      "affiliateLink": "https://s.shopee.com.br/5LBBmiHhDv?lp=aff",
-      "originalMessage": "*SUAS SALADAS VÃO DURAR MAIS TEMPO🤌🏼*\n\nCentrífuga De Salada Secador Verduras  Manual 4 Litros\n\nDe: _~R$ 33,67~_\n*POOR  R$ 29,29* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/W5vomfqb4\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA A COZINHA! 🔥 As saladas vão durar muito mais tempo com essa praticidade! 😱\n\nCentrífuga De Salada Secador Verduras Manual 4 Litros\n\nDe: ~R$ 33,67~\nPOR R$ 29,29 ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/5LBBmiHhDv?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_654xni41m",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Manta Cobertor Microfibra Casal Queen Habitat",
-      "originalLink": "https://s.shopee.com.br/112CPv7p2D",
-      "affiliateLink": "https://s.shopee.com.br/3g2xneAym2?lp=aff",
-      "originalMessage": "*DESCONTÃO DO DIAA! ⚡️‼️*\n\n> 🛍️ Manta Cobertor Microfibra Casal Queen Super Quentinha Toque Macio Cereja Habitat\n\n❌ de R$ 100,00\n✅ *Por R$ 79,90*\n\n🛒: https://s.shopee.com.br/112CPv7p2D\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! 😱 Uma oferta imperdível na Shopee para deixar seu quarto super aconchegante! 🧡✨ \n\n🛍️ Manta Cobertor Microfibra Casal Queen Super Quentinha Toque Macio Cereja Habitat\n\n❌ de R$ 100,00\n✅ *Por R$ 79,90*\n\nGaranta a sua aqui: https://s.shopee.com.br/3g2xneAym2?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_x73iocusi",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Tênis Drift Osklen",
-      "originalLink": "https://meli.la/2U7JyS6",
-      "affiliateLink": "https://www.mercadolivre.com.br/tenis-masculino-drift-osklen/up/MLBU3977083953?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "CASUALZINHO PARA O DIA-A-DIA\n\n👟 *Tênis Drift Osklen*\n\n🔥 ~DE 347~ | *POR 210,16 no Pix*\n🎟 CUPOM: *SEMPRENAMODA*\n\n🔗 https://meli.la/2U7JyS6\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥\n\n👟 Tênis Drift Osklen\n\n🔥 ~DE 347~ | POR 210,16 no Pix\n🎟 CUPOM: SEMPRENAMODA\n\nhttps://www.mercadolivre.com.br/tenis-masculino-drift-osklen/up/MLBU3977083953?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_615992-MLB112320551630_062026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_silszetzz",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Cupons de Desconto em Produtos de Beleza",
-      "originalLink": "https://meli.la/2uJCWdS",
-      "affiliateLink": "https://www.mercadolivre.com.br/hidratante-facial-epidrat-acqua-50ml-mantecorp-skincare-todo-tipo-de-pele-dianoite/p/MLB19870720?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*NOVOS CUPONS PARA PRODUTOS DE BELEZA*\n\n🎟️ *EPISOL15* \n15% DE DESCONTO para compras a partir de R$$5 e desconto máximo de R$150.\n Válido em: https://meli.la/2uJCWdS\n\n🎟️ *DARROW15* \n15% DE DESCONTO para compras a partir de R$$5 e desconto máximo de R$150. \nVálido em: https://meli.la/2EDBrrX\n\n🎟️ *AVENE15* \n15% DE DESCONTO para compras a partir de R$$5 e desconto máximo de R$150.\n Válido em: https://meli.la/2E9HrU3\n\n🎟️ *ACTINE20* \n20% DE DESCONTO para compras a partir de R$$5 e desconto máximo de R$150. \nVálido em: https://meli.la/1BKX9kV\n\n🎟️ *MAKE20* \n20% OFF para compras mínimas de R$39 e desconto máximo de R$30. \nVálido em :https://meli.la/1Ya2zRz\n\n- abra o link e clique em “Mostrar mais” para ver todos os produtos",
-      "rewrittenMessage": "🚨 GENTE, CORRE PARA APROVEITAR ESSES CUPONS NO MERCADO LIVRE! 😱🔥 Está rolando descontos imperdíveis em produtos de beleza selecionados! Confira as ofertas: 🎟️ EPISOL15 (15% OFF a partir de R$5), 🎟️ DARROW15 (15% OFF a partir de R$5), 🎟️ AVENE15 (15% OFF a partir de R$5), 🎟️ ACTINE20 (20% OFF a partir de R$5) e 🎟️ MAKE20 (20% OFF em compras a partir de R$39)! Aproveite a entrega rápida do Mercado Livre! ✨ https://www.mercadolivre.com.br/hidratante-facial-epidrat-acqua-50ml-mantecorp-skincare-todo-tipo-de-pele-dianoite/p/MLB19870720?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_719503-MLU75980721377_042024-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_xzta2lpi0",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Jaqueta Feminina Bobojaco Impermeável Puffer",
-      "originalLink": "https://meli.la/17FZuPj",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-5579138038-jaqueta-feminina-bobojaco-impermeavel-puffer-capuz-removivel-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*LEVE A SUA E FIQUE PROTEGIDA DO FRIO! 🔥*\n\n _Jaqueta Feminina Bobojaco Impermeável Puffer Capuz Removível_\n\nde:~­ 149,90~ *por:­ 54,24* 😮\n> ᴄᴜᴘᴏᴍ: *OUTLETCUPONEIRA* 🎟️\n\n🛒 https://meli.la/17FZuPj\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA SE PROTEGER DO FRIO! 🔥 Jaqueta Feminina Bobojaco Impermeável Puffer com Capuz Removível! 😱 de: R$ 149,90 por: R$ 54,24 😮 Utilize o cupom: OUTLETCUPONEIRA 🎟️ https://produto.mercadolivre.com.br/MLB-5579138038-jaqueta-feminina-bobojaco-impermeavel-puffer-capuz-removivel-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_740189-MLB107452699125_022026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_woctlokjw",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Jogo de Toalhas 4 Peças Banhão e Rosto 100% Algodão Brisa Karsten",
-      "originalLink": "https://s.shopee.com.br/7psWYyDcO8",
-      "affiliateLink": "https://s.shopee.com.br/3LQ7P1UFeE?lp=aff",
-      "originalMessage": "*TOALHAS KARSTEN NA  PROMO😍🤩*\n\nJogo de Toalhas 4 Peças Banhão e Rosto 100% Algodão Brisa Karsten\n\nDe: _~R$ 286,89~_\n*POOR R$ 149,91 NO PIX* ✨\n\n🎟️Aplique o cupom abaixo do produto\n\n🛒 Compre aqui: https://s.shopee.com.br/7psWYyDcO8\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSA PROMOÇÃO DAS TOALHAS KARSTEN! 😱✨\n\nJogo de Toalhas 4 Peças Banhão e Rosto 100% Algodão Brisa Karsten\n\nDe: ~R$ 286,89~\nPOR R$ 149,91 NO PIX ✨\n\n🎟️ Não esqueça de aplicar o cupom disponível na página do produto!\n\n🛒 Aproveite esse achado da Shopee aqui: https://s.shopee.com.br/3LQ7P1UFeE?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_x3dl6x9ym",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Seleção de Ofertas com Cupom Mercado Livre",
-      "originalLink": "https://meli.la/2f8qnQp",
-      "affiliateLink": "https://www.mercadolivre.com.br/500-petalas-artificiais-branca-rosa-e-pessego-casamento/up/MLBU3838332329?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*NOVO CUPOM DE 20% OFF NO ML*\nfunciona para alguns itens fora da lista também\n\nCupom: *OUTLETCUPONEIRA* 🎟️\n20% OFF no site em compras a partir de R$39, limitado a R$50.\n\nLista: https://meli.la/2f8qnQp\n\n- abra o link e clique em “Mostrar mais” para ver todos os produtos\n",
-      "rewrittenMessage": "🚨 APROVEITE! NOVO CUPOM DE 20% OFF NO MERCADO LIVRE! 💛🔥 Esse cupom funciona para diversos itens da lista! 😱 Aproveite enquanto durar! Cupom: *OUTLETCUPONEIRA* 🎟️ (20% OFF em compras a partir de R$39, limitado a R$50). Acesse aqui e clique em “Mostrar mais” para ver todos os produtos selecionados: https://www.mercadolivre.com.br/500-petalas-artificiais-branca-rosa-e-pessego-casamento/up/MLBU3838332329?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_784368-MLB108720379415_032026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_fw9y7z8o2",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Jogo de 6 Pratos Rasos Ryo Maresia Areia 27,5cm Oxford",
-      "originalLink": "https://s.shopee.com.br/4Vc4b0MKz4",
-      "affiliateLink": "https://s.shopee.com.br/80Bwxaz9HN?lp=aff",
-      "originalMessage": "*EU AMOOO ESSA AQUI! 🥰💖*\n\n> 🛍️ Prato Raso Ryo Maresia Areia 6 Unidades 27,5cm Oxford Porcelanas\n\n❌ de R$ 290,00\n✅ *Por R$ 199,90*\n\n🛒: https://s.shopee.com.br/4Vc4b0MKz4\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO QUE TUDO! 🥰💖\n\nPrato Raso Ryo Maresia Areia 6 Unidades 27,5cm Oxford Porcelanas, perfeitos para deixar sua mesa posta um luxo! ✨\n\n❌ de R$ 290,00\n✅ *Por R$ 199,90*\n\n🛒 Aproveite agora: https://s.shopee.com.br/80Bwxaz9HN?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_0uz2ct44p",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Tira Manchas Percarbonato",
-      "originalLink": "https://meli.la/2SH6R5m",
-      "affiliateLink": "https://www.mercadolivre.com.br/tira-manchas-percarbonato-calisul-brancas-e-coloridas--1kg/up/MLBU3145110489?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*O CAMISA 10 DA LIMPEZA VOLTOU*\n\nUse o Cupom: *CASAML* 🎟️\n\nTira Manchas Percarbonato Brancas E Coloridas - 1kg\nDe ~R$ 28~ por R$ 19\nhttps://meli.la/2SH6R5m\n\nPercarbonato De Sódio Tira Manchas Alvejante - 2kg\nR$ 36 no PIX (R$ 18 cada)\nhttps://meli.la/16Dcdg9\n\nPercarbonato Limpador Clareador Tira Manchas - 3kg\nR$ 51 (R$ 17 cada)\nhttps://meli.la/1Hb8FJb\n\nLoja Oficial Calisul no ML",
-      "rewrittenMessage": "🚨 O CAMISA 10 DA LIMPEZA VOLTOU! 😱🔥 Não perca essa chance de deixar suas roupas impecáveis pagando pouco! \n\n🎟️ Use o Cupom: CASAML\n\n✨ Tira Manchas Percarbonato Brancas E Coloridas - 1kg\nDe R$ 28 por R$ 19\nhttps://www.mercadolivre.com.br/tira-manchas-percarbonato-calisul-brancas-e-coloridas--1kg/up/MLBU3145110489?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\n✨ Percarbonato De Sódio Tira Manchas Alvejante - 2kg\nR$ 36 no PIX (R$ 18 cada)\nhttps://www.mercadolivre.com.br/tira-manchas-percarbonato-calisul-brancas-e-coloridas--1kg/up/MLBU3145110489?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\n✨ Percarbonato Limpador Clareador Tira Manchas - 3kg\nR$ 51 (R$ 17 cada)\nhttps://www.mercadolivre.com.br/tira-manchas-percarbonato-calisul-brancas-e-coloridas--1kg/up/MLBU3145110489?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_899165-MLB113315035623_062026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_zhwvs9nkt",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Jogo De Facas Faqueiro 9 Peças Plenus Aço Inox Tramontina",
-      "originalLink": "https://meli.la/1d1STSh",
-      "affiliateLink": "https://www.mercadolivre.com.br/jogo-de-facas-faqueiro-9-pecas-plenus-aco-inox-tramontina/p/MLB28408264?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*HOJE É DIA DE PAGAR BARATOOOOO* 🙌\n\n💛 Jogo De Facas Faqueiro 9 Peças  Plenus Aço Inox Tramontina\n\nDe: ~R$ 68,00~\n Poooor: *R$ 46,92*\n\n🎟️ Use o cupom: *CASAML* para sair nesse valor\n\n🔥 Compre aqui:  https://meli.la/1d1STSh\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\n💛 Jogo De Facas Faqueiro 9 Peças Plenus Aço Inox Tramontina\n\nDe: ~R$ 68,00~\n Poooor: *R$ 46,92*\n\n🎟️ Use o cupom: *CASAML* para sair nesse valor\n\n🔥 Compre aqui: https://www.mercadolivre.com.br/jogo-de-facas-faqueiro-9-pecas-plenus-aco-inox-tramontina/p/MLB28408264?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_736022-MLA92610004880_092025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_m2hbrcz7y",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Kit 10 Cuecas Boxer Box Poliamida Sem Costura Selene",
-      "originalLink": "https://meli.la/2zTWyYL",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-10-cuecas-boxer-box-poliamida-sem-costura-selene/up/MLBU3712932551?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*PREÇÃO NAS CUECAS DE POLIAMIDA*\nsomente tamanho M e EG\n\nKit 10 Cuecas Boxer Box Poliamida Sem Costura Selene\n\nDe ~R$ 229~ por R$ 83 em 4x\n\nUse o Cupom: *OUTLETCUPONEIRA* ou *SEMPRENAMODA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/2zTWyYL",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE PREÇO NAS CUECAS! 🔥 São 10 unidades da Selene em Poliamida sem costura (tamanhos M e EG)! 😱 Aproveite a entrega rápida do Mercado Livre! 💛\n\nDe ~R$ 229~ por R$ 83 em 4x\n\nUse o Cupom: OUTLETCUPONEIRA ou SEMPRENAMODA 🎟️\n\nhttps://www.mercadolivre.com.br/kit-10-cuecas-boxer-box-poliamida-sem-costura-selene/up/MLBU3712932551?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_700692-MLB103734099374_012026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_hoz8qb18o",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Hiper Mass 1kg Growth Supplements - Sabor Chocolate",
-      "originalLink": "https://meli.la/16LRscb",
-      "affiliateLink": "https://www.mercadolivre.com.br/hiper-mass-1kg-growth-supplements-sabor-chocolate/p/MLB23928135?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*ADEUS SHAPE VARETA*\n\nHiper Mass 1kg Growth Supplements - Sabor Chocolate\n\nDe ~R$ 79~ por R$ 48\n\nUse o Cupom: *SAUDEPRAVC* 🎟️\n\nLoja Oficial Growth no ML\nhttps://meli.la/16LRscb",
-      "rewrittenMessage": "🚨 GENTE, OLHA ESSE ACHADO! ADEUS SHAPE VARETA! 🔥 Hiper Mass 1kg Growth Supplements - Sabor Chocolate com um super desconto! 😱 De ~R$ 79~ por R$ 48. Aproveite a entrega rápida do Mercado Livre! 💛 Use o Cupom: SAUDEPRAVC 🎟️ https://www.mercadolivre.com.br/hiper-mass-1kg-growth-supplements-sabor-chocolate/p/MLB23928135?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_713346-MLA107082143625_022026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_umaluom3e",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Jogo 6 Copos de Vidro Pérola Luxo 300ml",
-      "originalLink": "https://s.shopee.com.br/6AkIabbrMR",
-      "affiliateLink": "https://s.shopee.com.br/2gAQbmkK9T?lp=aff",
-      "originalMessage": "*SÃO O PURO  LUXOOOO🤩*\n\nJogo 6 Copos de Vidro Pérola Luxo 300ml Água Suco 4 cores\n\nDe: _~R$ 54,88~_\n*POOR R$ 54,88* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/6AkIabbrMR\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 SÃO O PURO LUXOOOO! 🤩\n\nOlha esse Jogo 6 Copos de Vidro Pérola Luxo 300ml para deixar sua mesa impecável! Disponível em 4 cores maravilhosas. ✨\n\nDe: R$ 54,88\nPor: R$ 54,88\n\n🛒 Garanta o seu aqui: https://s.shopee.com.br/2gAQbmkK9T?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_lc1pw2zfz",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*A COZINHA COMPLETA FAMOSA DA  🤍*",
-      "originalLink": "https://s.shopee.com.br/7fZ6NWRu4h",
-      "affiliateLink": "https://s.shopee.com.br/6fgZN8DI6S?lp=aff",
-      "originalMessage": "*A COZINHA COMPLETA FAMOSA DA SHOPEE 🤍*\n\n> 🛍️ Armário de Cozinha Completa 310cm Reims Madesa 02\n\n✅ *Por R$ 2.109,99*\n\n🛒: https://s.shopee.com.br/7fZ6NWRu4h\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*A COZINHA COMPLETA FAMOSA DA SHOPEE 🤍*\n\n> 🛍️ Armário de Cozinha Completa 310cm Reims Madesa 02\n\n✅ *Por R$ 2.109,99*\n\n🛒: https://s.shopee.com.br/4Vc4n9Lg45?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Conjunto Facas Grandes de Cozinha Zurich Aço Inox",
+      "originalLink": "https://s.shopee.com.br/7VFgk3aEIa",
+      "affiliateLink": "https://s.shopee.com.br/2gAQzBEYlx?lp=aff",
+      "originalMessage": "*ESSE É O VALOR MAIS BAIXO QUE JÁ VI NESSE 🥹🥹*\n\n> 🛍️ LUMAI Conjunto Facas Grandes de Cozinha Zurich Aço Inox High Carbon Steel Original Faca Chef Santoku\n\n❌ de R$ 261,00\n✅ *Por R$ 174,90*\n\n🛒: https://s.shopee.com.br/7VFgk3aEIa\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO QUE ESTÁ NO VALOR MAIS BAIXO DE TODOS! 🥹🔥 \n\n🛍️ Conjunto de Facas Zurich Aço Inox High Carbon Steel Original (Faca Chef + Santoku)\n\n❌ de R$ 261,00\n✅ *Por R$ 174,90*\n\n🧡 Aproveite os cupons de frete grátis da Shopee aqui:\nhttps://s.shopee.com.br/2gAQzBEYlx?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_p1i4prit8",
-      "time": "20:00",
+      "id": "deal_y1igv44q7",
+      "time": "01:34",
       "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*KITZÃO PRA SAIR DESMONTANDO A CASA*",
-      "originalLink": "https://meli.la/1Vu6nM9",
-      "affiliateLink": "https://www.mercadolivre.com.br/parafusadeira-furadeira-48v-profissional-2-baterias-maleta/up/MLBU3809307714?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*KITZÃO PRA SAIR DESMONTANDO A CASA*\n+5mil vendidos e 4,8⭐\n\nParafusadeira Furadeira 48v Profissional +2 Baterias +maleta\n\nDe ~R$ 129~ por R$ 88\n\nUse o Cupom: *CONSTRUIRMELI* 🎟️\n\nLoja Verificada no ML\nhttps://meli.la/1Vu6nM9",
-      "rewrittenMessage": "*KITZÃO PRA SAIR DESMONTANDO A CASA*\n+5mil vendidos e 4,8⭐\n\nParafusadeira Furadeira 48v Profissional +2 Baterias +maleta\n\nDe ~R$ 129~ por R$ 88\n\nUse o Cupom: *CONSTRUIRMELI* 🎟️\n\nLoja Verificada no ML\nhttps://www.mercadolivre.com.br/parafusadeira-furadeira-48v-profissional-2-baterias-maleta/up/MLBU3809307714?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_674467-MLB111929234014_062026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_7cjm966s0",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "PRA SÓ JOGAR POR CIMA E FICAR QUENTIN",
-      "originalLink": "https://meli.la/1drtwNo",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-2-moletons-careca-paris-flanelado-premium-diversas-cores/up/MLBU3956360298?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "PRA SÓ JOGAR POR CIMA E FICAR QUENTIN\n\n🧥 *Kit 2 Moletons Careca Paris Flanelado* (diversas cores)\n\n🔥 ~DE 129~ | *POR 58,32* (29,16 cada)\n🎟 CUPOM: *SEMPRENAMODA*\n\n🔗 https://meli.la/1drtwNo\n> siga @helensoares.moraski",
-      "rewrittenMessage": "PRA SÓ JOGAR POR CIMA E FICAR QUENTIN\n\n🧥 *Kit 2 Moletons Careca Paris Flanelado* (diversas cores)\n\n🔥 ~DE 129~ | *POR 58,32* (29,16 cada)\n🎟 CUPOM: *SEMPRENAMODA*\n\n🔗 https://www.mercadolivre.com.br/kit-2-moletons-careca-paris-flanelado-premium-diversas-cores/up/MLBU3956360298?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_629253-MLB111389162419_052026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_aeb93xps1",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*ACABOU AS DESCULPAS PRA PULAR O TREINO",
-      "originalLink": "https://meli.la/2MeMqko",
-      "affiliateLink": "https://www.mercadolivre.com.br/social/tu20260803182009811/lists?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*ACABOU AS DESCULPAS PRA PULAR O TREINO DE PERNA*\n\nCalça Dry Fit Poliamida com Elastano\n\nDe ~R$ 109~ por R$ 36\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/2MeMqko",
-      "rewrittenMessage": "*ACABOU AS DESCULPAS PRA PULAR O TREINO DE PERNA*\n\nCalça Dry Fit Poliamida com Elastano\n\nDe ~R$ 109~ por R$ 36\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/social/tu20260803182009811/lists?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_p3yp6q2va",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*DESPERTE SUA ESSÊNCIA COM ESTA FRAGRÂNC",
-      "originalLink": "https://meli.la/2ZNHbr7",
-      "affiliateLink": "https://www.mercadolivre.com.br/perfume-feminino-my-euphoria-edp-50ml-calvin-klein/p/MLB34562961?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*DESPERTE SUA ESSÊNCIA COM ESTA FRAGRÂNCIA ÚNICA! ✨*\n\n *Perfume Feminino My Euphoria Edp 50ml Calvin Klein*\n\n❌ De: ~R$ 609,42~\n✅ Por: *R$ 226,42*\n\n_Loja Verificada no ML_\n\n🔗 Link do produto:\nhttps://meli.la/2ZNHbr7\n\n @gatagarotafinds\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*DESPERTE SUA ESSÊNCIA COM ESTA FRAGRÂNCIA ÚNICA! ✨*\n\n *Perfume Feminino My Euphoria Edp 50ml Calvin Klein*\n\n❌ De: ~R$ 609,42~\n✅ Por: *R$ 226,42*\n\n_Loja Verificada no ML_\n\n🔗 Link do produto:\nhttps://www.mercadolivre.com.br/perfume-feminino-my-euphoria-edp-50ml-calvin-klein/p/MLB34562961?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_897297-MLU75261284763_032024-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_6lxs7nvih",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Jogo 6 Canecas Café Chá Ryo Maresia 260ml Oxford Porcelanas",
-      "originalLink": "https://s.shopee.com.br/AUtHlFDCEM",
-      "affiliateLink": "https://s.shopee.com.br/1qbJcEwUfV?lp=aff",
-      "originalMessage": "*ESSA É DE QUALIDADEE, VIU? 🥰😮‍💨*\n\n> 🛍️ Jogo 6 Canecas Café Chá Ryo Maresia 260ml Oxford Porcelanas\n\n❌ de R$ 140,00\n✅ *Por R$ 127,29*\n\n🛒: https://s.shopee.com.br/AUtHlFDCEM\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE, OLHA ESSA QUALIDADE! 😱✨ O Jogo com 6 Canecas Café Chá Ryo Maresia da Oxford Porcelanas está simplesmente maravilhoso! 🔥\n\n❌ de R$ 140,00\n✅ *Por R$ 127,29*\n\n🧡 Aproveite os cupons de frete grátis da Shopee aqui:\nhttps://s.shopee.com.br/1qbJcEwUfV?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_p1dag35d5",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*ERA POTE QUE VC QUERIA?*",
-      "originalLink": "https://meli.la/1jam3g2",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-12-potes-hermeticos-com-travas-plastico-cinza-plasutil/p/MLB52675726?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*ERA POTE QUE VC QUERIA?*\nentão toma\n\nKit 12 Potes Herméticos Com Travas Plástico Cinza Plasútil\n\nDe ~R$ 214~ por R$ 68\n\n-Use o Cupom: *CASAML* + *OUTLETCUPONEIRA* 🎟️\n\nLoja Oficial Plasútil no ML\nhttps://meli.la/1jam3g2",
-      "rewrittenMessage": "*ERA POTE QUE VC QUERIA?*\nentão toma\n\nKit 12 Potes Herméticos Com Travas Plástico Cinza Plasútil\n\nDe ~R$ 214~ por R$ 68\n\n-Use o Cupom: *CASAML* + *OUTLETCUPONEIRA* 🎟️\n\nLoja Oficial Plasútil no ML\nhttps://www.mercadolivre.com.br/kit-12-potes-hermeticos-com-travas-plastico-cinza-plasutil/p/MLB52675726?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_835129-MLA95836789811_102025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_krwdoukw5",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*O PRECINHOOOOOO\ude0d*",
-      "originalLink": "https://s.shopee.com.br/9ANuAsGJyE",
-      "affiliateLink": "https://s.shopee.com.br/4LIeapZukh?lp=aff",
-      "originalMessage": "*O PRECINHOOOOOO😍*\n\nKit  Cabides Veludo Para Roupas Adulto 30 Unidades Fino Resistente\n\nDe: _~R$ 78,39~_\n*POOR R$ 34,49* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/9ANuAsGJyE\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*O PRECINHOOOOOO😍*\n\nKit  Cabides Veludo Para Roupas Adulto 30 Unidades Fino Resistente\n\nDe: _~R$ 78,39~_\n*POOR R$ 34,49* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/4LIeapZz0E?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Garrafinha de 2L com Adesivos",
+      "originalLink": "https://shope.ee/a283kd91",
+      "affiliateLink": "https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshope.ee%2Ferror_page",
+      "originalMessage": "🛍️ Olhem essa garrafinha linda de 2L que achei na Shopee! Vem com adesivos para colar. Ideal para levar pra academia ou trabalho. Apenas R$ 14,50! Link do produto: https://shope.ee/a283kd91 Corre que esgota logo!",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NA SHOPEE! 🔥\n\nEssa garrafinha linda de 2L já vem com adesivos para você personalizar! Perfeita para te acompanhar na academia ou no trabalho. 😱✨\n\nApenas R$ 14,50! Corre que esgota logo! 🏃‍♀️💨\n\nhttps://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshope.ee%2Ferror_page\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_bm0enbqqt",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*16 CONTO CADA FRIGIDEIRA DA TRAMONTINA*",
-      "originalLink": "https://meli.la/1VUmZn3",
-      "affiliateLink": "https://www.mercadolivre.com.br/jogo-de-frigideiras-turim-tramontina-2-pecas-vermelho-em-aluminio-antiaderente-20198760/p/MLB27398932?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*16 CONTO CADA FRIGIDEIRA DA TRAMONTINA*\n\nJogo de Frigideiras Turim Tramontina 2 peças Vermelho em Alumínio Antiaderente\n\nDe ~R$ 55~ por R$ 33\n\n-Use o Cupom: *CASAML* + *OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/1VUmZn3",
-      "rewrittenMessage": "*16 CONTO CADA FRIGIDEIRA DA TRAMONTINA*\n\nJogo de Frigideiras Turim Tramontina 2 peças Vermelho em Alumínio Antiaderente\n\nDe ~R$ 55~ por R$ 33\n\n-Use o Cupom: *CASAML* + *OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/jogo-de-frigideiras-turim-tramontina-2-pecas-vermelho-em-aluminio-antiaderente-20198760/p/MLB27398932?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_727210-MLA95972647557_102025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_kplii1thm",
-      "time": "20:00",
+      "id": "deal_op2zsro27",
+      "time": "01:33",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*SÃO 4 TOALHAS DE BANHO KARSTEN AQUI*",
-      "originalLink": "https://meli.la/21asBRP",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-4-toalhas-de-banho-karsten-algodao-otto-jogo/up/MLBU4194707776?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*SÃO 4 TOALHAS DE BANHO KARSTEN AQUI*\n\n💛 Kit 4 Toalhas De Banho Karsten Algodão Otto Jogo Vivaz 4 Cores\n\nDe: ~R$ 189,99~\n Poooor: *R$  128,24*\n\n🎟️ Use o cupom: *CASAML* para sair nesse valor\n\n🔥 Compre aqui: https://meli.la/21asBRP\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*SÃO 4 TOALHAS DE BANHO KARSTEN AQUI*\n\n💛 Kit 4 Toalhas De Banho Karsten Algodão Otto Jogo Vivaz 4 Cores\n\nDe: ~R$ 189,99~\n Poooor: *R$  128,24*\n\n🎟️ Use o cupom: *CASAML* para sair nesse valor\n\n🔥 Compre aqui: https://www.mercadolivre.com.br/kit-4-toalhas-de-banho-karsten-algodao-otto-jogo/up/MLBU4194707776?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Mixer Philco PMX1000 4 Lâminas Pro Maxx 2 E 1 500w Branco",
+      "originalLink": "https://meli.la/2jMv9Zi",
+      "affiliateLink": "https://www.mercadolivre.com.br/mixer-philco-pmx1000-4-laminas-pro-maxx-2-e-1-500w-branco/p/MLB28528150?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*APROVEITE ESSA OFERTA EXCLUSIVA ANTES QUE ACABE! 🚀*\n\n _Mixer Philco PMX1000 4 Lâminas Pro Maxx 2 E 1 500w Branco_\n\nde:~­ 239,90~ *por:­ 125,91* 😮\n\n🛒 https://meli.la/2jMv9Zi\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\nMixer Philco PMX1000 4 Lâminas Pro Maxx 2 E 1 500w Branco\n\nde: R$ 239,90 por: R$ 125,91 😮\n\nAproveite a entrega rápida do Mercado Livre! 💛\n\nhttps://www.mercadolivre.com.br/mixer-philco-pmx1000-4-laminas-pro-maxx-2-e-1-500w-branco/p/MLB28528150?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_781055-MLB113953874945_062026-O.webp",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_701958-MLA99508832424_112025-O.webp",
       "storeType": "mercadolivre"
     },
     {
-      "id": "deal_w67ct9kqc",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*NOVO  DE 10% OFF NO ML*",
-      "originalLink": "https://meli.la/2SNFsuQ",
-      "affiliateLink": "https://www.mercadolivre.com.br/fechadura-digital-biometrica-bluetooth-tuya-smart-vida/up/MLBU4072217549?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*NOVO CUPOM DE 10% OFF NO ML*\n\nCupom: *TOCUPONERA* 🎟️\n10% OFF no site em compras a partir de R$0, limitado a R$10.\n\nAtive Aqui e pesquise pelo produto desejado:\nhttps://meli.la/2SNFsuQ\n\n- abra o link e clique em “Mostrar mais” para ver todos os produtos",
-      "rewrittenMessage": "*NOVO CUPOM DE 10% OFF NO ML*\n\nCupom: *TOCUPONERA* 🎟️\n10% OFF no site em compras a partir de R$0, limitado a R$10.\n\nAtive Aqui e pesquise pelo produto desejado:\nhttps://www.mercadolivre.com.br/fechadura-digital-biometrica-bluetooth-tuya-smart-vida/up/MLBU4072217549?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_717344-MLB113073107771_062026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_9p5jjc3ki",
-      "time": "20:00",
+      "id": "deal_3ie717gfp",
+      "time": "01:13",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "BBB CASEIRO",
-      "originalLink": "https://meli.la/2o1Urun",
-      "affiliateLink": "https://www.mercadolivre.com.br/jogo-de-panelas-4mm-14-pecas-antiaderente-ceramico-inducao/up/MLBU3318833476?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "BBB CASEIRO\n\n📷 *Kit com 2 Câmeras de Segurança IP WiFi com Visão Noturna Interna 360º*\n\n🔥 ~DE 199~ | *POR 84,31* (42,16 cada)\n🎟 CUPOM: *CASAML*\n\n🔗 https://meli.la/2o1Urun\n> siga @helensoares.moraski",
-      "rewrittenMessage": "BBB CASEIRO\n\n📷 *Kit com 2 Câmeras de Segurança IP WiFi com Visão Noturna Interna 360º*\n\n🔥 ~DE 199~ | *POR 84,31* (42,16 cada)\n🎟 CUPOM: *CASAML*\n\n🔗 https://www.mercadolivre.com.br/jogo-de-panelas-4mm-14-pecas-antiaderente-ceramico-inducao/up/MLBU3318833476?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_876779-MLB114754361588_082026-AB{sanitized_title}.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_jdhz1xjev",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*FICAR TOMANDO BANHO FRIO NÃO DA NÉ*",
-      "originalLink": "https://meli.la/2aDdsoz",
-      "affiliateLink": "https://www.mercadolivre.com.br/ducha-advanced-multitemperaturas-lorenzetti-acabamento-brilhante-cor-220v-7500w/p/MLB48181532?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*FICAR TOMANDO BANHO FRIO NÃO DA NÉ*\n\nDucha Advanced Multitemperaturas Lorenzetti Acabamento Brilhante Cor 220V 7500W\n\nDe ~R$ 269~ por R$ 91 no PIX\n\n-Use o Cupom: *CASAML* + *OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/2aDdsoz",
-      "rewrittenMessage": "*FICAR TOMANDO BANHO FRIO NÃO DA NÉ*\n\nDucha Advanced Multitemperaturas Lorenzetti Acabamento Brilhante Cor 220V 7500W\n\nDe ~R$ 269~ por R$ 91 no PIX\n\n-Use o Cupom: *CASAML* + *OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/ducha-advanced-multitemperaturas-lorenzetti-acabamento-brilhante-cor-220v-7500w/p/MLB48181532?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_707440-MLA95500450716_102025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_2ymtsv6oi",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*COM ESSA VC AUMENTA ATÉ O PR NO SUPINO*",
-      "originalLink": "https://meli.la/1R69vWk",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-2983126488-camiseta-nike-legend-masculina-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*COM ESSA VC AUMENTA ATÉ O PR NO SUPINO*\n\nCamiseta Nike Legend Masculina\n\nDe ~R$ 129~ por R$ 62\n\nUse o Cupom: *TOCUPONERA* 🎟️\n\nLoja Oficial Nike no ML\nhttps://meli.la/1R69vWk",
-      "rewrittenMessage": "*COM ESSA VC AUMENTA ATÉ O PR NO SUPINO*\n\nCamiseta Nike Legend Masculina\n\nDe ~R$ 129~ por R$ 62\n\nUse o Cupom: *TOCUPONERA* 🎟️\n\nLoja Oficial Nike no ML\nhttps://produto.mercadolivre.com.br/MLB-2983126488-camiseta-nike-legend-masculina-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_885862-MLB100870857409_122025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_vt8vt41dc",
-      "time": "20:00",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*ESSE EU INDICO PRA TODAS MINHAS AMIGAS",
-      "originalLink": "https://s.shopee.com.br/20ujeELCSk",
-      "affiliateLink": "https://s.shopee.com.br/50YLO2pF3r?lp=aff",
-      "originalMessage": "*ESSE EU INDICO PRA TODAS MINHAS AMIGAS 👯‍♀️💖*\n\n> 🛍️ Conjunto Travessa Saladeira Baixelas Para Servir Ryo Maresia Areia Oxford Porcelanas\n\n❌ de R$ 150,00\n✅ *Por R$ 124,90*\n\n🛒: https://s.shopee.com.br/20ujeELCSk\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*ESSE EU INDICO PRA TODAS MINHAS AMIGAS 👯‍♀️💖*\n\n> 🛍️ Conjunto Travessa Saladeira Baixelas Para Servir Ryo Maresia Areia Oxford Porcelanas\n\n❌ de R$ 150,00\n✅ *Por R$ 124,90*\n\n🛒: https://s.shopee.com.br/1gHtPv1vqz?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Mesa Bandeja Café da Manhã Com Pezinho Dobrável",
+      "originalLink": "https://s.shopee.com.br/6fgZidXjK3",
+      "affiliateLink": "https://s.shopee.com.br/3qMOLR4NSV?lp=aff",
+      "originalMessage": "*OLHA O PREÇO😳*\n\nMesa Bandeja Café da Manhã Com Pezinho Dobrável  Decoração Cozinha\n\nDe: _~R$ 35,77~_\n*POOR R$ 22,89* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/6fgZidXjK3\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥\n\n*Mesa Bandeja Café da Manhã Com Pezinho Dobrável*\n\nDe: _~R$ 35,77~_\n*POR R$ 22,89* ✨\n\n🧡 Aproveite os cupons de frete grátis da Shopee!\n\n🛒 Compre aqui: https://s.shopee.com.br/3qMOLR4NSV?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_dfn4n2mei",
-      "time": "20:00",
+      "id": "deal_ukefjm9kp",
+      "time": "01:03",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*MUUUUITO MAIS HIGIÊNICA, NÃO PRECISA EN",
-      "originalLink": "https://s.shopee.com.br/6pzzPHgxnI",
-      "affiliateLink": "https://s.shopee.com.br/50YLO2ga1L?lp=aff",
-      "originalMessage": "*MUUUUITO MAIS HIGIÊNICA, NÃO PRECISA ENCOSTAR ​A MÃO PRA ABRIR😱*\n\nLixeira Sensor Automática Inteligente Recarregável Moderna Usb Anti Odor Cozinha Banheiro Escritório\n\nDe: _~R$ 109,37~_\n*POOR R$ 67,81* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/6pzzPHgxnI\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*MUUUUITO MAIS HIGIÊNICA, NÃO PRECISA ENCOSTAR ​A MÃO PRA ABRIR😱*\n\nLixeira Sensor Automática Inteligente Recarregável Moderna Usb Anti Odor Cozinha Banheiro Escritório\n\nDe: _~R$ 109,37~_\n*POOR R$ 67,81* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/20ujoWs4L9?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Kit 3 Peneiras de Aço Inox",
+      "originalLink": "https://s.shopee.com.br/AAGRsNp70E",
+      "affiliateLink": "https://s.shopee.com.br/W5wMd7dOW?lp=aff",
+      "originalMessage": "*BARATINHO INDISPENSÁVEL 🙂‍↔️*\n\nKit 3 Peneira Coador De Peneiras Aço Inoxidável Para Cozinha Peneira De Cozinha\n\nDe: _~R$ 25,79~_\n*POOR R$ 15,99* ✨\n\n🛒 Compre  aqui: https://s.shopee.com.br/AAGRsNp70E\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! ACHADO INDISPENSÁVEL PARA SUA COZINHA! 🚨\n\nOlha esse Kit 3 Peneiras Coador de Aço Inoxidável por um preço incrível! 😱✨\n\nDe: R$ 25,79\nPor: R$ 15,99\n\nGaranta o seu antes que acabe: https://s.shopee.com.br/W5wMd7dOW?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_ec3wqnjvp",
-      "time": "20:00",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*ANTES NO COLCHÃO DO QUE NO CHÃO*",
-      "originalLink": "https://meli.la/2RAKTt7",
-      "affiliateLink": "https://www.mercadolivre.com.br/colchao-inflavel-solteiro-multiuso-aveludado-o2flow/up/MLBU1755940893?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*ANTES NO COLCHÃO DO QUE NO CHÃO*\n\nColchão Inflável Solteiro Aveludado O2Flow\n\nDe ~R$ 99~ por R$ 46\n\nUse o Cupom: *OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/2RAKTt7",
-      "rewrittenMessage": "*ANTES NO COLCHÃO DO QUE NO CHÃO*\n\nColchão Inflável Solteiro Aveludado O2Flow\n\nDe ~R$ 99~ por R$ 46\n\nUse o Cupom: *OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://www.mercadolivre.com.br/colchao-inflavel-solteiro-multiuso-aveludado-o2flow/up/MLBU1755940893?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_872720-MLB70818562117_082023-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_bz961kd71",
-      "time": "19:59",
+      "id": "deal_nq5puxfdm",
+      "time": "01:03",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*  x LOJA OFICIAL LOVITO*",
-      "originalLink": "https://s.shopee.com.br/7fZ6P7ne7q",
-      "affiliateLink": "https://s.shopee.com.br/6fgZN6RVIa",
-      "originalMessage": "🚨 *CUPOM SHOPEE x LOJA OFICIAL LOVITO*\n\n➡️ _30% OFF sem mínimo, limitado a R$10 OFF_\n🎟 cupom: *LOVIV1TA*\n\nResgate aqui\n👉 https://s.shopee.com.br/7fZ6P7ne7q\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 *CUPOM SHOPEE x LOJA OFICIAL LOVITO*\n\n➡️ _30% OFF sem mínimo, limitado a R$10 OFF_\n🎟 cupom: *LOVIV1TA*\n\nResgate aqui\n👉 https://s.shopee.com.br/6pzzZPV3wa\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Perfume Nasma Candy Eau De Parfum 100ml",
+      "originalLink": "https://meli.la/29MpUxe",
+      "affiliateLink": "https://www.mercadolivre.com.br/perfume-nasma-candy-eau-de-parfum-100ml-notas-doces-frutadas/p/MLB59182941?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*SINTA ESSA DOÇURA ENVOLVENTE! ✨*\n\n *Perfume Nasma Candy Eau De Parfum 100ml Notas Doces Frutadas*\n\n✅ Por: *R$ 307,49*\n\n_Loja Verificada no ML_\n\n🔗 Link do produto:\nhttps://meli.la/29MpUxe\n\n @gatagarotafinds\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥✨\n\n*Perfume Nasma Candy Eau De Parfum 100ml Notas Doces Frutadas*\n\n✅ Por: *R$ 307,49*\n\n💛 Aproveite a entrega rápida do Mercado Livre!\n\nhttps://www.mercadolivre.com.br/perfume-nasma-candy-eau-de-parfum-100ml-notas-doces-frutadas/p/MLB59182941?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
-    },
-    {
-      "id": "deal_l8cum25si",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "*DURAMO NESSE PREÇO É LOUCURA*",
-      "originalLink": "https://meli.la/2JiASPq",
-      "affiliateLink": "https://www.mercadolivre.com.br/social/tu20260803182009811/lists?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*DURAMO NESSE PREÇO É LOUCURA*\npreço pode variar com o tamanho\n\nTênis Masculino Duramo Rc 2 Adidas\n\nDe ~R$ 379~ por R$ 151 no PIX (42)\n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nLoja Oficial Adidas no ML\nhttps://meli.la/2JiASPq",
-      "rewrittenMessage": "*DURAMO NESSE PREÇO É LOUCURA*\npreço pode variar com o tamanho\n\nTênis Masculino Duramo Rc 2 Adidas\n\nDe ~R$ 379~ por R$ 151 no PIX (42)\n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nLoja Oficial Adidas no ML\nhttps://www.mercadolivre.com.br/social/tu20260803182009811/lists?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_650075-MLA94411181975_102025-O.webp",
       "storeType": "mercadolivre"
     },
     {
-      "id": "deal_l8nunr96p",
-      "time": "19:59",
+      "id": "deal_7vrd9byb0",
+      "time": "01:01",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*O CARRINHO TÁ PEDINDO SOCORRO! \ude02*",
-      "originalLink": "https://s.shopee.com.br/9V0kaduleR",
-      "affiliateLink": "https://s.shopee.com.br/4fvUzQUVlR?lp=aff",
-      "originalMessage": "*O CARRINHO TÁ PEDINDO SOCORRO! 😂*\n\n> 🛍️ Jogo 6 Taça Sobremesa Vidro Sorvete Açai 330ml Canelado Luxo\n\n❌ de R$ 120,00\n✅ *Por R$ 69,69*\n\n🛒: https://s.shopee.com.br/9V0kaduleR\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
-      "rewrittenMessage": "*O CARRINHO TÁ PEDINDO SOCORRO! 😂*\n\n> 🛍️ Jogo 6 Taça Sobremesa Vidro Sorvete Açai 330ml Canelado Luxo\n\n❌ de R$ 120,00\n✅ *Por R$ 69,69*\n\n🛒: https://s.shopee.com.br/3B6hCfaDp9?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Camiseta Gola Polo Feminina Malha 100% Algodão",
+      "originalLink": "https://meli.la/1ovbs6Z",
+      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-5065184698-camiseta-gola-polo-feminina-malha-100-algodo-moda-trabalho-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*IMPERDÍVEL* 😱😱\n\nCamiseta Gola Polo Feminina Malha 100% Algodão Moda Trabalho\n\n~De R$ 44,90 💵~\n\n*Por* *R$ 27,76* 😱😱\n\n🎟️Use o cupom: *COMPENSAML*\n\n🛒Compre aqui: https://meli.la/1ovbs6Z\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 IMPERDÍVEL! GENTE, OLHA ESSA OFERTA NO MERCADO LIVRE! 🔥\n\nCamiseta Gola Polo Feminina Malha 100% Algodão Moda Trabalho ✨\n\n~De R$ 44,90 💵~\n\n*Por* *R$ 27,76* 😱😱\n\n🎟️ Use o cupom: *COMPENSAML*\n\n🛒 Aproveite a entrega rápida do Mercado Livre aqui: https://produto.mercadolivre.com.br/MLB-5065184698-camiseta-gola-polo-feminina-malha-100-algodo-moda-trabalho-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=1080&auto=format&fit=crop&q=80",
-      "storeType": "shopee"
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_630696-MLB92160030292_092025-O.webp",
+      "storeType": "mercadolivre"
     },
     {
-      "id": "deal_nhelhinix",
-      "time": "19:59",
+      "id": "deal_446nmf3kr",
+      "time": "00:55",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Fogão 4 Bocas Electrolux Mesa de Vidro com 2 Fornos FE4D",
-      "originalLink": "https://meli.la/2U2JEU8",
-      "affiliateLink": "https://www.mercadolivre.com.br/fogao-4-bocas-electrolux-preto-mesa-de-vidro-2-fornos-fe4d-preto/p/MLB64557087?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*ESSE TEM FORNO DUPLOOOO* 😱🙌\n\n💛 Fogão 4  Bocas Electrolux Preto Mesa De Vidro,  2 Fornos Fe4d Preto!\n\nDe: ~R$ 2.800,00~\n Poooor: *R$ 1.939,00*\n\n🎟️ Use o cupom: *AQUITEM* para sair nesse valor\n\n🔥 Compre aqui: https://meli.la/2U2JEU8\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥 *ESSE TEM FORNO DUPLOOOO* 😱🙌\n\n💛 Fogão 4 Bocas Electrolux Preto Mesa De Vidro, 2 Fornos Fe4d Preto!\n\nDe: ~R$ 2.800,00~\nPoooor: *R$ 1.939,00*\n\n🎟️ Use o cupom: *AQUITEM* para sair nesse valor\n\n🔥 Compre aqui: https://www.mercadolivre.com.br/fogao-4-bocas-electrolux-preto-mesa-de-vidro-2-fornos-fe4d-preto/p/MLB64557087?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Cafeteira Elétrica 15 Xícaras Elgin Coffee Break",
+      "originalLink": "https://meli.la/25GomWv",
+      "affiliateLink": "https://www.mercadolivre.com.br/cafeteira-eletrica-15-xicaras-elgin-coffee-break-preta/p/MLB39934591?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*PRECINHO RARO AQUI* 😱\n\n💛 Cafeteira Elétrica 15 Xícaras Elgin Coffee Break Preta 110v\n\nDe: ~R$ 75,20~\n  Poooor: *R$ 66,09*\n\n🔥 Compre aqui: https://meli.la/25GomWv\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 PRECINHO RARO AQUI! 😱 💛 Cafeteira Elétrica 15 Xícaras Elgin Coffee Break Preta 110v. De: ~R$ 75,20~ Por: *R$ 66,09*. Aproveite a entrega rápida do Mercado Livre! 🔥 Compre aqui: https://www.mercadolivre.com.br/cafeteira-eletrica-15-xicaras-elgin-coffee-break-preta/p/MLB39934591?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_677483-MLA105272444961_012026-O.webp",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_737405-MLA114315517360_082026-O.webp",
       "storeType": "mercadolivre"
     },
     {
-      "id": "deal_l51vk7c21",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "id": "deal_98955g7u3",
+      "time": "00:54",
+      "sourceGroup": "Descontos da China 🇨🇳",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "*JÁ TO PRONTO PRA TOMAR CHUVA*",
-      "originalLink": "https://meli.la/2xHSPCb",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-4186264641-capa-de-chuva-roupa-conjunto-motoqueiro-pvc-emborrachada-reforcada-com-capuz-motoboy-ciclista-moto-impermeavel-pioneira-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*JÁ TO PRONTO PRA TOMAR CHUVA*\n+10mil vendidos e 4,8⭐\n\nCapa De Chuva Roupa Conjunto Motoqueiro Pvc Emborrachada Reforçada Com Capuz\n\nDe ~R$ 141~ por R$ 57\n\nUse o Cupom: *SEMPRENAMODA* +\n*OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/2xHSPCb",
-      "rewrittenMessage": "*JÁ TO PRONTO PRA TOMAR CHUVA*\n+10mil vendidos e 4,8⭐\n\nCapa De Chuva Roupa Conjunto Motoqueiro Pvc Emborrachada Reforçada Com Capuz\n\nDe ~R$ 141~ por R$ 57\n\nUse o Cupom: *SEMPRENAMODA* +\n*OUTLETCUPONEIRA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://produto.mercadolivre.com.br/MLB-4186264641-capa-de-chuva-roupa-conjunto-motoqueiro-pvc-emborrachada-reforcada-com-capuz-motoboy-ciclista-moto-impermeavel-pioneira-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_892322-MLB114902554589_072026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_lpn6j1zbl",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Kit 2 Cestos Organizadores Dobráveis",
-      "originalLink": "https://meli.la/22M4wCN",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-2-cestos-organizadores-dobraveis-armario-guarda-roupa/up/MLBU3934249369?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*VAMO ORGANIZAR ESSAS TRALHAS*\n\nKit 2 Cestos Organizadores Dobráveis\n\nDe ~R$ 49~ por R$ 21\n\n-Use o Cupom: *CASAML* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/22M4wCN",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA ORGANIZAR A CASA! 🔥 Kit 2 Cestos Organizadores Dobráveis por um preço imperdível no Mercado Livre! 😱 De ~R$ 49~ por R$ 21. Aproveite a entrega rápida do Mercado Livre! 💛 Use o Cupom: CASAML 🎟️ https://www.mercadolivre.com.br/kit-2-cestos-organizadores-dobraveis-armario-guarda-roupa/up/MLBU3934249369?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_613676-MLB111195089619_052026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_i1vg2y1o5",
-      "time": "19:59",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Perfume Árabe Feminino The Kingdom Lattafa 100ml",
-      "originalLink": "https://meli.la/1Ms2uHK",
-      "affiliateLink": "https://www.mercadolivre.com.br/perfume-arabe-feminino-the-kingdom-lattafa-100ml-original-nf/up/MLBU3660592267?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*LEVE ESSA JOIA PARA SUA COLEÇÃO! 💖*\n\n *Perfume Árabe Feminino The Kingdom Lattafa 100ml Original Nf*\n\n❌ De: ~R$ 329,90~\n✅ Por: *R$ 196,97*\n\n_Loja Verificada no ML_\n\n🔗 Link do produto:\nhttps://meli.la/1Ms2uHK\n\n @gatagarotafinds\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\nLEVE ESSA JOIA PARA SUA COLEÇÃO! 💖\n\nPerfume Árabe Feminino The Kingdom Lattafa 100ml Original Nf\n\n❌ De: R$ 329,90\n✅ Por: R$ 196,97\n\nAPROVEITE A ENTREGA RÁPIDA DO MERCADO LIVRE! 💛\n\n🔗 https://www.mercadolivre.com.br/perfume-arabe-feminino-the-kingdom-lattafa-100ml-original-nf/up/MLBU3660592267?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_736264-MLB103113295870_012026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_zqqk3ld6y",
-      "time": "19:59",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Porta Tampas de Panela Organizador Vertical",
-      "originalLink": "https://s.shopee.com.br/2qTqedvwoN",
-      "affiliateLink": "https://s.shopee.com.br/7psWlEWCI0?lp=aff",
-      "originalMessage": "*MELHOR FORMA  DE ORGANIZAR SUAS TAMPAS🥳*\n\nPorta Tampas de Panela Organizador Vertical para Bancada e Armário\n\nDe: _~R$ 69,80~_\n*POOR R$ 34,90* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/2qTqedvwoN\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA ORGANIZAR SUA COZINHA! 🔥\n\nChega de bagunça com as tampas! Esse Porta Tampas de Panela Organizador Vertical é perfeito para bancada ou armário! 😱✨\n\nDe: ~R$ 69,80~\nPOR R$ 34,90 ✨\n\n🛒 Aproveite agora: https://s.shopee.com.br/7psWlEWCI0?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Triturador elétrico de alho e temperos USB",
+      "originalLink": "https://shp.ee/u29kd8a",
+      "affiliateLink": "https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2Fu29kd8a",
+      "originalMessage": "😱 FACILITE SUA VIDA NA COZINHA! Triturador elétrico de alho e temperos USB por apenas R$ 22,99! É maravilhoso, comprei um e recomendo demais. Link promocional aqui: https://shp.ee/u29kd8a",
+      "rewrittenMessage": "😱 FACILITE SUA VIDA NA COZINHA! Triturador elétrico de alho e temperos USB por apenas R$ 22,99! 🔥 É maravilhoso, eu recomendo demais! 🧡 Aproveite o achado da Shopee:\n\nhttps://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2Fu29kd8a\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_sahiyb7dn",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Kit Prato Fundo Tramontina Floralis 06 Peças",
-      "originalLink": "https://meli.la/12BAjP1",
-      "affiliateLink": "https://www.mercadolivre.com.br/kit-prato-fundo-tramontina-floralis-06-pecas/p/MLB37231536?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*PELO MENOS 6 PRATOS BONITOS VC VAI TER*\n\nKit Prato Fundo Tramontina Floralis 06 Peças\n\nDe ~R$ 149~ por R$ 98\n\n-Use o Cupom: *CASAML* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/12BAjP1",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥 Para deixar sua mesa impecável, esse kit é perfeito! 😱✨\n\nKit Prato Fundo Tramontina Floralis 06 Peças\n\nDe ~R$ 149~ por R$ 98\n\n-Use o Cupom: CASAML 🎟️\n\nGaranta o seu aqui: https://www.mercadolivre.com.br/kit-prato-fundo-tramontina-floralis-06-pecas/p/MLB37231536?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_785614-MLA80314137172_112024-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_0xasj25up",
-      "time": "19:59",
+      "id": "deal_g1w030o0w",
+      "time": "00:53",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Tênis Fila Comet",
-      "originalLink": "https://meli.la/2TmNdnV",
-      "affiliateLink": "https://www.mercadolivre.com.br/tenis-fila-corrida-estavel-amortecimento-caminhada-azul/up/MLBU4262160148?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "BORA CORRIDINHA DE LEVE?\n\n👟 *Tênis Fila Comet*\n\n🔥 ~DE 349~ | *POR 223,99*\n🎟 CUPOM: *SEMPRENAMODA*\n\n🔗 https://meli.la/2TmNdnV\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA SUA CORRIDINHA! 🏃‍♀️💨\n\n👟 *Tênis Fila Comet*\n\n🔥 ~DE 349~ | *POR 223,99*\n🎟 CUPOM: *SEMPRENAMODA*\n\n💛 Aproveite a entrega rápida do Mercado Livre:\nhttps://www.mercadolivre.com.br/tenis-fila-corrida-estavel-amortecimento-caminhada-azul/up/MLBU4262160148?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_648230-MLB113061449392_072026-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_sxmje1lxl",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Kit 6 Pares Meias Puma Cano Médio Alto Atoalhada",
-      "originalLink": "https://meli.la/1Q8prCz",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-3239976866-kit-6-pares-meias-puma-cano-medio-alto-atoalhada-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*AS FAMOSAS MEIAS DO TIGRE*\n+500mil vendidos e 4,9⭐\n\nKit 6 Pares Meias Puma Cano Médio Alto Atoalhada\n\nDe ~R$ 149~ por R$ 49 no PIX\n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nVendido por Loja Oficial no ML\nhttps://meli.la/1Q8prCz",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSA OFERTA IMPERDÍVEL NO MERCADO LIVRE! 🔥 As famosas meias do tigre estão com um preço incrível! ✨\n\nKit 6 Pares Meias Puma Cano Médio Alto Atoalhada\n+500mil vendidos e 4,9⭐\n\nDe ~R$ 149~ por R$ 49 no PIX\n\nUse o Cupom: SEMPRENAMODA 🎟️\n\nhttps://produto.mercadolivre.com.br/MLB-3239976866-kit-6-pares-meias-puma-cano-medio-alto-atoalhada-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_617361-MLB54128842596_032023-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_jz5em2z15",
-      "time": "19:59",
-      "sourceGroup": "#101 HELEN INDICA  🏠",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎",
-        "# 111 achadinhos da Isa 👶🏠🧰"
-      ],
-      "productTitle": "Kit Churrasco Personalizado Premium",
-      "originalLink": "https://s.shopee.com.br/1VyT4u0zEG",
-      "affiliateLink": "https://s.shopee.com.br/qimQMS30t?lp=aff",
-      "originalMessage": "*KIT CHURRASCO PERSONALIZADO😍PERFEITO PRA DAR DE PRESENTE🫶🏼*\n\nkit churrasco personalizado tábua premium faca e  garfo inox\n\nDe: _~R$ 254,07~_\n*POOR R$ 149,90* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/1VyT4u0zEG\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! 🔥\n\n*KIT CHURRASCO PERSONALIZADO😍 PERFEITO PRA DAR DE PRESENTE🫶🏼*\n\nKit churrasco personalizado com tábua premium, faca e garfo inox.\n\nDe: _~R$ 254,07~_\n*POR R$ 149,90* ✨\n\n🛒 Aproveite agora: https://s.shopee.com.br/qimQMS30t?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Torre de Potinhos para Leite em Pó e Frutinhas",
+      "originalLink": "https://s.shopee.com.br/5ArluU3mhe",
+      "affiliateLink": "https://s.shopee.com.br/5LBC6nKt1Z?lp=aff",
+      "originalMessage": "*PARA GUARDAR FRUTAS OU LEITE EM PÓ😍*\n\nTorre de Potinhos para Leite em Pó e Frutinhas com 4 Módulos Encaixáveis e Tampas de Alta Vedação\n\nDe: _~R$ 24,99~_\n*POOR R$ 19,99* ✨\n\n🛒 Compre ​aqui: https://s.shopee.com.br/5ArluU3mhe\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA FACILITAR A ROTINA! 🚨\n\nTorre de Potinhos para Leite em Pó e Frutinhas com 4 Módulos Encaixáveis e Tampas de Alta Vedação. Perfeito para organizar! ✨\n\nDe: _~R$ 24,99~_\n*POR R$ 19,99* ✨\n\n🛒 Aproveite aqui: https://s.shopee.com.br/5LBC6nKt1Z?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
       "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
       "storeType": "shopee"
     },
     {
-      "id": "deal_332dmbvp8",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "id": "deal_u57biaoq2",
+      "time": "00:48",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
         "Ofertas Exclusivas Afiliado 💎",
         "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Panela De Pressão Tramontina Vancouver Effect Alumínio 6L",
-      "originalLink": "https://meli.la/2obeCeb",
-      "affiliateLink": "https://www.mercadolivre.com.br/panela-de-pressao-tramontina-vancouver-effect-aluminio-6l-cor-vermelho-20592724/p/MLB45070153?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*ATÉ A PANELA TÃO REBAIXANDO*\n\nPanela De Pressão Tramontina Vancouver Effect Alumínio 6L cor Vermelho\n\nDe ~R$ 272~ por R$ 185 no PIX\n\n-Use o Cupom: *CASAML* 🎟️\n\nLoja Oficial Tramontina no ML\nhttps://meli.la/2obeCeb",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥 A Panela de Pressão Tramontina Vancouver Effect 6L está com um preço surreal! 😱\n\nDe ~R$ 272~ por R$ 185 no PIX ✨\n\n🎟️ Use o cupom: CASAML\n\n🛒 Aproveite a entrega rápida do Mercado Livre aqui:\nhttps://www.mercadolivre.com.br/panela-de-pressao-tramontina-vancouver-effect-aluminio-6l-cor-vermelho-20592724/p/MLB45070153?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Tênis Nike Court Vision Low Next Nature",
+      "originalLink": "https://meli.la/1N1bReM",
+      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-2608162557-tnis-nike-court-vision-low-next-nature-masculino-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "CLÁSSICO LINDO DA NIKE\n\n👟 *Tênis Nike Court Vision Low Next Nature* \n\n🔥 ~DE 599~ | *POR 329,99 no Pix*\n🔗 https://meli.la/1N1bReM\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO IMPERDÍVEL! 😱\n\n👟 Tênis Nike Court Vision Low Next Nature\n\n🔥 DE 599 | POR 329,99 no Pix\n\nGaranta o seu aqui: https://produto.mercadolivre.com.br/MLB-2608162557-tnis-nike-court-vision-low-next-nature-masculino-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_750517-MLA112997849268_072026-O.webp",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_968873-MLB113159156385_062026-O.webp",
       "storeType": "mercadolivre"
     },
     {
-      "id": "deal_r57ugc9va",
-      "time": "19:59",
+      "id": "deal_fyw33vju9",
+      "time": "00:45",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎"
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Monitor LG UltraGear 24\" 144Hz, 1ms (MBR), IPS",
-      "originalLink": "https://meli.la/1o1B2Gv",
-      "affiliateLink": "https://www.mercadolivre.com.br/monitor-lg-ultragear-24g411a-b-24fhd-144hz-1ms-mbr-nvidia-g-sync-amd-freesync-hdr10/p/MLB57489948?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "TROQUE O MONITOR VÉIO\n\n🖥 *Monitor LG UltraGear 24\" 144Hz, 1ms (MBR), IPS*\n\n🔥 ~DE 659~ | *POR 539,10*\n🎟 CUPOM: *AQUITEM*\n\n🔗 https://meli.la/1o1B2Gv\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE, OLHA ESSE ACHADO! QUER DAR UM UP NO SEU SETUP? 😱\n\n🖥 Monitor LG UltraGear 24\" 144Hz, 1ms (MBR), IPS\n\n🔥 DE 659 | POR 539,10\n🎟 CUPOM: AQUITEM\n\nGaranta o seu aqui: https://www.mercadolivre.com.br/monitor-lg-ultragear-24g411a-b-24fhd-144hz-1ms-mbr-nvidia-g-sync-amd-freesync-hdr10/p/MLB57489948?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Kit Vasos e Bandeja Decoração Susy 3 peças",
+      "originalLink": "https://s.shopee.com.br/2LXaWlIpq3",
+      "affiliateLink": "https://s.shopee.com.br/2LXaWlnMGQ?lp=aff",
+      "originalMessage": "*PRA DECORAR GASTANDO POUCO 🤭*\n\nKIT VASOS E BANDEJA Decoração  Susy 3 peças em  gesso / sem flores /presente casa copa sala ambiente\n\nDe: _~R$ 29,99~_\n*POOR R$ 29,99* ✨\n\n🛒 Compre aqui: https://s.shopee.com.br/2LXaWlIpq3\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA DECORAR GASTANDO POUCO! 😱\n\nKit Vasos e Bandeja Decoração Susy 3 peças em gesso (sem flores), perfeito para deixar sua casa, copa ou sala linda! ✨\n\nDe: ~R$ 29,99~\nPor: R$ 29,99 ✨\n\n🛒 Aproveite agora: https://s.shopee.com.br/2LXaWlnMGQ?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_685909-MLA101438581463_122025-O.webp",
-      "storeType": "mercadolivre"
+      "imageUrl": "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
     },
     {
-      "id": "deal_k47iclw9q",
-      "time": "19:59",
+      "id": "deal_jgu3zzl7v",
+      "time": "00:44",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎"
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Tênis Feminino Vl Court 3.0 adidas",
-      "originalLink": "https://meli.la/31eTprH",
-      "affiliateLink": "https://www.mercadolivre.com.br/tenis-feminino-vl-court-30-adidas/up/MLBU3647425331?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*SEU NOVO TÊNIS ADIDAS ESPERANDO POR R$265,26! ✨*\n\n _Tênis Feminino Vl Court 3.0 adidas Clpink/legink/gum3 Liso 36 Br_\n\nde:~­ 399,99~ *por:­ 212,20* 😮\n> ᴄᴜᴘᴏᴍ: *SEMPRENAMODA* 🎟️\n\n🛒 https://meli.la/31eTprH\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\nGaranta seu novo Tênis Feminino Vl Court 3.0 adidas Clpink/legink/gum3 Liso 36 Br! 😱\n\nDe: R$ 399,99 por: R$ 212,20 😮\nCupom: SEMPRENAMODA 🎟️\n\nAproveite a entrega rápida do Mercado Livre! 💛\n\nhttps://www.mercadolivre.com.br/tenis-feminino-vl-court-30-adidas/up/MLBU3647425331?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Mesinha Retangular De Centro Sala C/ Pés Palito Pvc Caramelo",
+      "originalLink": "https://meli.la/1QtrS4k",
+      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-4240820381-mesinha-retangular-de-centro-sala-c-pes-palito-pvc-caramelo-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*LEVE ESSA PEÇA ÚNICA PARA SUA CASA AGORA! 🌟*\n\n _Mesinha Retangular De Centro Sala C/ Pés Palito Pvc Caramelo_\n\nde: ~72,99~ *por: 44,79* 😮\n> ᴄᴜᴘᴏᴍ *APROVEITAGORA* 🎟️\n\n🛒 https://meli.la/1QtrS4k\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA SUA CASA! 😱🌟\n\n_Mesinha Retangular De Centro Sala C/ Pés Palito Pvc Caramelo_\n\nde: ~72,99~ *por: 44,79* 😮\n> ᴄᴜᴘᴏᴍ *APROVEITAGORA* 🎟️\n\n🛒 https://produto.mercadolivre.com.br/MLB-4240820381-mesinha-retangular-de-centro-sala-c-pes-palito-pvc-caramelo-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_965659-MLA99819822835_112025-O.webp",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_705087-MLB88234570116_072025-O.webp",
       "storeType": "mercadolivre"
     },
     {
-      "id": "deal_f7isf12vp",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "id": "deal_5g80s4pv1",
+      "time": "00:44",
+      "sourceGroup": "Ofertas e Cupons Relâmpago ⚡",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎"
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Tênis Under Armour Charged Wing 2",
-      "originalLink": "https://meli.la/1xqmqWH",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-5318160484-tnis-under-armour-charged-wing-2-esportivo-academia-fitness-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*SÓ COM ASAS PRA CONSEGUIR AUMENTAR O PACE*\n\nTênis Under Armour Charged Wing 2 (39 ao 42)\n\nDe ~R$ 399~ por R$ 215\n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nLoja Oficial Usee Brasil no ML\nhttps://meli.la/1xqmqWH",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\n*SÓ COM ASAS PRA CONSEGUIR AUMENTAR O PACE*\n\nTênis Under Armour Charged Wing 2 (39 ao 42)\n\nDe ~R$ 399~ por R$ 215\n\nUse o Cupom: *SEMPRENAMODA* 🎟️\n\nAproveite a entrega rápida do Mercado Livre aqui: https://produto.mercadolivre.com.br/MLB-5318160484-tnis-under-armour-charged-wing-2-esportivo-academia-fitness-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Ring Light completa com tripé e ajuste de iluminação",
+      "originalLink": "https://shp.ee/92kd81x",
+      "affiliateLink": "https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2F92kd81x",
+      "originalMessage": "✨ Para fazer seus vídeos e fotos brilharem! Ring Light completa com tripé e ajuste de iluminação por apenas R$ 31,50 📸 Link com o cupom aplicado: https://shp.ee/92kd81x",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! ✨ Para fazer seus vídeos e fotos brilharem! Ring Light completa com tripé e ajuste de iluminação por apenas R$ 31,50 📸 Aproveite os cupons de frete grátis da Shopee! 🧡 https://shopee.com.br/universal-link?utm_source=an_affiliate&utm_medium=affiliates&utm_campaign=-&utm_content=bot&utm_term=18399950350&url=https%3A%2F%2Fshp.ee%2F92kd81x\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_612024-MLB110694608714_052026-O.webp",
-      "storeType": "mercadolivre"
+      "imageUrl": "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
     },
     {
-      "id": "deal_5d5jj02gf",
-      "time": "19:59",
+      "id": "deal_h91tzb4py",
+      "time": "00:44",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎"
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Ar Condicionado Inverter Philco 9000 Btus",
-      "originalLink": "https://meli.la/2HH1LvV",
-      "affiliateLink": "https://www.mercadolivre.com.br/ar-condicionado-inverter-philco-pac9qg-9000-btus-qf-220v-220v/p/MLB68725782?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*ESPELHADO DA PHILCO ENTROU NA PROMOOOOO*\n\n💛 Ar Condicionado Inverter Philco Pac9qg  9000 Btus Qf 220v  220v\n\nDe: ~R$ 2.449,00~\n Poooor: *R$ 1.749,00*\n\n🎟️ Use o cupom: *AQUITEM* para sair nesse valor\n\n🔥 Compre aqui: https://meli.la/2HH1LvV\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 GENTE DO CÉU! O queridinho da Philco entrou na promo! 😱💛 Ar Condicionado Inverter Philco Pac9qg 9000 Btus Qf 220v por um preço incrível! ✨ Aproveite a entrega rápida do Mercado Livre! 🔥 De: ~R$ 2.449,00~ Poooor: *R$ 1.749,00* 🎟️ Use o cupom: *AQUITEM* para sair nesse valor https://www.mercadolivre.com.br/ar-condicionado-inverter-philco-pac9qg-9000-btus-qf-220v-220v/p/MLB68725782?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Jogo de Panelas Brinox Antiaderente Ceramic Life Sirius Vanilla - 6 Peças",
+      "originalLink": "https://s.shopee.com.br/qimjvQQa0",
+      "affiliateLink": "https://s.shopee.com.br/1gHtjT5Fkz?lp=aff",
+      "originalMessage": "*O CARRINHO TÁ PEDINDO SOCORRO! 😂*\n\n> 🛍️ Jogo de Panelas Brinox Antiaderente Ceramic Life Sirius Vanilla - 6 Peças com Indução\n\n❌ de R$ 929,00\n✅ *Por R$ 808,23*\n\n🛒: https://s.shopee.com.br/qimjvQQa0\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO PARA SUA COZINHA! 🔥 O CARRINHO TÁ PEDINDO SOCORRO! 😂\n\n🛍️ Jogo de Panelas Brinox Antiaderente Ceramic Life Sirius Vanilla - 6 Peças com Indução\n\n❌ de R$ 929,00\n✅ Por R$ 808,23\n\n🧡 Aproveite os cupons de frete grátis da Shopee aqui:\nhttps://s.shopee.com.br/1gHtjT5Fkz?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_674078-MLA110988666909_042026-O.webp",
-      "storeType": "mercadolivre"
+      "imageUrl": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
     },
     {
-      "id": "deal_7w2oskhni",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
-      "targetGroups": [
-        "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎"
-      ],
-      "productTitle": "Jogo De Panelas Brinox Smart Plus 6pçs Ceramic Life Vanilla",
-      "originalLink": "https://meli.la/25NPWeZ",
-      "affiliateLink": "https://www.mercadolivre.com.br/jogo-de-panelas-brinox-smart-plus-6pcs-ceramic-life-vanilla-4791102/p/MLB33325840?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*PREÇO CANALHA PRA QUEM TEM NO PIX*\n\nJogo De Panelas Brinox Smart Plus 6pçs Ceramic Life Vanilla\n\nDe ~R$ 459~ por R$ 327 no PIX\n\n-Use o Cupom: *CASAML* 🎟️\n\nLoja Verificada no ML\nhttps://meli.la/25NPWeZ",
-      "rewrittenMessage": "🚨 PREÇO CANALHA PARA QUEM TEM NO PIX! 🚨\n\nOlha esse achado imperdível: Jogo De Panelas Brinox Smart Plus 6pçs Ceramic Life Vanilla! 🔥\n\nDe ~R$ 459~ por R$ 327 no PIX 😱\n\nAproveite a entrega rápida do Mercado Livre e use o cupom: CASAML 🎟️\n\nGaranta o seu aqui: https://www.mercadolivre.com.br/jogo-de-panelas-brinox-smart-plus-6pcs-ceramic-life-vanilla-4791102/p/MLB33325840?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
-      "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_985950-MLA100060232525_122025-O.webp",
-      "storeType": "mercadolivre"
-    },
-    {
-      "id": "deal_x769l1q5f",
-      "time": "19:59",
+      "id": "deal_2dl0dz9ha",
+      "time": "00:42",
       "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎"
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Tênis Fila Kr7 Pro",
-      "originalLink": "https://meli.la/2cqobf9",
-      "affiliateLink": "https://www.mercadolivre.com.br/tenis-fila-kr7-pro-speed-tech-masculino/up/MLBU4609891366?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "BRABO DEMAISSS\n\n👟 *Tênis Fila Kr7 Pro*\n\n🔥 ~DE 389~ | *POR 272,40*\n🎟 CUPOM: *SEMPRENAMODA*\n\n🔗 https://meli.la/2cqobf9\n> siga @helensoares.moraski",
-      "rewrittenMessage": "🚨 BRABO DEMAISSS! 🔥 Olha esse Tênis Fila Kr7 Pro que encontrei para você! 😱\n\n🔥 De 389 | POR 272,40\n🎟 CUPOM: SEMPRENAMODA\n\nGaranta o seu aqui: https://www.mercadolivre.com.br/tenis-fila-kr7-pro-speed-tech-masculino/up/MLBU4609891366?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Fritadeira Air Fryer Oven Mondial 12L Digital",
+      "originalLink": "https://s.shopee.com.br/1Lf3KhAd87",
+      "affiliateLink": "https://s.shopee.com.br/40foVbZfvs",
+      "originalMessage": "*AMIGAAAA, VAI PERDER?* 🥹\n\n🧡 Fritadeira Air Fryer Oven AFON-12L-FG  12L Digital 2000W Mondial\n\n  Pooor: *R$ 455,05*\nou no pix: R$ 431,10\n\n🔥*Compre aqui*: https://s.shopee.com.br/1Lf3KhAd87\n\n🎟️ Use o cupom *5% OFF* disponível em \"cupom de desconto\" no carrinho\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! VAI PERDER ESSA OPORTUNIDADE? 😱🧡 Fritadeira Air Fryer Oven AFON-12L-FG 12L Digital 2000W Mondial está com um preço imperdível! 🔥 \n\n💰 Pooor: R$ 455,05 ou no pix: R$ 431,10 \n🎟️ Aproveite: Use o cupom 5% OFF disponível em \"cupom de desconto\" no carrinho da Shopee!\n\n🛒 Garanta a sua aqui: https://s.shopee.com.br/40foVbZfvs\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_742207-MLB115663463783_082026-O.webp",
+      "imageUrl": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_ryng1b4sm",
+      "time": "00:36",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Carregador Portátil Power Bank I2go 10000mah",
+      "originalLink": "https://meli.la/2ef7hFr",
+      "affiliateLink": "https://www.mercadolivre.com.br/carregador-portatil-power-bank-i2go-10000mah-cor-preto/p/MLB21030521?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "CARREGAR O RADIN\n\n⚡️ *Carregador Portátil Power Bank I2go 10000mah*\n\n🔥 ~DE 169~ | *POR 65,90*\n🔗 https://meli.la/2ef7hFr\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE, OLHA ESSE ACHADO NO MERCADO LIVRE! 🔥\n\nGaranta agora o seu Carregador Portátil Power Bank I2go 10000mah com um super desconto! ⚡️\n\n🔥 DE 169 | POR 65,90\n\nAproveite a entrega rápida do Mercado Livre! ✨\n\nhttps://www.mercadolivre.com.br/carregador-portatil-power-bank-i2go-10000mah-cor-preto/p/MLB21030521?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_925922-MLA99475407944_112025-O.webp",
       "storeType": "mercadolivre"
     },
     {
-      "id": "deal_2bm3me7y8",
-      "time": "19:59",
-      "sourceGroup": "🛍️ #12 CUPONS/OFERTAS DIÁRIOS",
+      "id": "deal_nimelrwap",
+      "time": "00:35",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
       "targetGroups": [
         "Meus Achados Shopee - Helton 🛍️",
-        "Ofertas Exclusivas Afiliado 💎"
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
       ],
-      "productTitle": "Tênis Feminino Ramarim Chunky",
-      "originalLink": "https://meli.la/1WN48pd",
-      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-4270077891-tenis-feminino-chunky-ramarim-casual-conforto-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
-      "originalMessage": "*O NB DO POBRE*\n\nTênis Feminino Ramarim Chunky (7 cores)\n\nDe ~R$ 299~ por R$ 113 no PIX\n\nUse o Cupom: *SEMPRENAMODA* 🎟️ \n\nLoja Verificada no ML\nhttps://meli.la/1WN48pd",
-      "rewrittenMessage": "🚨 OPORTUNIDADE IMPERDÍVEL! O famoso queridinho está com um preço surreal! 😱 Tênis Feminino Ramarim Chunky (7 cores) disponível agora com um super desconto! 💛 De ~R$ 299~ por R$ 113 no PIX! ✨ Use o Cupom: SEMPRENAMODA 🎟️ Aproveite a entrega rápida do Mercado Livre! https://produto.mercadolivre.com.br/MLB-4270077891-tenis-feminino-chunky-ramarim-casual-conforto-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "productTitle": "Kit Utensílios de Cozinha em Silicone",
+      "originalLink": "https://s.shopee.com.br/3B6hVY7hy7",
+      "affiliateLink": "https://s.shopee.com.br/7AcqGusDLW?lp=aff",
+      "originalMessage": "*GARIMPEI PRA VOCÊS! 😌🥰*\n\n> 🛍️ Kit Utensílios de Cozinha em Silicone – 7 ou 12 Peças\n\n❌ de R$ 100,00\n✅ *Por R$ 93,00*\n\n🛒: https://s.shopee.com.br/3B6hVY7hy7\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO QUE GARIMPEI PARA VOCÊS! 😱✨ Kit de Utensílios de Cozinha em Silicone (7 ou 12 peças) com um desconto especial! 🧡🔥 ❌ de R$ 100,00 ✅ Por R$ 93,00 Aproveite os cupons de frete grátis da Shopee! 🚚💨 https://s.shopee.com.br/7AcqGusDLW?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
       "status": "success",
-      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_932773-MLB109478888460_042026-O.webp",
+      "imageUrl": "https://images.unsplash.com/photo-1588854337236-6889d631faa8?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_jr9womeup",
+      "time": "00:34",
+      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Mochila Resistente Impermeável com Saída USB",
+      "originalLink": "https://shopee.com.br/product-2283921-12039201",
+      "affiliateLink": "https://s.shopee.com.br/60QssjSfJL",
+      "originalMessage": "🚨 MOCHILA RESISTENTE EM PROMOÇÃO! Ótima para escola, faculdade ou trabalho, impermeável e com saída USB de carregamento por R$59,90! 🏃‍♂️ Aproveite: https://shopee.com.br/product-2283921-12039201",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO DA SHOPEE! 🔥 Mochila super resistente, perfeita para escola, faculdade ou trabalho! Ela é impermeável e ainda vem com saída USB para carregar seu celular por apenas R$59,90! 😱 Não perde tempo que está um sucesso! 🏃‍♂️ Aproveite: https://s.shopee.com.br/60QssjSfJL\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_m9amfzvza",
+      "time": "00:32",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Principia Kit Trio Hidratação",
+      "originalLink": "https://s.shopee.com.br/4fvVI9ntfo",
+      "affiliateLink": "https://s.shopee.com.br/30nHJ6KqaD",
+      "originalMessage": "NO PRECINHO QUE A  GENTE AMAAAAA\n\n🧡 Principia Kit Trio Hidratação c/ Creme Hidratante Facial CH-01 +  Loção Hidratante LH-02 500 ML + Creme Hidratante CH-02\n\n Pooor: *R$ 104,98*\nou no pix: R$ 99,74\n\n🔥*Compre aqui*: https://s.shopee.com.br/4fvVI9ntfo\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO DA SHOPEE QUE A GENTE AMAAAA! 🔥\n\n🧡 Principia Kit Trio Hidratação c/ Creme Hidratante Facial CH-01 + Loção Hidratante LH-02 500 ML + Creme Hidratante CH-02\n\n✨ Pooor: *R$ 104,98*\nou no pix: R$ 99,74\n\n🔥 Aproveite os cupons de frete grátis da Shopee aqui: https://s.shopee.com.br/30nHJ6KqaD\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_bwcgkhefe",
+      "time": "00:31",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Jogo de Panelas Cerâmica 15 Peças Antiaderente",
+      "originalLink": "https://meli.la/1bBMFxi",
+      "affiliateLink": "https://www.mercadolivre.com.br/jogo--panelas-ceramica-15-pecas-antiaderente-cabo-removivel/up/MLBU4251635207?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*SONHO DE CONSUMOO 😱😍💞*\n  \nJogo  Panelas Cerâmica 15 Peças Antiaderente Cabo Removível Preto\n\nDe: _~R$ 493,71~_\nPOOR: *R$ 308,07* ✅\n\n🎟️Use o cupom:*APROVEITAGORA*\n\n🛒 Compre  aqui: https://meli.la/1bBMFxi\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 SONHO DE CONSUMO! 😱😍💞 Jogo de Panelas Cerâmica 15 Peças Antiaderente com Cabo Removível na cor Preta! De: ~R$ 493,71~ Por: R$ 308,07 ✅ Aproveite a entrega rápida do Mercado Livre! 💛 🎟️ Use o cupom: APROVEITAGORA 🛒 Compre aqui: https://www.mercadolivre.com.br/jogo--panelas-ceramica-15-pecas-antiaderente-cabo-removivel/up/MLBU4251635207?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_760762-MLB113101728694_072026-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_43bfy4pbm",
+      "time": "00:29",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Kit 10 Pano De Prato Premium Atoalhado",
+      "originalLink": "https://meli.la/2bYHrw6",
+      "affiliateLink": "https://produto.mercadolivre.com.br/MLB-4176314449-kit-10-pano-de-prato-premium-atoalhado-grande-100-algodo-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*APROVEITA LOGO* 😱😱\n\nKit 10 Pano De Prato Premium Atoalhado Grande 100% Algodão\n\n~De R$ 78,90 💵~\n\n*Por* *R$ 47,92* 😱😱\n\n🎟️Use o cupom: *APROVEITAGORA*\n\n🛒Compre aqui: https://meli.la/2bYHrw6\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 OPORTUNIDADE IMPERDÍVEL! 🚨\n\nGaranta agora esse Kit com 10 Panos de Prato Premium Atoalhados, 100% Algodão! Qualidade e absorção que você precisa na sua cozinha! ✨\n\n~De R$ 78,90 💵~\n*Por R$ 47,92* 😱😱\n\n🎟️ Use o cupom: APROVEITAGORA\n\n🛒 Compre aqui: https://produto.mercadolivre.com.br/MLB-4176314449-kit-10-pano-de-prato-premium-atoalhado-grande-100-algodo-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_885145-MLB109930001113_042026-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_huhhlp1sd",
+      "time": "00:25",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Presente Natura Essencial Miniaturas 3n 25 Ml",
+      "originalLink": "https://meli.la/2fqVRXQ",
+      "affiliateLink": "https://www.mercadolivre.com.br/presente-natura-essencial-miniaturas-3n-25-ml/p/MLB47419836?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "*LEVE ESSA EXPERIÊNCIA OLFATIVA INCRÍVEL PARA CASA! 🎁*\n\n _Presente Natura Essencial Miniaturas 3n 25 Ml_\n\nde:~­ 344,10~ *por:­ 137,64* 😮\n\n🛒 https://meli.la/2fqVRXQ\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! 😱 LEVE ESSA EXPERIÊNCIA OLFATIVA INCRÍVEL PARA CASA! 🎁\n\nPresente Natura Essencial Miniaturas 3n 25 Ml\n\nde: R$ 344,10 por: R$ 137,64 😮\n\nGaranta o seu aqui: https://www.mercadolivre.com.br/presente-natura-essencial-miniaturas-3n-25-ml/p/MLB47419836?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_799950-MLA84534668084_052025-O.webp",
+      "storeType": "mercadolivre"
+    },
+    {
+      "id": "deal_emtbhro2e",
+      "time": "00:24",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Colchão Casal Molas Ensacadas Zidi Alabama",
+      "originalLink": "https://s.shopee.com.br/AUtIEKNpE9",
+      "affiliateLink": "https://s.shopee.com.br/112CusFjAO?lp=aff",
+      "originalMessage": "*ESSE PASSOU NA MINHA CURADORIA!  😮‍💨😮‍💨*\n\n> 🛍️ Colchão Casal Molas Ensacadas Zidi Alabama 138x188x24cm\n\n❌ de R$ 1.197,00\n✅ *Por R$ 729,99*\n\n🛒: https://s.shopee.com.br/AUtIEKNpE9\n\n> curadoria por @gii.promodecasa\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 ESSE PASSOU NA MINHA CURADORIA! 😮‍💨😮‍💨 🔥 Achei esse Colchão Casal Molas Ensacadas Zidi Alabama 138x188x24cm com um preço incrível! 😱 ❌ de R$ 1.197,00 ✅ *Por R$ 729,99* 🧡 Aproveite os cupons de frete grátis da Shopee aqui: https://s.shopee.com.br/112CusFjAO?lp=aff\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_9wjynyvxj",
+      "time": "00:24",
+      "sourceGroup": "Achadinhos Shopee Brasil 🇧🇷",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Fone de Ouvido Bluetooth sem fio",
+      "originalLink": "https://shopee.com.br/product-10293021-9988231",
+      "affiliateLink": "https://s.shopee.com.br/AAGRphcu8N",
+      "originalMessage": "🔥 ALERTA DE PREÇO BAIXO! Fone de Ouvido Bluetooth sem fio por apenas R$18,90! Excelente som e bateria! Compre no precinho: https://shopee.com.br/product-10293021-9988231 Frete grátis usando cupom!",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO! 🔥 Fone de Ouvido Bluetooth sem fio por apenas R$18,90! 😱 Excelente som e bateria, aproveite os cupons de frete grátis da Shopee! 🧡 Compre no precinho aqui: https://s.shopee.com.br/AAGRphcu8N\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1080&auto=format&fit=crop&q=80",
+      "storeType": "shopee"
+    },
+    {
+      "id": "deal_3w1obpjmc",
+      "time": "00:22",
+      "sourceGroup": "#101 HELEN INDICA  🏠",
+      "targetGroups": [
+        "Meus Achados Shopee - Helton 🛍️",
+        "Ofertas Exclusivas Afiliado 💎",
+        "# 111 achadinhos da Isa 👶🏠🧰"
+      ],
+      "productTitle": "Kit Jogo Chaves 46 Peças",
+      "originalLink": "https://meli.la/1oFNMVj",
+      "affiliateLink": "https://www.mercadolivre.com.br/kit-jogo-chaves-fenda-philips-catraca-soquete-allen-canhao-46-pecas-com-maleta-portatil-completa-mecanico-oficina-manutencao-casa-carro-profissional-resistente-uso-domestico-compacto-original-hexon/p/MLB73944353?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true",
+      "originalMessage": "TEM QUE TER\n\n🔧 *Kit Jogo Chaves Fenda Philips Catraca Soquete Allen Canhão 46 Peças*\n\n🔥 ~DE 50~ | *POR 19 no pix* \n🎟 CUPOM: *OFFHOJE* \n\n🔗 https://meli.la/1oFNMVj\n> siga @helensoares.moraski",
+      "rewrittenMessage": "🚨 GENTE DO CÉU! OLHA ESSE ACHADO... 🔥\n\n🔧 *Kit Jogo Chaves Fenda Philips Catraca Soquete Allen Canhão 46 Peças*\n\n🔥 ~DE 50~ | *POR 19 no pix* \n🎟 CUPOM: *OFFHOJE* \n\n🔗 https://www.mercadolivre.com.br/kit-jogo-chaves-fenda-philips-catraca-soquete-allen-canhao-46-pecas-com-maleta-portatil-completa-mecanico-oficina-manutencao-casa-carro-profissional-resistente-uso-domestico-compacto-original-hexon/p/MLB73944353?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true\n\nsiga no Instagram e Tik Tok  @isamara.manoel",
+      "status": "success",
+      "imageUrl": "https://http2.mlstatic.com/D_NQ_NP_2X_699480-MLA113536583531_062026-O.webp",
       "storeType": "mercadolivre"
     }
   ],
   "logs": [
     {
-      "time": "20:01:27",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/1PcjAMA"
+      "time": "02:25:14",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
     },
     {
-      "time": "20:01:27",
+      "time": "02:25:14",
       "type": "info",
-      "message": "Nova mensagem em \"#101 HELEN INDICA  🏠\": Analisando anúncio..."
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
     },
     {
-      "time": "20:01:26",
+      "time": "02:24:59",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:24:59",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:24:44",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:24:44",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:24:29",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:24:29",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:24:18",
+      "type": "info",
+      "message": "Anúncio em \"Achadinhos Shopee Brasil 🇧🇷\" já foi convertido e enviado anteriormente (https://shopee.com.br/product-10293021-9988231). Ignorando para evitar duplicidade."
+    },
+    {
+      "time": "02:24:18",
+      "type": "info",
+      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
+    },
+    {
+      "time": "02:24:14",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:24:14",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:24:09",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:24:08",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:23:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:23:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:22:19",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "02:22:19",
       "type": "success",
-      "message": "✨ [Shopee 🧡] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": *EU FICO CHOCADA COM ESSES PREÇOS! \ude2e🤌🏻"
+      "message": "✨ Sincronizados 27 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
     },
     {
-      "time": "20:01:26",
+      "time": "02:22:19",
+      "type": "info",
+      "message": "Sincronização concluída: 0 novos e 54 nomes de grupos atualizados."
+    },
+    {
+      "time": "02:22:18",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:21:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:21:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:20:18",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:20:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:19:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:19:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:18:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:18:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:17:18",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:17:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:16:18",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:16:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:15:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:15:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:14:19",
+      "type": "info",
+      "message": "Anúncio em \"Ofertas e Cupons Relâmpago ⚡\" já foi convertido e enviado anteriormente (https://shopee.com.br/product-2283921-12039201). Ignorando para evitar duplicidade."
+    },
+    {
+      "time": "02:14:19",
+      "type": "info",
+      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
+    },
+    {
+      "time": "02:14:18",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "02:14:18",
+      "type": "success",
+      "message": "✨ Sincronizados 27 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "02:14:18",
+      "type": "info",
+      "message": "Sincronização concluída: 0 novos e 54 nomes de grupos atualizados."
+    },
+    {
+      "time": "02:14:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:13:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:13:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:12:18",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:12:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:11:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:11:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:10:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:10:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:09:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:09:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:08:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:08:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:07:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:07:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:06:18",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "02:06:18",
+      "type": "success",
+      "message": "✨ Sincronizados 27 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "02:06:18",
+      "type": "info",
+      "message": "Sincronização concluída: 0 novos e 54 nomes de grupos atualizados."
+    },
+    {
+      "time": "02:06:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:05:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:05:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:04:45",
+      "type": "success",
+      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": Parafusadeira e Furadeira 12V com Acessórios"
+    },
+    {
+      "time": "02:04:45",
       "type": "success",
       "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
     },
     {
-      "time": "20:01:26",
+      "time": "02:04:44",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "02:04:44",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "02:04:44",
+      "type": "warning",
+      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
+    },
+    {
+      "time": "02:04:44",
+      "type": "warning",
+      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
+    },
+    {
+      "time": "02:04:38",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.li/382910a"
+    },
+    {
+      "time": "02:04:32",
+      "type": "info",
+      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.li/382910a"
+    },
+    {
+      "time": "02:04:32",
+      "type": "success",
+      "message": "🔗 Link Mercado Livre gerado com sucesso: https://meli.li/382910a?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true"
+    },
+    {
+      "time": "02:04:26",
+      "type": "info",
+      "message": "Expandindo link do Mercado Livre: https://meli.li/382910a"
+    },
+    {
+      "time": "02:04:20",
+      "type": "info",
+      "message": "Nova mensagem em \"Ofertas e Cupons Relâmpago ⚡\": Analisando anúncio..."
+    },
+    {
+      "time": "02:04:20",
+      "type": "info",
+      "message": "🤖 [Piloto Automático] Executando simulação (Intervalo configurado: 599s)..."
+    },
+    {
+      "time": "02:04:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:04:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:03:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:03:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:02:18",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:02:18",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:01:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:01:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "02:00:17",
+      "type": "warning",
+      "message": "Não foi possível listar os grupos automaticamente: rate-overlimit"
+    },
+    {
+      "time": "02:00:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "01:59:18",
+      "type": "info",
+      "message": "Lista de grupos atualizada."
+    },
+    {
+      "time": "01:59:18",
+      "type": "success",
+      "message": "✨ Sincronizados 27 grupos reais do seu WhatsApp! Vá em 'Grupos e Canais' para ativá-los."
+    },
+    {
+      "time": "01:59:18",
+      "type": "info",
+      "message": "Sincronização concluída: 0 novos e 54 nomes de grupos atualizados."
+    },
+    {
+      "time": "01:59:17",
+      "type": "info",
+      "message": "Buscando lista de grupos que você participa no WhatsApp..."
+    },
+    {
+      "time": "01:58:49",
+      "type": "success",
+      "message": "✨ [Shopee 🧡] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": Kit 6 Potes de Vidro Belifou com Tampa de Bambu 200ML"
+    },
+    {
+      "time": "01:58:49",
+      "type": "success",
+      "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
+    },
+    {
+      "time": "01:58:48",
       "type": "warning",
       "message": "⚠️ [Shopee 🧡] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
     },
     {
-      "time": "20:01:26",
+      "time": "01:58:48",
       "type": "warning",
       "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
     },
     {
-      "time": "20:01:26",
+      "time": "01:58:48",
       "type": "warning",
       "message": "⚠️ [Shopee 🧡] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
     },
     {
-      "time": "20:01:26",
+      "time": "01:58:48",
       "type": "warning",
       "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
     },
     {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "info",
-      "message": "Buscando foto original do produto no link Shopee: https://shopee.com.br/opaanlp/1526836548/23294017914?__mobile__=1&credential_token=8wEwiDL7YDd3P7d5KA3AzsKdSS9xKAsEho3i2uviKo&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QABpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMHJtu46N4YL1ETOwWAbpdPCpoOnQDXHQJ5OvtcN0M_eDbRA41r_846ydnLzTRf_samdRHEh2GSlumtjiKqmNpcGhlcnRleHTEmQAAAAxQsL0E1GF97-ilOCFhyMkHW_F45QwREEEGKtR2lzpp7uCq78Pt7B9MYKp6jY8MQtn4UTkNQ-4PZP8uoOlypk0J8zgL9c_GbiueyD1PP5hXbPc3rYvBUC9f72A-v2caez_HQoLjJWD5zopRtU-yjp71Bsy94G1GWjn4B5FQKzo3AnA77lBMubJMMred3WC2_DZPVzkpMw&lang=pt-BR&mmp_pid=an_18345690260&uls_trackid=56dl9mk900r5&utm_campaign=id_0c31d9bc4d481897&utm_content=gurubot----&utm_medium=affiliates&utm_source=an_18345690260&utm_term=fe278obwvbif"
+      "message": "Buscando foto original do produto no link Shopee: https://shopee.com.br/opaanlp/1224363395/23793843771?__mobile__=1&credential_token=8wEwiDL7YDd9NX7i3i16rhajDyd3TFo2govjnfEd84&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QABpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMHJtu46N4YL1ETOwWAbpdPCpoOnQDXHQJ5OvtcN0M_eDbRA41r_846ydnLzTRf_samdRHEh2GSlumtjiKqmNpcGhlcnRleHTEmQAAAAyvABptfZw0hpFXH9HAHZ2nfPDfKk7dbFNlXk5qvgt3LCshc7CSoRTw70V4hUBURSq4Jza6EFo9l3o6wujCFuqZg_Mu1_t_JzBLsys9CikH4RBN65mFjhsETY_LGnisGrqvuqQd0G7LNpyI31Myb51jvQz36vhS0fbXBnp5hsedaEzTgRKbmB1id8NlxRw4xIeRksgshA&lang=pt-BR&mmp_pid=an_18345690260&uls_trackid=56dnb4kh01hs&utm_campaign=id_9ddf15fdf19a9a3a&utm_content=gurubot----&utm_medium=affiliates&utm_source=an_18345690260&utm_term=fe3okzb9b3h9"
     },
     {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "success",
-      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/1526836548/23294017914?__mobile__=1&cred..."
+      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/1224363395/23793843771?__mobile__=1&cred..."
     },
     {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "info",
-      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/gPLyY7Z2i"
+      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/1BLdDdGALo"
     },
     {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "success",
-      "message": "🔗 Link Shopee gerado com sucesso: https://s.shopee.com.br/8V8DYZVESP?lp=aff"
+      "message": "🔗 Link Shopee gerado com sucesso: https://s.shopee.com.br/5q7SmDKOnQ?lp=aff"
     },
     {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "success",
-      "message": "✅ Link curto oficial Shopee gerado com sucesso: https://s.shopee.com.br/8V8DYZVESP?lp=aff"
+      "message": "✅ Link curto oficial Shopee gerado com sucesso: https://s.shopee.com.br/5q7SmDKOnQ?lp=aff"
     },
     {
-      "time": "20:01:25",
-      "type": "info",
-      "message": "Nova mensagem em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Analisando anúncio..."
-    },
-    {
-      "time": "20:01:25",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": *BARRINHA DE DOCE DE LEITE NÃO TEM COMO"
-    },
-    {
-      "time": "20:01:25",
-      "type": "success",
-      "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
-    },
-    {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "info",
       "message": "Tentando gerar link curto oficial via API Shopee Open Platform..."
     },
     {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "success",
-      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/1526836548/23294017914?__mobile__=1&cred..."
+      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/1224363395/23793843771?__mobile__=1&cred..."
     },
     {
-      "time": "20:01:25",
+      "time": "01:58:48",
       "type": "info",
-      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/gPLyY7Z2i"
-    },
-    {
-      "time": "20:01:25",
-      "type": "success",
-      "message": "🔗 Link Shopee gerado com sucesso: https://s.shopee.com.br/8fRdksUb6V?lp=aff"
-    },
-    {
-      "time": "20:01:25",
-      "type": "success",
-      "message": "✅ Link curto oficial Shopee gerado com sucesso: https://s.shopee.com.br/8fRdksUb6V?lp=aff"
-    },
-    {
-      "time": "20:01:25",
-      "type": "info",
-      "message": "Tentando gerar link curto oficial via API Shopee Open Platform..."
-    },
-    {
-      "time": "20:01:25",
-      "type": "success",
-      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/1526836548/23294017914?__mobile__=1&cred..."
-    },
-    {
-      "time": "20:01:25",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:25",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:25",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:25",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:25",
-      "type": "success",
-      "message": "📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!"
-    },
-    {
-      "time": "20:01:25",
-      "type": "info",
-      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/gPLyY7Z2i"
-    },
-    {
-      "time": "20:01:25",
-      "type": "warning",
-      "message": "⚠️ Falha ao usar IA do Gemini para reescrever anúncio. Usando conversão automática via Regex."
-    },
-    {
-      "time": "20:01:24",
-      "type": "info",
-      "message": "Nova mensagem em \"#101 HELEN INDICA  🏠\": Analisando anúncio..."
-    },
-    {
-      "time": "20:01:24",
-      "type": "info",
-      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.la/1UmF6sY"
-    },
-    {
-      "time": "20:01:24",
-      "type": "success",
-      "message": "🔗 Link Mercado Livre gerado com sucesso: https://www.mercadolivre.com.br/barra-de-proteina-nutrata-whey-grego-havanna-de-doce-de-leite-kit-12-unidades/p/MLB27175466?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true"
-    },
-    {
-      "time": "20:01:24",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre extraído do card principal: https://www.mercadolivre.com.br/barra-de-proteina-nutrata-whey-grego-havanna-de-doce-de-leite-kit-12-unidades/p/MLB27175466"
-    },
-    {
-      "time": "20:01:24",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": \udef4 DIVERSÃO QUE NÃO PARA! \ude0d"
-    },
-    {
-      "time": "20:01:24",
-      "type": "success",
-      "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
-    },
-    {
-      "time": "20:01:24",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:24",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:24",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:24",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:24",
-      "type": "success",
-      "message": "📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!"
-    },
-    {
-      "time": "20:01:24",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/1UmF6sY"
-    },
-    {
-      "time": "20:01:24",
-      "type": "success",
-      "message": "🔗 Link Mercado Livre gerado com sucesso: https://www.mercadolivre.com.br/barra-de-proteina-nutrata-whey-grego-havanna-de-doce-de-leite-kit-12-unidades/p/MLB27175466?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true"
-    },
-    {
-      "time": "20:01:24",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre extraído do card principal: https://www.mercadolivre.com.br/barra-de-proteina-nutrata-whey-grego-havanna-de-doce-de-leite-kit-12-unidades/p/MLB27175466"
-    },
-    {
-      "time": "20:01:23",
-      "type": "info",
-      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.la/1SrFn1Q"
-    },
-    {
-      "time": "20:01:23",
-      "type": "success",
-      "message": "🔗 Link Mercado Livre gerado com sucesso: https://www.mercadolivre.com.br/patinete-infantil-3-rodas-para-menino-dobravel-ajustavel-rodinhas-de-gel-com-led-atacarejo-kids/p/MLB61991380?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true"
-    },
-    {
-      "time": "20:01:23",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre extraído do card principal: https://www.mercadolivre.com.br/patinete-infantil-3-rodas-para-menino-dobravel-ajustavel-rodinhas-de-gel-com-led-atacarejo-kids/p/MLB61991380"
-    },
-    {
-      "time": "20:01:23",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/1UmF6sY"
-    },
-    {
-      "time": "20:01:23",
-      "type": "warning",
-      "message": "⚠️ Falha ao usar IA do Gemini para reescrever anúncio. Usando conversão automática via Regex."
-    },
-    {
-      "time": "20:01:23",
-      "type": "info",
-      "message": "Nova mensagem em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Analisando anúncio..."
-    },
-    {
-      "time": "20:01:23",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": *KAPPA NESSE PREÇO NÃO DA PRA RECUSAR*"
-    },
-    {
-      "time": "20:01:23",
-      "type": "success",
-      "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
-    },
-    {
-      "time": "20:01:23",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/1SrFn1Q"
-    },
-    {
-      "time": "20:01:23",
-      "type": "success",
-      "message": "🔗 Link Mercado Livre gerado com sucesso: https://www.mercadolivre.com.br/patinete-infantil-3-rodas-para-menino-dobravel-ajustavel-rodinhas-de-gel-com-led-atacarejo-kids/p/MLB61991380?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true"
-    },
-    {
-      "time": "20:01:23",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre extraído do card principal: https://www.mercadolivre.com.br/patinete-infantil-3-rodas-para-menino-dobravel-ajustavel-rodinhas-de-gel-com-led-atacarejo-kids/p/MLB61991380"
-    },
-    {
-      "time": "20:01:22",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:22",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:22",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:22",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:22",
-      "type": "success",
-      "message": "📸 Foto em Alta Resolução (HD 2X) extraída do anúncio do Mercado Livre!"
-    },
-    {
-      "time": "20:01:22",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/1SrFn1Q"
-    },
-    {
-      "time": "20:01:22",
-      "type": "warning",
-      "message": "⚠️ Falha ao usar IA do Gemini para reescrever anúncio. Usando conversão automática via Regex."
-    },
-    {
-      "time": "20:01:22",
-      "type": "info",
-      "message": "Buscando foto em alta resolução do Mercado Livre: https://meli.la/33jfwXp"
-    },
-    {
-      "time": "20:01:22",
-      "type": "success",
-      "message": "🔗 Link Mercado Livre gerado com sucesso: https://produto.mercadolivre.com.br/MLB-4049279695-tnis-masculino-feminino-kappa-park-20-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true"
-    },
-    {
-      "time": "20:01:22",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre extraído do card principal: https://produto.mercadolivre.com.br/MLB-4049279695-tnis-masculino-feminino-kappa-park-20-original-_JM"
-    },
-    {
-      "time": "20:01:22",
-      "type": "info",
-      "message": "Nova mensagem em \"#101 HELEN INDICA  🏠\": Analisando anúncio..."
-    },
-    {
-      "time": "20:01:22",
-      "type": "success",
-      "message": "✨ [Shopee 🧡] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": *PRECINHO DE BUGG! CORRE 🏃‍♀🏃‍♂*"
-    },
-    {
-      "time": "20:01:22",
-      "type": "success",
-      "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/33jfwXp"
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "🔗 Link Mercado Livre gerado com sucesso: https://produto.mercadolivre.com.br/MLB-4049279695-tnis-masculino-feminino-kappa-park-20-original-_JM?matt_word=is20251020221720&matt_tool=37552149&forceInApp=true"
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "✅ Link do Mercado Livre extraído do card principal: https://produto.mercadolivre.com.br/MLB-4049279695-tnis-masculino-feminino-kappa-park-20-original-_JM"
-    },
-    {
-      "time": "20:01:21",
-      "type": "warning",
-      "message": "⚠️ [Shopee 🧡] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:21",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:21",
-      "type": "warning",
-      "message": "⚠️ [Shopee 🧡] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:21",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Meus Achados Shopee - Helton 🛍️\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Buscando foto original do produto no link Shopee: https://shopee.com.br/opaanlp/379173812/22394409850?__mobile__=1&credential_token=8wEwiDL7YDXmuQQdYptEXW8AaXns6ozLDewNUwvT9p&exp_group=rollout&gads_t_sig=gqRjZGVrxHCFomtpsTE0MjUxOnRzc19zZGtfa2V5omt20QABpGFsZ2_SAAAAZKNkZWvAomN0xEAAAAAMHJtu46N4YL1ETOwWAbpdPCpoOnQDXHQJ5OvtcN0M_eDbRA41r_846ydnLzTRf_samdRHEh2GSlumtjiKqmNpcGhlcnRleHTElwAAAAwwrfz5ywyyvUNMjGjFUrW-TZ0mu4ltcSFx-mDIO3oeo4uSFiUHIUdNwEJAhpCwxhZFAvPwkSjw_r7I7GJYZPsdjGBt_x5DDNWa2yNCC9AWftw6yIFXw0Lb9_rtq2SrLVqn6rBmMwEZqN_P48CDhskCpUqA0OVMoFQQguEbj69zDH85m0btqqItACRn4prfvNOKgbU&lang=pt-BR&mmp_pid=an_18345690260&uls_trackid=56dl9m6k00ic&utm_campaign=id_338897c0d2957d9c&utm_content=gurubot----&utm_medium=affiliates&utm_source=an_18345690260&utm_term=fe278bgesj2p"
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/379173812/22394409850?__mobile__=1&crede..."
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/9pdatgIs6n"
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "🔗 Link Shopee gerado com sucesso: https://s.shopee.com.br/2BEA0vbbb1?lp=aff"
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "✅ Link curto oficial Shopee gerado com sucesso: https://s.shopee.com.br/2BEA0vbbb1?lp=aff"
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Expandindo link do Mercado Livre: https://meli.la/33jfwXp"
-    },
-    {
-      "time": "20:01:21",
-      "type": "warning",
-      "message": "⚠️ Falha ao usar IA do Gemini para reescrever anúncio. Usando conversão automática via Regex."
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Tentando gerar link curto oficial via API Shopee Open Platform..."
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/379173812/22394409850?__mobile__=1&crede..."
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/9pdatgIs6n"
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "🔗 Link Shopee gerado com sucesso: https://s.shopee.com.br/7psWlLGJ9O?lp=aff"
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "✅ Link curto oficial Shopee gerado com sucesso: https://s.shopee.com.br/7psWlLGJ9O?lp=aff"
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Nova mensagem em \"🛍️ #12 CUPONS/OFERTAS DIÁRIOS\": Analisando anúncio..."
-    },
-    {
-      "time": "20:01:21",
-      "type": "info",
-      "message": "Tentando gerar link curto oficial via API Shopee Open Platform..."
-    },
-    {
-      "time": "20:01:21",
-      "type": "success",
-      "message": "✅ Link curto expandido com sucesso para: https://shopee.com.br/opaanlp/379173812/22394409850?__mobile__=1&crede..."
-    },
-    {
-      "time": "20:01:20",
-      "type": "info",
-      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/9pdatgIs6n"
-    },
-    {
-      "time": "20:01:20",
-      "type": "warning",
-      "message": "⚠️ Falha ao usar IA do Gemini para reescrever anúncio. Usando conversão automática via Regex."
-    },
-    {
-      "time": "20:01:20",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": *KIT DE REFLETORES PERFEITO PRA SUA ÁREA"
-    },
-    {
-      "time": "20:01:20",
-      "type": "success",
-      "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
-    },
-    {
-      "time": "20:01:20",
-      "type": "info",
-      "message": "Nova mensagem em \"#101 HELEN INDICA  🏠\": Analisando anúncio..."
-    },
-    {
-      "time": "20:01:20",
-      "type": "success",
-      "message": "✨ [Mercado Livre 💛] Anúncio enviado para \"# 111 achadinhos da Isa 👶🏠🧰\": *BAIXOUUUUU*"
-    },
-    {
-      "time": "20:01:20",
-      "type": "success",
-      "message": "📸 Anúncio com FOTO enviado para \"# 111 achadinhos da Isa 👶🏠🧰\""
-    },
-    {
-      "time": "20:01:20",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Ofertas Exclusivas Afiliado 💎\". Verifique se o grupo está ativo e sincronizado."
-    },
-    {
-      "time": "20:01:20",
-      "type": "warning",
-      "message": "ID do grupo de destino \"Ofertas Exclusivas Afiliado 💎\" não é um JID válido do WhatsApp (@g.us). Selecione um grupo sincronizado na aba 'Grupos e Canais'."
-    },
-    {
-      "time": "20:01:20",
-      "type": "warning",
-      "message": "⚠️ [Mercado Livre 💛] Não foi possível enviar para o destino \"Meus Achados Shopee - Helton 🛍️\". Verifique se o grupo está ativo e sincronizado."
+      "message": "Expandindo link curto da Shopee: https://s.shopee.com.br/1BLdDdGALo"
     }
   ]
 }

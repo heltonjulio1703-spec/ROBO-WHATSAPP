@@ -307,8 +307,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
 
           <form id="config-form" onSubmit={handleSubmit} className="space-y-5">
-            {/* Real-time Strict Mode Section */}
-            <div id="realtime-mode-section" className="bg-emerald-50/80 border border-emerald-200 rounded-xl p-4">
+            {/* Real-time Strict Mode & 24/7 Continuous Operation Section */}
+            <div id="realtime-mode-section" className="bg-emerald-50/80 border border-emerald-200 rounded-xl p-4 space-y-3">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
@@ -316,7 +316,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       {realtimeOnly && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>}
                       <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${realtimeOnly ? "bg-emerald-500" : "bg-gray-400"}`}></span>
                     </span>
-                    <span className="text-sm font-bold text-emerald-950">Captura Somente em Tempo Real ⚡</span>
+                    <span className="text-sm font-bold text-emerald-950">Captura em Tempo Real & Modo 24/7 ⚡</span>
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                       realtimeOnly 
                         ? "bg-emerald-200 text-emerald-900 border-emerald-300" 
@@ -326,7 +326,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     </span>
                   </div>
                   <span className="text-xs text-emerald-900/80 mt-1 leading-relaxed">
-                    Processa e encaminha <strong>exclusivamente anúncios que chegarem ao vivo</strong> nos grupos de origem do WhatsApp a partir de agora, ignorando histórico ou mensagens antigas.
+                    Processa e encaminha <strong>exclusivamente novos anúncios</strong> que chegarem aos grupos do WhatsApp ao vivo, sem limite de tempo e sem travar buffer.
                   </span>
                 </div>
 
@@ -347,6 +347,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   </div>
                   <span>{realtimeOnly ? "ATIVO (Ao Vivo)" : "DESATIVADO"}</span>
                 </button>
+              </div>
+
+              {/* 24/7 Keep-Alive Assurance Tag */}
+              <div className="pt-2 border-t border-emerald-200/60 flex items-center justify-between text-xs text-emerald-900">
+                <div className="flex items-center gap-1.5 font-semibold">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>Conexão Permanente 24/7: <strong>Sem limite de tempo</strong></span>
+                </div>
+                <span className="text-[11px] text-emerald-700 font-medium">Keep-alive e auto-reconexão contínua o dia todo</span>
               </div>
             </div>
 

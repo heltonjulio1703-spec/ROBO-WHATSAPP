@@ -358,8 +358,8 @@ const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string,
   let cleanUrl = originalUrl.trim().replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
   
   // Resolve effective affiliate ID specifically for Shopee
-  const affIdToUse = (shopeeAffiliateId || state.config.shopeeAffiliateId || state.config.affiliateId || "18399950350").trim();
-  const linkModel = forceModel || state.config.shopeeLinkModel || "shopee_short";
+  const affIdToUse = (shopeeAffiliateId || state.config.shopeeAffiliateId || state.config.affiliateId || "heltonjulio1703").trim();
+  const linkModel = forceModel || state.config.shopeeLinkModel || "universal";
 
   // If cleanUrl is already a universal-link, unwrap it to get the raw product URL and avoid nesting
   let targetUrl = cleanUrl;
@@ -379,18 +379,25 @@ const convertToAffiliateLink = (originalUrl: string, shopeeAffiliateId?: string,
     }
   }
 
-  // Strip existing tracking parameters from targetUrl so it doesn't preserve previous affiliate cookies
+  // Strip all competitor and tracking query parameters from targetUrl
   try {
     const parsedTarget = new URL(targetUrl);
-    parsedTarget.searchParams.delete("utm_source");
-    parsedTarget.searchParams.delete("utm_medium");
-    parsedTarget.searchParams.delete("utm_campaign");
-    parsedTarget.searchParams.delete("utm_term");
-    parsedTarget.searchParams.delete("utm_content");
-    parsedTarget.searchParams.delete("af_siteid");
-    parsedTarget.searchParams.delete("af_sub_siteid");
-    parsedTarget.searchParams.delete("smtt");
-    targetUrl = parsedTarget.toString();
+    // If it is a canonical product page, stripping all tracking query params yields the cleanest URL
+    const isProductPage = /i\.\d+\.\d+/i.test(parsedTarget.pathname) || /\/product\/\d+\/\d+/i.test(parsedTarget.pathname);
+    if (isProductPage) {
+      targetUrl = `${parsedTarget.origin}${parsedTarget.pathname}`;
+    } else {
+      const trackingParams = [
+        "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+        "af_siteid", "af_sub_siteid", "smtt", "mmp_pid", "uls_trackid", "gads_t_sig",
+        "share_channel_code", "sub_id", "tracking_id", "af_click_lookback",
+        "pid", "c", "is_from_signup"
+      ];
+      for (const p of trackingParams) {
+        parsedTarget.searchParams.delete(p);
+      }
+      targetUrl = parsedTarget.toString();
+    }
   } catch (e) {}
 
   // Extract domain from original URL to support other regions
@@ -873,20 +880,16 @@ const convertToMercadoLivreAffiliateLink = (originalUrl: string, mlAffiliateId?:
 
   try {
     const urlObj = new URL(cleanUrl);
-    // Remove previous competitor affiliate/tracking params
-    urlObj.searchParams.delete("matt_tool");
-    urlObj.searchParams.delete("matt_word");
-    urlObj.searchParams.delete("matt_source");
-    urlObj.searchParams.delete("tracking_id");
-    urlObj.searchParams.delete("ref");
-    urlObj.searchParams.delete("item_id");
-    urlObj.searchParams.delete("c_id");
-    urlObj.searchParams.delete("c_element_order");
-    urlObj.searchParams.delete("c_campaign");
-    urlObj.searchParams.delete("c_uid");
-    urlObj.searchParams.delete("sid");
-    urlObj.searchParams.delete("wid");
-    urlObj.searchParams.delete("polycard_client");
+    // Remove all competitor affiliate, tracking, and recommendation params
+    const mlParamsToRemove = [
+      "matt_tool", "matt_word", "matt_source", "matt_tool_id", "matt_event_ts", "matt_d2id", "matt_tracing_id",
+      "tracking_id", "ref", "item_id", "c_id", "c_element_order", "c_campaign", "c_uid",
+      "sid", "wid", "polycard_client", "searchVariation", "reco_backend", "reco_model",
+      "reco_client", "reco_item_pos", "reco_backend_type", "reco_id", "source"
+    ];
+    for (const p of mlParamsToRemove) {
+      urlObj.searchParams.delete(p);
+    }
 
     // Clean hash
     urlObj.hash = "";

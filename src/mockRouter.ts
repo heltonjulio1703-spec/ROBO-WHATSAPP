@@ -182,7 +182,11 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
       addSimulatedLog("info", "Iniciando conexão simulada do WhatsApp com servidores do WhatsApp Web...");
 
       if (phoneNumber) {
-        const cleanPhone = phoneNumber.replace(/\D/g, "");
+        let cleanPhone = phoneNumber.replace(/\D/g, "");
+        cleanPhone = cleanPhone.replace(/^0+/, "");
+        if ((cleanPhone.length === 10 || cleanPhone.length === 11) && !cleanPhone.startsWith("55")) {
+          cleanPhone = "55" + cleanPhone;
+        }
         const codeChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ23456789";
         let code1 = "";
         let code2 = "";
@@ -200,7 +204,7 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
           pairingPhone: cleanPhone,
           pairingCode: simCode,
         };
-        addSimulatedLog("success", `🔑 [Vercel] Código de Emparelhamento oficial gerado com sucesso: ${simCode}`);
+        addSimulatedLog("success", `🔑 Código de Pareamento gerado para +${cleanPhone}: ${simCode}`);
         addSimulatedLog("info", `Digite o código de pareamento no seu celular WhatsApp para o número +${cleanPhone}.`);
       } else {
         whatsappState = {
@@ -229,7 +233,8 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
         connectedAt: new Date().toLocaleString("pt-BR"),
       };
       setLocalStorage("shopee_bot_whatsapp", whatsappState);
-      addSimulatedLog("success", `🟢 [Vercel] WhatsApp conectado com sucesso como +${mockPhone}!`);
+      addSimulatedLog("success", `🟢 [Vercel Demo] WhatsApp conectado com sucesso como +${mockPhone}! [Modo 24/7 Ativo: Sem limite de tempo]`);
+      addSimulatedLog("info", "Keep-alive e monitoramento contínuo ativados para encaminhar links o dia todo sem interrupção.");
       
       // Seed some realistic sources/targets if empty
       if (groupsState.sources.length === 0 || !groupsState.sources.some(g => g.id.endsWith("@g.us"))) {
@@ -422,7 +427,7 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
 
       const affId = (isMl ? (bodyObj.affiliateId || configState.mercadolivreAffiliateId || configState.affiliateId) : (bodyObj.affiliateId || configState.shopeeAffiliateId || configState.affiliateId)) || "heltonjulio1703";
       let convertedAffiliate = "";
-      let resolvedUrl = testUrl.split("?")[0].split("#")[0];
+      let resolvedUrl = testUrl.split("?")[0].split("#")[0].replace(/[.,;:!?)\]\>\<\'\"\,]+$/, "");
 
       if (isMl) {
         if (testUrl.includes("2S5rJzD")) {
@@ -437,7 +442,7 @@ const customFetch = async function (this: any, input: RequestInfo | URL, init?: 
           convertedAffiliate = `${resolvedUrl}?matt_tool=${encodeURIComponent(affId)}&matt_word=bot&forceInApp=true`;
         }
       } else {
-        const shpModel = configState.shopeeLinkModel || "shopee_short";
+        const shpModel = configState.shopeeLinkModel || "universal";
         const shpShort = configState.shopeeShortLink || "https://s.shopee.com.br/3VjU9xABK7";
         if (shpModel === "shopee_short" && shpShort.startsWith("http")) {
           convertedAffiliate = shpShort;

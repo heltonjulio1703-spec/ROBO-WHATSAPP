@@ -74,8 +74,47 @@ export class WhatsAppEngine {
   };
   
   private isConnecting = false;
+  private activePairingPhone?: string;
+  private pairingTimeout?: NodeJS.Timeout;
+  private keepAliveInterval?: NodeJS.Timeout;
+  private reconnectAttempts = 0;
+  private isExplicitLogout = false;
   private groupNameCache = new Map<string, string>();
   private messageStore = new Map<string, Array<any>>();
+
+  private startKeepAliveLoop() {
+    if (this.keepAliveInterval) {
+      clearInterval(this.keepAliveInterval);
+      this.keepAliveInterval = undefined;
+    }
+    // Proactive 24/7 presence heartbeat and socket health watchdog
+    this.keepAliveInterval = setInterval(async () => {
+      if (this.status.status === "connected" && this.sock) {
+        try {
+          // Tell WhatsApp server that this client is online & active (prevents idle drop)
+          await this.sock.sendPresenceUpdate("available");
+        } catch (e) {
+          // Ignore transient presence ping warnings
+        }
+      } else if (this.status.status === "connected" && !this.sock && !this.isConnecting && !this.isExplicitLogout) {
+        console.log("📡 Watchdog 24/7: Socket fechado inesperadamente. Reconectando imediatamente...");
+        this.addLogCallback("info", "🔄 [24/7 Watchdog] Reativando conexão com o WhatsApp em segundo plano...");
+        this.connect(false);
+      }
+    }, 20000);
+  }
+
+  public static normalizePhoneNumber(input: string): string {
+    if (!input) return "";
+    let clean = input.replace(/\D/g, "");
+    clean = clean.replace(/^0+/, "");
+    
+    // Auto-detect Brazilian numbers missing DDI 55 (e.g., 11999998888 or 1188887777)
+    if ((clean.length === 10 || clean.length === 11) && !clean.startsWith("55")) {
+      clean = "55" + clean;
+    }
+    return clean;
+  }
 
   public setRobotState(enabled: boolean, activationTimeMs: number = Date.now()) {
     this.isRobotEnabled = enabled;
@@ -180,6 +219,11 @@ export class WhatsAppEngine {
 
   public async reset() {
     this.isConnecting = false;
+    this.activePairingPhone = undefined;
+    if (this.pairingTimeout) {
+      clearTimeout(this.pairingTimeout);
+      this.pairingTimeout = undefined;
+    }
     if (this.sock) {
       try {
         this.sock.ev.removeAllListeners("connection.update");
@@ -195,22 +239,36 @@ export class WhatsAppEngine {
       userName: "",
       qrCodeProgress: 0,
       connectedAt: null,
+      pairingCode: undefined,
+      pairingPhone: undefined,
+      qrDataUrl: undefined,
     };
     this.addLogCallback("info", "Mecanismo de conexão reiniciado.");
   }
 
   public simulateSuccessfulConnection() {
     this.isConnecting = false;
+    this.activePairingPhone = undefined;
+    this.reconnectAttempts = 0;
+    this.isExplicitLogout = false;
+    if (this.pairingTimeout) {
+      clearTimeout(this.pairingTimeout);
+      this.pairingTimeout = undefined;
+    }
+    const mockPhone = this.status.pairingPhone || "5511999998888";
     this.connectionTimestampSec = Math.floor(Date.now() / 1000);
     this.status = {
       status: "connected",
-      phone: "+55 (11) 99999-8888",
+      phone: `+${mockPhone}`,
       userName: "Conta de Teste (Simulada)",
       qrCodeProgress: 100,
       connectedAt: new Date().toLocaleString("pt-BR"),
-      qrDataUrl: undefined
+      qrDataUrl: undefined,
+      pairingCode: undefined,
+      pairingPhone: undefined,
     };
-    this.addLogCallback("success", "🟢 [Vercel Demo] WhatsApp conectado com sucesso como Conta de Teste!");
+    this.addLogCallback("success", `🟢 [Vercel Demo] WhatsApp conectado com sucesso como +${mockPhone}! [Modo 24/7 Ativo: Sem limite de tempo]`);
+    this.startKeepAliveLoop();
     this.fetchAndRegisterGroups();
     if (this.onConnectedCallback) {
       this.onConnectedCallback();
@@ -220,24 +278,35 @@ export class WhatsAppEngine {
   public async connect(force = false, phoneNumber?: string) {
     console.log(`📡 WhatsAppEngine: Chamada de connect(force=${force}, phone=${phoneNumber}). Status atual: ${this.status.status}, isConnecting: ${this.isConnecting}`);
     
-    if (this.isConnecting && !force) {
+    if (this.pairingTimeout) {
+      clearTimeout(this.pairingTimeout);
+      this.pairingTimeout = undefined;
+    }
+
+    if (this.isConnecting && !force && !phoneNumber) {
       this.addLogCallback("info", "Já existe uma tentativa de conexão em andamento...");
       return;
     }
 
-    if (this.status.status === "connected" && !force) {
+    if (this.status.status === "connected" && !force && !phoneNumber) {
       this.addLogCallback("warning", "WhatsApp já está conectado.");
       return;
     }
 
     const isAlreadyConnected = this.status.status === "connected";
+    const normalizedPhone = phoneNumber ? WhatsAppEngine.normalizePhoneNumber(phoneNumber) : this.activePairingPhone;
+
+    if (phoneNumber) {
+      this.activePairingPhone = normalizedPhone;
+      force = true; // Always force clean slate when initiating pairing with a phone number
+    }
 
     this.isConnecting = true;
     this.status.status = "connecting";
-    this.status.qrCodeProgress = 10;
+    this.status.qrCodeProgress = 15;
     this.status.qrDataUrl = undefined;
     this.status.pairingCode = undefined;
-    this.status.pairingPhone = undefined;
+    this.status.pairingPhone = normalizedPhone || undefined;
 
     // Vercel / Serverless Environment Detection
     const isVercel = typeof process !== 'undefined' && (
@@ -252,9 +321,8 @@ export class WhatsAppEngine {
       this.status.status = "qr_code";
       this.status.qrCodeProgress = 50;
       
-      if (phoneNumber) {
-        const cleanPhone = phoneNumber.replace(/\D/g, "");
-        this.status.pairingPhone = cleanPhone;
+      if (normalizedPhone) {
+        this.status.pairingPhone = normalizedPhone;
         // Generate a random-like pairing code
         const codeChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ23456789";
         let code1 = "";
@@ -266,7 +334,7 @@ export class WhatsAppEngine {
         const simCode = `${code1}-${code2}`;
         this.status.pairingCode = simCode;
         this.status.qrCodeProgress = 95;
-        this.addLogCallback("success", `🔑 [Vercel] Código de Emparelhamento simulado gerado para +${cleanPhone}: ${simCode}`);
+        this.addLogCallback("success", `🔑 [Vercel] Código de Emparelhamento simulado gerado para +${normalizedPhone}: ${simCode}`);
         this.addLogCallback("info", "Clique em 'Confirmar Leitura' ou aguarde 5 segundos para simular a conexão bem-sucedida.");
         
         // Auto-connect after 5 seconds
@@ -277,7 +345,6 @@ export class WhatsAppEngine {
         }, 5000);
       } else {
         try {
-          // Generates a mock QR code image pointing to Shopee affiliate page with high resolution
           this.status.qrDataUrl = await QRCode.toDataURL("https://shopee.com.br/m/afiliados-shopee?utm_source=vercel_demo_autopost", {
             margin: 1,
             width: 360,
@@ -304,11 +371,13 @@ export class WhatsAppEngine {
       return;
     }
 
-    this.addLogCallback("info", "Iniciando processo de conexão oficial com WhatsApp...");
+    this.addLogCallback("info", normalizedPhone 
+      ? `Iniciando conexão oficial com WhatsApp para o número +${normalizedPhone}...` 
+      : "Iniciando processo de conexão oficial com WhatsApp...");
 
     try {
       // Limpeza profunda se for forçado ou se não estiver conectado para garantir geração de QR Code limpo
-      if (force || !isAlreadyConnected) {
+      if (force || !isAlreadyConnected || normalizedPhone) {
         console.log("📡 WhatsAppEngine: Limpando socket e sessão anterior...");
         try {
           if (this.sock) {
@@ -322,11 +391,11 @@ export class WhatsAppEngine {
         }
         this.sock = null;
 
-        // Limpar pasta de autenticação ao pedir um novo QR code para evitar travamento em credenciais inválidas/expiradas
-        if (force && fs.existsSync(this.authStatePath)) {
+        // Limpar pasta de autenticação ao pedir um novo pareamento/QR code para evitar credenciais inválidas/expiradas
+        if ((force || normalizedPhone) && fs.existsSync(this.authStatePath)) {
           try {
             fs.rmSync(this.authStatePath, { recursive: true, force: true });
-            console.log("📡 WhatsAppEngine: Pasta auth_info_baileys limpa para novo QR Code.");
+            console.log("📡 WhatsAppEngine: Pasta auth_info_baileys limpa para nova sessão.");
           } catch (e) {
             console.error("Erro ao apagar authStatePath:", e);
           }
@@ -349,7 +418,9 @@ export class WhatsAppEngine {
         console.warn("Usando fallback de versão Baileys:", err);
       }
 
-      this.addLogCallback("info", "Aguardando geração do QR Code oficial pelo servidor WhatsApp...");
+      if (!normalizedPhone) {
+        this.addLogCallback("info", "Aguardando geração do QR Code oficial pelo servidor WhatsApp...");
+      }
 
       this.sock = makeWASocket({
         version,
@@ -380,9 +451,13 @@ export class WhatsAppEngine {
         }) as any,
         auth: state,
         printQRInTerminal: false,
-        browser: ["Chrome (Linux)", "", ""],
+        browser: ["Ubuntu", "Chrome", "20.0.04"],
         connectTimeoutMs: 60000,
-        keepAliveIntervalMs: 30000,
+        keepAliveIntervalMs: 10000, // Ping WhatsApp server every 10s to keep socket permanently alive
+        defaultQueryTimeoutMs: 60000,
+        retryRequestDelayMs: 250,
+        maxMsgRetryCount: 5,
+        markOnlineOnConnect: true,
         emitOwnEvents: true,
         generateHighQualityLinkPreview: false,
         syncFullHistory: false,
@@ -390,73 +465,64 @@ export class WhatsAppEngine {
 
       this.sock.ev.on("creds.update", saveCreds);
 
-      if (phoneNumber) {
-        let cleanPhone = phoneNumber.replace(/\D/g, "");
-        // If cleanPhone starts with + or contains DDI, Baileys expects standard digits string e.g. 5511999998888
-        if (cleanPhone) {
-          this.status.pairingPhone = cleanPhone;
-          this.status.status = "qr_code";
-          this.status.qrCodeProgress = 40;
-          this.addLogCallback("info", `Aguardando registro inicial para solicitar código de emparelhamento para +${cleanPhone}...`);
-          
-          let pairingCodeRequested = false;
-          let retryCount = 0;
-          const maxRetries = 15;
-          
-          const requestPairing = async () => {
-            if (pairingCodeRequested) {
-              clearInterval(pairingInterval);
-              return;
-            }
-            if (!this.sock) {
-              clearInterval(pairingInterval);
-              return;
-            }
-            
-            try {
-              if (!this.sock.authState.creds.registered) {
-                this.addLogCallback("info", `Enviando solicitação de código de emparelhamento oficial para +${cleanPhone} (Tentativa ${retryCount + 1}/${maxRetries})...`);
-                const code = await this.sock.requestPairingCode(cleanPhone);
-                // Format code as ABCD-EFGH for high readability if it's 8 characters
-                const formattedCode = code && code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
-                this.status.pairingCode = formattedCode || code;
+      // Handler for requesting pairing code with reliable retry logic
+      if (normalizedPhone) {
+        this.status.pairingPhone = normalizedPhone;
+        this.status.status = "qr_code";
+        this.status.qrCodeProgress = 40;
+        this.addLogCallback("info", `Aguardando socket do WhatsApp para solicitar código de pareamento para +${normalizedPhone}...`);
+
+        let retryCount = 0;
+        const maxRetries = 8;
+
+        const requestPairing = async () => {
+          if (!this.sock || !this.activePairingPhone) {
+            return;
+          }
+
+          try {
+            if (!this.sock.authState.creds.registered) {
+              this.addLogCallback("info", `Enviando solicitação de código de pareamento oficial para +${this.activePairingPhone} (Tentativa ${retryCount + 1}/${maxRetries})...`);
+              const code = await this.sock.requestPairingCode(this.activePairingPhone);
+              if (code) {
+                const formattedCode = code.length === 8 ? `${code.slice(0, 4)}-${code.slice(4)}` : code;
+                this.status.pairingCode = formattedCode;
                 this.status.qrCodeProgress = 95;
-                pairingCodeRequested = true;
-                this.addLogCallback("success", `🔑 Código de Emparelhamento oficial gerado com sucesso: ${this.status.pairingCode}`);
-                clearInterval(pairingInterval);
-              } else {
-                this.addLogCallback("warning", "O WhatsApp já consta como registrado nesta sessão.");
-                clearInterval(pairingInterval);
-              }
-            } catch (err) {
-              const errMsg = (err as Error).message || String(err) || "";
-              console.warn(`Tentativa ${retryCount + 1} de gerar pairing code falhou:`, errMsg);
-              
-              if (errMsg.includes("registered")) {
-                this.addLogCallback("warning", "Aparelho já registrado. Não foi possível solicitar código de emparelhamento.");
-                clearInterval(pairingInterval);
+                this.status.status = "qr_code";
+                this.addLogCallback("success", `🔑 Código de Pareamento gerado com sucesso: ${formattedCode}`);
+                this.addLogCallback("info", `No celular (+${this.activePairingPhone}): Vá em "Aparelhos conectados" > "Conectar um aparelho" > "Conectar com número de telefone" e digite: ${formattedCode}`);
                 return;
               }
-              
-              retryCount++;
-              if (retryCount >= maxRetries) {
-                this.addLogCallback("error", `Falha ao solicitar código de emparelhamento após ${maxRetries} tentativas: ${errMsg}`);
-                clearInterval(pairingInterval);
-              }
+            } else {
+              this.addLogCallback("info", "Aparelho já registrado na sessão. Conectando...");
             }
-          };
-          
-          const pairingInterval = setInterval(requestPairing, 3500);
-          // Run first attempt after 2 seconds to allow WebSocket connection handshake
-          setTimeout(requestPairing, 2000);
-        }
+          } catch (err: any) {
+            const errMsg = err?.message || String(err) || "";
+            console.warn(`Tentativa ${retryCount + 1} de pairing code falhou:`, errMsg);
+
+            if (errMsg.includes("registered")) {
+              this.addLogCallback("info", "Sessão já registrada.");
+              return;
+            }
+
+            retryCount++;
+            if (retryCount < maxRetries) {
+              this.pairingTimeout = setTimeout(requestPairing, 3000);
+            } else {
+              this.addLogCallback("error", `Não foi possível gerar o código de pareamento: ${errMsg}. Verifique se o número (+${this.activePairingPhone}) tem WhatsApp ativo.`);
+            }
+          }
+        };
+
+        // Trigger pairing request after short handshake delay
+        this.pairingTimeout = setTimeout(requestPairing, 1500);
       }
 
       this.sock.ev.on("connection.update", async (update) => {
         const { connection, lastDisconnect, qr } = update;
         console.log("📡 Baileys Update:", { connection, qr: !!qr });
 
-        if (qr && !phoneNumber) {
+        if (qr && !this.activePairingPhone && !this.status.pairingCode) {
           this.status.status = "qr_code";
           this.status.qrCodeProgress = 50;
           try {
@@ -478,6 +544,13 @@ export class WhatsAppEngine {
 
         if (connection === "open") {
           this.isConnecting = false;
+          this.reconnectAttempts = 0;
+          this.isExplicitLogout = false;
+          this.activePairingPhone = undefined;
+          if (this.pairingTimeout) {
+            clearTimeout(this.pairingTimeout);
+            this.pairingTimeout = undefined;
+          }
           this.connectionTimestampSec = Math.floor(Date.now() / 1000);
           const userJid = this.sock?.user?.id || "";
           const userName = this.sock?.user?.name || "Minha Conta";
@@ -489,9 +562,12 @@ export class WhatsAppEngine {
             userName: userName,
             qrCodeProgress: 100,
             connectedAt: new Date().toLocaleString("pt-BR"),
-            qrDataUrl: undefined
+            qrDataUrl: undefined,
+            pairingCode: undefined,
+            pairingPhone: undefined,
           };
-          this.addLogCallback("success", `🟢 Conectado com sucesso como ${userName}`);
+          this.addLogCallback("success", `🟢 Conectado com sucesso como ${userName} (+${phone})! [Modo 24/7 Ativo: Sem Limite de Tempo]`);
+          this.startKeepAliveLoop();
           this.fetchAndRegisterGroups();
           if (this.onConnectedCallback) {
             this.onConnectedCallback();
@@ -508,33 +584,31 @@ export class WhatsAppEngine {
           if (!isStreamError) {
             console.log("📡 Conexão fechada. Código:", statusCode, "Erro:", err?.message || err);
           } else {
-            console.log("📡 Stream WhatsApp reiniciando (Código 515/RestartRequired)...");
+            console.log("📡 Stream WhatsApp sincronizando/reiniciando (Código 515/RestartRequired)...");
           }
           
           const wasConnected = this.status.status === "connected";
-          const wasConnecting = this.status.status === "connecting" || this.status.status === "qr_code";
-
-          if (!isStreamError && this.status.status !== "connected") {
-            this.status.status = "disconnected";
-          }
           this.sock = null;
 
-          if (statusCode === DisconnectReason.loggedOut || statusCode === 401 || statusCode === 403) {
-            this.addLogCallback("error", "Sessão encerrada ou inválida. Você precisará gerar um novo QR Code.");
+          if (this.isExplicitLogout || statusCode === DisconnectReason.loggedOut || statusCode === 401 || statusCode === 403) {
+            this.addLogCallback("error", "Sessão do WhatsApp encerrada pelo usuário ou pelo aplicativo.");
             this.logout();
           } else {
-            const shouldReconnect = isStreamError || wasConnected || wasConnecting || !lastDisconnect;
-            if (shouldReconnect) {
-              if (isStreamError) {
-                this.addLogCallback("info", "🔄 Sincronizando conexão com os servidores do WhatsApp...");
-              } else {
-                this.addLogCallback("info", "Reconectando em 2s...");
-              }
-              setTimeout(() => this.connect(), isStreamError ? 500 : 2000);
+            // Em modo 24/7 ininterrupto: sempre reconectar automaticamente a qualquer oscilação de rede
+            const delay = isStreamError ? 500 : Math.min(1000 * Math.pow(1.3, this.reconnectAttempts), 8000);
+            this.reconnectAttempts++;
+
+            if (isStreamError) {
+              this.addLogCallback("info", "🔄 Sincronizando credenciais recebidas com os servidores do WhatsApp...");
             } else {
-              this.addLogCallback("warning", "Conexão perdida. Clique em Conectar para tentar novamente.");
-              this.status.status = "disconnected";
+              this.addLogCallback("info", `🔄 [24/7 Auto-Reconexão] Reconectando automaticamente ao WhatsApp em ${Math.max(1, Math.round(delay / 1000))}s... (Tentativa ${this.reconnectAttempts})`);
             }
+
+            setTimeout(() => {
+              if (!this.isExplicitLogout) {
+                this.connect(false);
+              }
+            }, delay);
           }
         }
       });
@@ -1011,12 +1085,21 @@ export class WhatsAppEngine {
 
   // Clear credentials and disconnect
   public async logout() {
+    this.isExplicitLogout = true;
+    if (this.keepAliveInterval) {
+      clearInterval(this.keepAliveInterval);
+      this.keepAliveInterval = undefined;
+    }
+
     this.status = {
       status: "disconnected",
       phone: "",
       userName: "",
       qrCodeProgress: 0,
       connectedAt: null,
+      pairingCode: undefined,
+      pairingPhone: undefined,
+      qrDataUrl: undefined,
     };
 
     if (this.sock) {
